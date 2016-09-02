@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Summer Hot</title>
+    <headerTemplate th:include="/utils/common::headerTemplate"></headerTemplate>
+    <script th:inline="javascript" type="text/javascript">
+        /*<![CDATA[*/
+        $(function () {
+            $.post(basePath + "summerHot/jdbcTemplate", {}, function (json) {
+                $("#dataShow").html(JSON.stringify(json));
+                $("#dataShow").dialog({
+                    autoOpen: true,
+                    width: 400,
+                    height: 300
+                });
+            }, 'json');
+
+            $("#summerDialog").dialog({
+                autoOpen: false,
+                width: 400,
+                modal: true,
+                buttons: [{
+                    text: "确定",
+                    click: function() {
+                        $(this).dialog("close");
+                    }
+                },{
+                    text: "关闭",
+                    click: function() {
+                        $(this).dialog("close");
+                    }
+                }]
+            });
+
+            $("#tabs").tabs({
+                show: {effect: "fadeIn", duration: 100}
+            });
+        });
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div style="margin: 20px;">
+
+    <button class="btn btn-default btn-sm" onclick="$('#summerDialog').dialog('open');">Open Dialog</button>
+    <p th:text="'Hello, ' + ${templateName} + '!'">templateName</p>
+
+    <div id="summerDialog" title="summer hot" style="display: none;">
+        Hello jQuery ui Dialog !
+        <div style="height: 100px; border: 1px dashed gray; padding: 5px; overflow-y: scroll;">
+            I'am 100px height .<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        </div>
+        <!-- Tabs -->
+        <div id="tabs" style="height: 200px;">
+            <ul>
+                <li><a href="#tabs-1">First</a></li>
+                <li><a href="#tabs-2">Second</a></li>
+                <li><a href="#tabs-3">Third</a></li>
+            </ul>
+            <div id="tabs-1">这是tab1.</div>
+            <div id="tabs-2">这是tab2.</div>
+            <div id="tabs-3">这是tab3.</div>
+        </div>
+    </div>
+
+    <div id="dataShow" title="数据显示" style="display: none;"></div>
+
+</div>
+</body>
+</html>

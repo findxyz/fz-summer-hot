@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>find why home</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/ligerUI/skins/Aqua/css/ligerui-all.css}" rel="stylesheet" />
+    <link th:href="@{/ligerUI/skins/Gray/css/all.css}" rel="stylesheet" />
+    <script th:src="@{/js/jquery-1.12.4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/ligerUI/js/ligerui.min.js}" type="text/javascript"></script>
+    <script th:src="@{/ligerUI/jquery.cookie.js}"></script>
+    <script th:src="@{/ligerUI/json2.js}"></script>
+    <script th:src="@{/js/notify.min.js}"></script>
+    <style type="text/css">
+        body, html { height: 100%; }
+        body { padding: 0; margin: 0; overflow: hidden; }
+    </style>
+    <script type="text/javascript">
+        var indexdata = [{text:'夏天好热',isexpand:true,children:[{url:"summerHot/template/a",text:"夏天好热模板a"},{url:"summerHot/log",text:"夏天好热log"},{url:"summerHot/value",text:"夏天好热value"},{url:"summerHot/jdbcTemplate",text:"夏天好热jdbcTemplate"},{url:"summerHot/jpaPage/1",text:"夏天好热jpaPage"},{url:"summerHot/jpaSave/zxc",text:"夏天好热jpaSave"}]}];
+    </script>
+    <script type="text/javascript">
+    /*<![CDATA[*/
+        var tab = null;
+        var accordion = null;
+        var tree = null;
+        var tabItems = [];
+        $(function () {
+
+            // 布局
+            $("#layout").ligerLayout({
+                leftWidth: 190,
+                height: '100%',
+                heightDiff: -34,
+                space: 4,
+                onHeightChanged: f_heightChanged,
+                onLeftToggle: function () {
+                    if (tab) {
+                        tab.trigger('sysWidthChange');
+                    }
+                },
+                onRightToggle: function () {
+                    if (tab) {
+                        tab.trigger('sysWidthChange');
+                    }
+                }
+            });
+
+            var height = $(".l-layout-center").height();
+
+            // 标签页
+            $("#framecenter").ligerTab({
+                height: height,
+                showSwitchInTab: true,
+                showSwitch: true,
+                onAfterAddTabItem: function (tabdata) {
+                    tabItems.push(tabdata);
+                    saveTabStatus();
+                },
+                onAfterRemoveTabItem: function (tabid) {
+                    for (var i = 0; i < tabItems.length; i++) {
+                        var o = tabItems[i];
+                        if (o.tabid == tabid) {
+                            tabItems.splice(i, 1);
+                            saveTabStatus();
+                            break;
+                        }
+                    }
+                }
+            });
+
+            // 面板
+            $("#accordion").ligerAccordion({
+                height: height - 24, speed: null
+            });
+
+            // 树
+            $("#tree").ligerTree({
+                data: indexdata,
+                checkbox: false,
+                slide: false,
+                nodeWidth: 120,
+                attribute: ['nodename', 'url'],
+                btnClickToToggleOnly: false,
+                render: function (a) {
+                    if (!a.isnew) return a.text;
+                    return '<a href="' + a.url + '" target="_blank">' + a.text + '</a>';
+                },
+                onSelect: function (node) {
+                    if (!node.data || !node.data.url) return;
+                    if (node.data.isnew) {
+                        return;
+                    }
+                    var tabid = $(node.target).attr("tabid");
+                    if (!tabid) {
+                        tabid = new Date().getTime();
+                        $(node.target).attr("tabid", tabid);
+                        if (tabItems.length >= 5) {
+                            $.notify("当前页面过多，可能造成不流畅，请适当关闭无用页面", {className: "info", position: "top center", autoHideDelay: 7000});
+                        }
+                    }
+                    f_addTab(tabid, node.data.text, node.data.url);
+                }
+            });
+
+            tree = liger.get("tree");
+            tab = liger.get("framecenter");
+            accordion = liger.get("accordion");
+
+            pages_init();
+        });
+
+        function f_heightChanged(options) {
+            if (tab)
+                tab.addHeight(options.diff);
+            if (accordion && options.middleHeight - 24 > 0)
+                accordion.setHeight(options.middleHeight - 24);
+        }
+
+        function f_addTab(tabid, text, url) {
+            tab.addTabItem({
+                tabid: tabid,
+                text: text,
+                url: url
+            });
+        }
+
+        function pages_init() {
+            var tabJson = $.cookie('liger-home-tab');
+            if (tabJson) {
+                var tabitems = JSON2.parse(tabJson);
+                for (var i = 0; tabitems && tabitems[i]; i++) {
+                    f_addTab(tabitems[i].tabid, tabitems[i].text, tabitems[i].url);
+                }
+            }
+        }
+
+        function saveTabStatus() {
+            $.cookie('liger-home-tab', JSON2.stringify(tabItems));
+        }
+    /*]]>*/
+    </script>
+</head>
+<body style="padding:0;background:#EAEEF5;">
+<div id="topmenu" style="height: 25px;">
+    <img th:src="@{/images/header.png}" height="30px" style="margin-left: 5px" />
+    <div style="float: right; margin-right: 10px; height: 25px;">
+        <button class="btn btn-success btn-sm">安全退出</button>
+    </div>
+</div>
+<div id="layout" style="width:99.2%;margin:0 auto;margin-top:4px;">
+    <div id="accordion" position="left" title="主要菜单">
+        <div title="功能列表" class="l-scroll">
+            <ul id="tree" style="margin-top:3px;"></ul>
+        </div>
+    </div>
+    <div id="framecenter" position="center">
+        <div tabid="home" title="我的主页" style="height:300px;">
+            <iframe frameborder="0" name="home" id="home" th:src="@{/html/welcome.htm}"></iframe>
+        </div>
+    </div>
+</div>
+<div style="height:32px;line-height:32px;text-align:center;">
+    Copyright © 2015-2016 www.findwhy.xyz
+</div>
+<div style="display:none"></div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <headerTemplate th:fragment="headerTemplate">
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- local custom -->
+        <link th:href="@{/jqueryUI/jquery-ui.min.css}" rel="stylesheet" />
+
+        <!-- cdn -->
+        <!--<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" />-->
+        <!--<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>-->
+        <!--<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>-->
+
+        <!-- local -->
+        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+        <script type="text/javascript" th:src="@{/js/jquery-1.12.4.min.js}"></script>
+        <script type="text/javascript" th:src="@{/jqueryUI/jquery-ui.min.js}"></script>
+
+        <!-- local setting -->
+        <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+            var basePath = [[${#httpServletRequest.getAttribute("basePath")}]];
+        /*]]>*/
+        </script>
+    </headerTemplate>
+</head>
+<body>
+</body>
+</html>

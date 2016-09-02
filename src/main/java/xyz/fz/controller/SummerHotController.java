@@ -72,7 +72,7 @@ public class SummerHotController {
                            @PathVariable String templateName) {
 
         model.addAttribute("templateName", templateName);
-        return "summerHot";
+        return "summerHot/template";
     }
 
     @RequestMapping("/jdbcTemplate")
