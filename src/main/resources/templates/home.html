@@ -94,9 +94,6 @@
                     if (!tabid) {
                         tabid = new Date().getTime();
                         $(node.target).attr("tabid", tabid);
-                        if (tabItems.length >= 5) {
-                            $.notify("当前页面过多，可能造成不流畅，请适当关闭无用页面", {className: "info", position: "top center", autoHideDelay: 7000});
-                        }
                     }
                     f_addTab(tabid, node.data.text, node.data.url);
                 }
@@ -122,6 +119,9 @@
                 text: text,
                 url: url
             });
+            if (tabItems.length >= 5) {
+                $.notify("当前页面过多，可能造成不流畅，请适当关闭无用页面", {className: "info", position: "top center", autoHideDelay: 7000});
+            }
         }
 
         function pages_init() {
@@ -137,6 +137,10 @@
         function saveTabStatus() {
             $.cookie('liger-home-tab', JSON2.stringify(tabItems));
         }
+
+        function logout() {
+            $.notify("退出成功^_^", {position: "top center", className: "success"});
+        }
     /*]]>*/
     </script>
 </head>
@@ -144,7 +148,7 @@
 <div id="topmenu" style="height: 30px;">
     <img th:src="@{/images/header.png}" height="30px;" style="margin-left: 0.4%; margin-top: 2px;"/>
     <div style="float: right; margin-right: 0.4%; margin-top: 2px; height: 30px;">
-        <button class="btn btn-success btn-sm">安全退出</button>
+        <button class="btn btn-success btn-sm" onclick="logout();">安全退出</button>
     </div>
 </div>
 <div id="layout" style="width:99.2%;margin:0 auto;margin-top:4px;">

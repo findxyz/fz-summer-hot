@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import xyz.fz.domain.SummerHot;
 import xyz.fz.service.SummerHotService;
@@ -82,11 +83,21 @@ public class SummerHotController {
         return summerHotService.summerHot();
     }
 
-    @RequestMapping("/jpaPage/{curPage}")
+    @RequestMapping("/jpaPage")
     @ResponseBody
-    public Page<SummerHot> jpaPage(@PathVariable int curPage) {
+    public Map<String, Object> jpaPage(@RequestParam(value = "draw", required = false, defaultValue = "0") int draw,
+                                       @RequestParam(value = "start", required = false, defaultValue = "0") int start,
+                                       @RequestParam(value = "length", required = false, defaultValue = "20") int length,
+                                       @RequestParam("name") String name) {
 
-        return summerHotService.pageSummerHot(curPage);
+        int curPage = (start / length);
+        Map<String, Object> result = new HashMap<>();
+        Page<SummerHot> page = summerHotService.pageSummerHot(name, curPage, length);
+        result.put("draw", draw);
+        result.put("recordsTotal", page.getTotalElements());
+        result.put("recordsFiltered", page.getTotalElements());
+        result.put("data", page.getContent());
+        return result;
     }
 
     @RequestMapping("/jpaSave/{name}")

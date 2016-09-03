@@ -13,7 +13,7 @@ public interface SummerHotService {
 
     List<Map<String, Object>> summerHot();
 
-    Page<SummerHot> pageSummerHot(int curPage);
+    Page<SummerHot> pageSummerHot(String name, int curPage, int pageSize);
 
     SummerHot saveSummerHot(String name);
 }

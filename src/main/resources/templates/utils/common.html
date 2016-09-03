@@ -13,18 +13,168 @@
         <!--<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" />-->
         <!--<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>-->
         <!--<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>-->
+        <!--<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css" />-->
+        <!--<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>-->
 
         <!-- local -->
         <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
         <script type="text/javascript" th:src="@{/js/jquery-1.12.4.min.js}"></script>
         <script type="text/javascript" th:src="@{/jqueryUI/jquery-ui.min.js}"></script>
+        <link rel="stylesheet" type="text/css" th:href="@{/datatables/jquery.dataTables.css}" />
+        <script type="text/javascript" charset="utf8" th:src="@{/datatables/jquery.dataTables.js}"></script>
 
         <!-- local setting -->
+        <style type="text/css">
+            .dtLeft {}
+            .dtCenter {
+                text-align: center;
+            }
+            .dtNoWrap {
+                text-align: left;
+                white-space: nowrap;
+            }
+            .dtWrap {
+                text-align: left;
+                word-break: break-all;
+            }
+            .dataTables_length {
+                margin-top: 10px;
+                margin-left: 10px;
+            }
+            .row-margin-bottom {
+                margin-bottom: 5px;
+            }
+            .dataLoading {
+                text-align: center;
+                display: none;
+                position: fixed;
+                z-index: 9000;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                background: rgba(255, 255, 255, .0);
+            }
+        </style>
         <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
             var basePath = [[${#httpServletRequest.getAttribute("basePath")}]];
+
+            $.extend($.fn.dataTable.defaults, {
+                "displayLength": 20,
+                "lengthMenu": [[20, 50, 100, 500], [20, 50, 100, 500]],
+                searching: false,
+                ordering: false,
+                processing: false,
+                serverSide: true,
+                "language": {
+                    "sProcessing":   "处理中...",
+                    "sLengthMenu":   "显示 _MENU_ 项结果",
+                    "sZeroRecords":  "没有匹配结果",
+                    "sInfo":         "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty":    "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix":  "",
+                    "sSearch":       "搜索:",
+                    "sUrl":          "",
+                    "sEmptyTable":     "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands":  ",",
+                    "oPaginate": {
+                        "sFirst":    "首页",
+                        "sPrevious": "上页",
+                        "sNext":     "下页",
+                        "sLast":     "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                }
+            });
+
+            function xDataTables(tabId, dataUrl, paramsFun, columns, columnDefs) {
+                // id容错处理
+                if (tabId.substr(0, 1) != "#") {
+                    tabId = "#" + tabId;
+                }
+                // 位置默认居中
+                for (var i=0; i<columns.length; i++) {
+                    if (!columns[i].className) {
+                        columns[i].className = "dtLeft";
+                    }
+                }
+                // 序号column
+                var seqColumn = {
+                    data: null,
+                    defaultContent: '',
+                    width: "30px",
+                    className: 'dtCenter'
+                };
+                columns.unshift(seqColumn);
+                var seqColumnDef = {
+                    targets: 0,
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        return (meta.row*1 + 1);
+                    }
+                };
+                columnDefs.unshift(seqColumnDef);
+                var config = {
+                    dom: '<"toolbar"rtip><"bottom"l>',
+                    scrollX: true,
+                    scrollY: 400,
+                    select: true,
+                    ajax: {
+                        url: dataUrl,
+                        type: "POST",
+                        data: function(sendData) {
+                            var params = $.extend({}, paramsFun());
+                            params.draw = sendData.draw;
+                            params.length = sendData.length;
+                            params.start = sendData.start;
+                            return params;
+                        }
+                    },
+                    "columns": columns,
+                    "columnDefs": columnDefs || []
+                };
+                var table = $(tabId).DataTable(config);
+                $(tabId + ' tbody').on('click', 'tr', function () {
+                    $(this).toggleClass('selected');
+                });
+                table.on('processing.dt', function (e, settings, processing) {
+                    $('#dataLoading').css('display', processing ? 'block' : 'none');
+                });
+                // 全选/取消 工具栏
+                var toolbar = '<div style="position: absolute; top: 1px; z-index: 9527;">';
+                toolbar += '<input id="allSelectBtn" type="button" class="btn btn-info btn-xs" value="全"/>';
+                toolbar += '<input id="allDeSelectBtn" type="button" class="btn btn-default btn-xs" value="空">';
+                toolbar += '</div>';
+                $(toolbar).prependTo($(tabId + "_wrapper"));
+                $("#allSelectBtn").click(function () {
+                    var trs = $(tabId + " > tbody > tr");
+                    for (var i=0; i<trs.length; i++) {
+                        if (!$(trs[i]).hasClass('selected')) {
+                            $(trs[i]).addClass('selected');
+                        }
+                    }
+                });
+                $("#allDeSelectBtn").click(function () {
+                    var trs = $(tabId + " > tbody > tr");
+                    for (var i=0; i<trs.length; i++) {
+                        if ($(trs[i]).hasClass('selected')) {
+                            $(trs[i]).removeClass('selected');
+                        }
+                    }
+                });
+                return table;
+            }
         /*]]>*/
         </script>
+        <div id="dataLoading" class="dataLoading">
+            <span style="color: #ffffff; font-size: 12px; top: 95%; right: 0; position: fixed;">loading...</span>
+        </div>
     </headerTemplate>
 </head>
 <body>

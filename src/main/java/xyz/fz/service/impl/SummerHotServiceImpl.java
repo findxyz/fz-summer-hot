@@ -22,8 +22,6 @@ import java.util.Map;
 @Transactional
 public class SummerHotServiceImpl implements SummerHotService {
 
-    private static final int pageSize = 20;
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -37,11 +35,11 @@ public class SummerHotServiceImpl implements SummerHotService {
     }
 
     @Override
-    public Page<SummerHot> pageSummerHot(int curPage) {
+    public Page<SummerHot> pageSummerHot(String name, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(curPage, pageSize, sort);
-        return summerHotDao.findAll(pageable);
+        return summerHotDao.findByName(name, pageable);
     }
 
     @Override
