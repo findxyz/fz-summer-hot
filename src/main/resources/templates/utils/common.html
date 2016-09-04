@@ -22,6 +22,7 @@
         <script type="text/javascript" th:src="@{/jqueryUI/jquery-ui.min.js}"></script>
         <link rel="stylesheet" type="text/css" th:href="@{/datatables/jquery.dataTables.css}" />
         <script type="text/javascript" charset="utf8" th:src="@{/datatables/jquery.dataTables.js}"></script>
+        <script th:src="@{/js/notify.min.js}"></script>
 
         <!-- local setting -->
         <style type="text/css">
@@ -55,10 +56,26 @@
                 width: 100%;
                 background: rgba(255, 255, 255, .0);
             }
+            .normalTable {
+                border-spacing: 0;
+                border-collapse: collapse;
+                border: 1px solid black;
+            }
+            .normalTable > thead, .normalTable > tbody {
+                text-align: center;
+            }
+            .normalTable td, .normalTable th {
+                border: 1px solid black;
+            }
         </style>
         <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
             var basePath = [[${#httpServletRequest.getAttribute("basePath")}]];
+
+            $.notify.defaults({
+                className: "info",
+                position: "top center"
+            });
 
             $.extend($.fn.dataTable.defaults, {
                 "displayLength": 20,
@@ -93,7 +110,7 @@
                 }
             });
 
-            function xDataTables(tabId, dataUrl, paramsFun, columns, columnDefs) {
+            function XDataTables(tabId, dataUrl, paramsFun, columns, columnDefs) {
                 // id容错处理
                 if (tabId.substr(0, 1) != "#") {
                     tabId = "#" + tabId;
@@ -147,7 +164,7 @@
                     $('#dataLoading').css('display', processing ? 'block' : 'none');
                 });
                 // 全选/取消 工具栏
-                var toolbar = '<div style="position: absolute; top: 1px; z-index: 9527;">';
+                var toolbar = '<div style="position: absolute; top: 1px; z-index: 27;">';
                 toolbar += '<input id="allSelectBtn" type="button" class="btn btn-info btn-xs" value="全"/>';
                 toolbar += '<input id="allDeSelectBtn" type="button" class="btn btn-default btn-xs" value="空">';
                 toolbar += '</div>';
@@ -169,6 +186,30 @@
                     }
                 });
                 return table;
+            }
+
+            function putDatasIntoTabBody(datas, datasDefs, tabBodyId) {
+                if (tabBodyId.substr(0, 1) != "#") {
+                    tabBodyId = "#" + tabBodyId;
+                }
+                $(tabBodyId).html("");
+                for (var m=0; m<datas.length; m++) {
+                    var tr = "<tr>";
+                    var data = datas[m];
+                    for (var n=0; n<datasDefs.length; n++) {
+                        var dataDef = datasDefs[n];
+                        if (dataDef.width) {
+                            if (dataDef.width.indexOf("px") == -1) {
+                                dataDef.width = dataDef.width + "px";
+                            }
+                            tr += "<td width='" + dataDef.width + "'>" + data[dataDef.key] + "</td>";
+                        } else {
+                            tr += "<td>" + data[dataDef.key] + "</td>";
+                        }
+                    }
+                    tr += "</tr>";
+                    $(tabBodyId).append(tr);
+                }
             }
         /*]]>*/
         </script>

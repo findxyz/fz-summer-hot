@@ -5,6 +5,11 @@
     <headerTemplate th:include="/utils/common::headerTemplate"></headerTemplate>
     <script th:inline="javascript" type="text/javascript">
         /*<![CDATA[*/
+        function showValue(me, value) {
+            $(me).closest("tr").click();
+            $.notify(value);
+        }
+
         $(function () {
             var paramsFun = function(){
                 var params = {};
@@ -14,14 +19,21 @@
             var columns = [{
                 data: "id"
             }, {
-                data: "name",
-                className: "dtLeft"
+                data: "name"
+            }, {
+                data: null,
+                defaultContent: ''
             }];
             var columnDefs = [{
                 "visible": false,
                 "targets": [1]
+            }, {
+                "targets": -1,
+                render: function (data, type, row) {
+                    return "<button class='btn btn-default btn-sm' onclick='showValue(this, " + JSON.stringify(row.name) + ")'>秀Value</button>";
+                }
             }];
-            var table = new xDataTables("shTab", basePath + "summerHot/jpaPage", paramsFun, columns, columnDefs);
+            var table = new XDataTables("shTab", basePath + "summerHot/jpaPage", paramsFun, columns, columnDefs);
             $("#name").bind("keypress", function (event) {
                 if (event.keyCode == 13) {
                     table.ajax.reload();
@@ -29,6 +41,38 @@
             });
             $("#search").bind("click", function () {
                 table.ajax.reload();
+            });
+            $("#valueBtn").bind("click", function () {
+                var datas = table.rows('.selected').data();
+                if (datas.length == 0) {
+                    $.notify("请先选择数据");
+                    return false;
+                }
+                var datasDefs = [{
+                    key: "id",
+                    width: "50"
+                }, {
+                    key: "name"
+                }];
+                putDatasIntoTabBody(datas, datasDefs, "#valueBody");
+                $("#valuesDialog").dialog("open");
+            });
+            $("#valuesDialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 400,
+                height: 300,
+                buttons: [{
+                    text: "好的",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }, {
+                    text: "关闭",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }]
             });
         });
         /*]]>*/
@@ -38,6 +82,7 @@
 <div style="margin: 5px;">
 
     <div id="toolBar" style="margin-bottom: 5px;">
+        <input id="valueBtn" class="btn btn-success btn-xs" type="button" value="获取选中值" />
         姓名：<input id="name" type="text" />
         <input id="search" class="btn btn-info btn-xs" type="button" value="查询" />
     </div>
@@ -47,11 +92,24 @@
             <th>序号</th>
             <th>ID</th>
             <th>姓名</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
+    <div id="valuesDialog" title="选中行的值" style="display: none">
+        <table class="normalTable" width="200px">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>姓名</td>
+                </tr>
+            </thead>
+            <tbody id="valueBody">
+            </tbody>
+        </table>
+    </div>
 
 </div>
 </body>
