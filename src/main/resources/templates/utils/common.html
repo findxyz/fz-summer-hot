@@ -125,7 +125,7 @@
                 var seqColumn = {
                     data: null,
                     defaultContent: '',
-                    width: "30px",
+                    width: 30,
                     className: 'dtCenter'
                 };
                 columns.unshift(seqColumn);
@@ -199,7 +199,7 @@
                     for (var n=0; n<datasDefs.length; n++) {
                         var dataDef = datasDefs[n];
                         if (dataDef.width) {
-                            if (dataDef.width.indexOf("px") == -1) {
+                            if ((dataDef.width + "").indexOf("px") == -1) {
                                 dataDef.width = dataDef.width + "px";
                             }
                             tr += "<td width='" + dataDef.width + "'>" + data[dataDef.key] + "</td>";
