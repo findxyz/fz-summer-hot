@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>用户管理</title>
+    <headerTemplate th:include="/utils/common::headerTemplate"></headerTemplate>
+    <script th:inline="javascript" type="text/javascript">
+        /*<![CDATA[*/
+        function resetPassWord(me, id) {
+            $(me).closest("tr").click();
+            // done 重置密码
+            mask.open();
+            $.post(basePath + "user/resetPassWord", {
+                id: id
+            }, function (json) {
+                mask.close();
+                if (json.success) {
+                    $.notify("重置成功88888888(8个8)", {className: "success"});
+                } else {
+                    $.notify("重置失败", {className: "error"});
+                }
+            }, 'json');
+        }
+
+        $(function () {
+            var paramsFun = function(){
+                var params = {};
+                params.userName = $("#sUserName").val();
+                return params;
+            };
+            var columns = [{
+                data: "id"
+            }, {
+                data: "userName",
+                width: 80
+            }, {
+                data: "realName",
+                width: 80
+            }, {
+                data: "createTime",
+                width: 150
+            }, {
+                data: "isActivity",
+                width: 80
+            }, {
+                data: null,
+                defaultContent: ''
+            }];
+            var columnDefs = [{
+                "visible": false,
+                "targets": [1]
+            }, {
+                "targets": -1,
+                render: function (data, type, row) {
+                    return "<button class='btn btn-warning btn-sm' onclick='resetPassWord(this, " + row.id + ")'>重置密码</button>";
+                }
+            }, {
+                "targets": -2,
+                render: function (data, type, row) {
+                    if (row.isActivity*1) {
+                        return "<font color='green'>有效</font>";
+                    } else {
+                        return "<font color='red'>无效</font>";
+                    }
+                }
+            }];
+            var table = new XDataTables("shTab", basePath + "user/userPageList", paramsFun, columns, columnDefs);
+            $("#sUserName").bind("keypress", function (event) {
+                if (event.keyCode == 13) {
+                    table.ajax.reload();
+                }
+            });
+            $("#search").bind("click", function () {
+                table.ajax.reload();
+            });
+            $("#addBtn").bind("click", function () {
+                $("#userName").val("");
+                $("#realName").val("");
+                $("#passWord").val("");
+                $("#userDialog").dialog("open");
+            });
+            $("#userDialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 340,
+                height: 240,
+                buttons: [{
+                    text: "保存",
+                    click: function () {
+                        var userName = $("#userName").val();
+                        var realName = $("#realName").val();
+                        var passWord = $("#passWord").val();
+                        if (!(userName && realName && passWord)) {
+                            $.notify("请完善数据后保存");
+                            return false;
+                        }
+                        mask.open();
+                        $.post(basePath + "user/saveUser", {
+                            userName: userName,
+                            realName: realName,
+                            passWord: passWord
+                        }, function (json) {
+                            mask.close();
+                            if (json.success) {
+                                $.notify("保存成功", {className: "success"});
+                                table.ajax.reload();
+                            } else {
+                                $.notify("保存失败", {className: "error"});
+                            }
+                        }, 'json');
+                        $(this).dialog("close");
+                    }
+                }, {
+                    text: "关闭",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }]
+            });
+        });
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div style="margin: 5px;">
+    <div id="toolBar" style="margin-bottom: 5px;">
+        <div>
+            <input id="addBtn" type="button" class="btn btn-success btn-xs" value="新增" />
+        </div>
+        <div>
+            账户名称：<input title="账户名称" id="sUserName" type="text" />
+            <input id="search" class="btn btn-info btn-xs" type="button" value="查询" />
+        </div>
+    </div>
+    <table id="shTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>ID</th>
+            <th>账户名称</th>
+            <th>真实姓名</th>
+            <th>创建时间</th>
+            <th>是否有效</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div id="userDialog" title="新增用户">
+        <table width="300px;" style="border-collapse: separate; border-spacing: 5px;">
+            <tr>
+                <td>账户名称：</td>
+                <td><input title="账户名称" id="userName" /></td>
+            </tr>
+            <tr>
+                <td>真实姓名：</td>
+                <td><input title="真实姓名" id="realName" /></td>
+            </tr>
+            <tr>
+                <td>密码：</td>
+                <td><input title="密码" type="password" id="passWord" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

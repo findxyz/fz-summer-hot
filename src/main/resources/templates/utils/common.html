@@ -45,6 +45,19 @@
             .row-margin-bottom {
                 margin-bottom: 5px;
             }
+
+            .normalTable {
+                border-spacing: 0;
+                border-collapse: collapse;
+                border: 1px solid black;
+            }
+            .normalTable > thead, .normalTable > tbody {
+                text-align: center;
+            }
+            .normalTable td, .normalTable th {
+                border: 1px solid black;
+            }
+
             .dataLoading {
                 text-align: center;
                 display: none;
@@ -56,16 +69,17 @@
                 width: 100%;
                 background: rgba(255, 255, 255, .0);
             }
-            .normalTable {
-                border-spacing: 0;
-                border-collapse: collapse;
-                border: 1px solid black;
-            }
-            .normalTable > thead, .normalTable > tbody {
+            .masking {
                 text-align: center;
-            }
-            .normalTable td, .normalTable th {
-                border: 1px solid black;
+                padding-top: 200px;
+                display: none;
+                position: fixed;
+                z-index: 9000;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                background: rgba(255, 255, 255, .5);
             }
         </style>
         <script type="text/javascript" th:inline="javascript">
@@ -211,10 +225,22 @@
                     $(tabBodyId).append(tr);
                 }
             }
+
+            var mask = {
+                open: function () {
+                    $("#masking").show();
+                },
+                close: function () {
+                    $("#masking").hide();
+                }
+            };
         /*]]>*/
         </script>
         <div id="dataLoading" class="dataLoading">
             <span style="color: #ffffff; font-size: 12px; top: 95%; right: 0; position: fixed;">loading...</span>
+        </div>
+        <div id="masking" class="masking">
+            <h1 style="color: #5e8dff">正在处理，请稍等。。。</h1>
         </div>
     </headerTemplate>
 </head>

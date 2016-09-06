@@ -16,7 +16,7 @@
         body { padding: 0; margin: 0; overflow: hidden; }
     </style>
     <script type="text/javascript">
-        var indexdata = [{text:'夏天好热',isexpand:true,children:[{url:"summerHot/template/a",text:"夏天好热模板a"},{url:"summerHot/log",text:"夏天好热log"},{url:"summerHot/value",text:"夏天好热value"},{url:"summerHot/jdbcTemplate",text:"夏天好热jdbcTemplate"},{url:"summerHot/jpaPage/1",text:"夏天好热jpaPage"},{url:"summerHot/jpaSave/zxc",text:"夏天好热jpaSave"}]}];
+        var treeData = [{text:'用户管理',isexpand:true,children:[{url:"user/main",text:"用户列表"}]}];
     </script>
     <script type="text/javascript">
     /*<![CDATA[*/
@@ -75,7 +75,7 @@
 
             // 树
             $("#tree").ligerTree({
-                data: indexdata,
+                data: treeData,
                 checkbox: false,
                 slide: false,
                 nodeWidth: 120,

@@ -6,14 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import xyz.fz.domain.SummerHot;
+import xyz.fz.domain.TUser;
 
 /**
  * Created by fz on 2016/8/11.
  */
 @Repository
-public interface SummerHotDao extends JpaRepository<SummerHot, Long> {
+public interface UserDao extends JpaRepository<TUser, Long> {
 
-    @Query("select s from SummerHot s where s.name like concat('%', :name, '%')")
-    Page<SummerHot> findByName(@Param("name") String name, Pageable pageable);
+    @Query("select u from TUser u where u.userName like concat('%', :userName, '%')")
+    Page<TUser> findByUserName(@Param("userName") String userName, Pageable pageable);
 }
