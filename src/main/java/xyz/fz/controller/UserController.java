@@ -81,8 +81,13 @@ public class UserController {
     public Map<String, Object> resetPassWord(@RequestParam("id") Long id) {
 
         Map<String, Object> result = new HashMap<>();
-        boolean success = userService.resetPassWord(id);
-        result.put("success", success);
+        try {
+            userService.resetPassWord(id);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+        }
         return result;
     }
 

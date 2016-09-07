@@ -17,5 +17,5 @@ public interface UserService {
 
     TUser saveUser(TUser user);
 
-    boolean resetPassWord(Long id);
+    void resetPassWord(Long id);
 }

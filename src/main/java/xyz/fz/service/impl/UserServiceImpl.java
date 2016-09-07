@@ -52,19 +52,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean resetPassWord(Long id) {
-
+    public void resetPassWord(Long id) {
         TUser user = userDao.findOne(id);
         user.setPassWord(BaseUtil.sha1Hex(defaultPassWord));
-        boolean success;
-        try {
-            userDao.save(user);
-            success = true;
-        } catch (Exception e) {
-            success = false;
-            e.printStackTrace();
-        }
-        return success;
+        userDao.save(user);
     }
 
 

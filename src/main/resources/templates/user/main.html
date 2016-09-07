@@ -18,7 +18,14 @@
                 } else {
                     $.notify("重置失败", {className: "error"});
                 }
+                search();
             }, 'json');
+        }
+
+        var table;
+
+        function search() {
+            table.ajax.reload();
         }
 
         $(function () {
@@ -63,14 +70,14 @@
                     }
                 }
             }];
-            var table = new XDataTables("shTab", basePath + "user/userPageList", paramsFun, columns, columnDefs);
+            table = new XDataTables("shTab", basePath + "user/userPageList", paramsFun, columns, columnDefs);
             $("#sUserName").bind("keypress", function (event) {
                 if (event.keyCode == 13) {
-                    table.ajax.reload();
+                    search();
                 }
             });
             $("#search").bind("click", function () {
-                table.ajax.reload();
+                search();
             });
             $("#addBtn").bind("click", function () {
                 $("#userName").val("");
@@ -102,7 +109,7 @@
                             mask.close();
                             if (json.success) {
                                 $.notify("保存成功", {className: "success"});
-                                table.ajax.reload();
+                                search();
                             } else {
                                 $.notify("保存失败", {className: "error"});
                             }
