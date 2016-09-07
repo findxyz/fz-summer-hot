@@ -11,7 +11,4 @@ public class BaseUtil {
         return DigestUtils.sha1Hex(str);
     }
 
-    public static void main(String[] args) {
-        System.out.println(sha1Hex("88888888"));
-    }
 }
