@@ -13,7 +13,7 @@ import java.io.IOException;
 public class BasePathFilter implements Filter{
 
     @Value("${server.context-path}")
-    public String basePath;
+    public final String basePath = null;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {}

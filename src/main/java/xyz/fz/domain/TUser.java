@@ -29,7 +29,10 @@ public class TUser {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
-    @Column(nullable = false, length = 1)
+    @Column
+    private Long roleId;
+
+    @Column(nullable = false, columnDefinition = "int(1) not null")
     private Integer isActivity;
 
     public Long getId() {
@@ -70,6 +73,14 @@ public class TUser {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public Integer getIsActivity() {

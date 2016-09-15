@@ -1,29 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>find why home</title>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
-    <link th:href="@{/ligerUI/skins/Aqua/css/ligerui-all.css}" rel="stylesheet" />
-    <link th:href="@{/ligerUI/skins/Gray/css/all.css}" rel="stylesheet" />
-    <script th:src="@{/js/jquery-1.12.4.min.js}" type="text/javascript"></script>
-    <script th:src="@{/ligerUI/js/ligerui.min.js}" type="text/javascript"></script>
-    <script th:src="@{/ligerUI/jquery.cookie.js}"></script>
-    <script th:src="@{/ligerUI/json2.js}"></script>
-    <script th:src="@{/js/notify.min.js}"></script>
+    <baseTemplate th:include="utils/common::baseTemplate"></baseTemplate>
+    <link th:href="@{/pubs/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/pubs/ligerUI/skins/Aqua/css/ligerui-all.css}" rel="stylesheet"/>
+    <link th:href="@{/pubs/ligerUI/skins/Gray/css/all.css}" rel="stylesheet"/>
+    <script th:src="@{/pubs/js/jquery-1.12.4.min.js}" type="text/javascript"></script>
+    <script th:src="@{/pubs/ligerUI/js/ligerui.min.js}" type="text/javascript"></script>
+    <script th:src="@{/pubs/ligerUI/jquery.cookie.js}"></script>
+    <script th:src="@{/pubs/ligerUI/json2.js}"></script>
+    <script th:src="@{/pubs/js/notify.min.js}"></script>
     <style type="text/css">
-        body, html { height: 100%; }
-        body { padding: 0; margin: 0; overflow: hidden; }
+        body, html {
+            height: 100%;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
     </style>
     <script type="text/javascript">
-        var treeData = [{text:'用户管理',isexpand:true,children:[{url:"user/main",text:"用户列表"}]}];
+        var treeData = [{text: '用户管理', isexpand: true, children: [{url: "user/main", text: "用户列表"}]}];
     </script>
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
+
         var tab = null;
         var accordion = null;
         var tree = null;
         var tabItems = [];
+
         $(function () {
 
             // 布局
@@ -70,7 +80,8 @@
 
             // 面板
             $("#accordion").ligerAccordion({
-                height: height - 24, speed: null
+                height: height - 24,
+                speed: null
             });
 
             // 树
@@ -86,7 +97,9 @@
                     return '<a href="' + a.url + '" target="_blank">' + a.text + '</a>';
                 },
                 onSelect: function (node) {
-                    if (!node.data || !node.data.url) return;
+                    if (!node.data || !node.data.url) {
+                        return;
+                    }
                     if (node.data.isnew) {
                         return;
                     }
@@ -107,10 +120,12 @@
         });
 
         function f_heightChanged(options) {
-            if (tab)
+            if (tab) {
                 tab.addHeight(options.diff);
-            if (accordion && options.middleHeight - 24 > 0)
+            }
+            if (accordion && options.middleHeight - 24 > 0) {
                 accordion.setHeight(options.middleHeight - 24);
+            }
         }
 
         function f_addTab(tabid, text, url) {
@@ -139,33 +154,48 @@
         }
 
         function logout() {
-            $.notify("退出成功^_^", {position: "top center", className: "success"});
+            $.post(basePath + "logout", {}, function (json) {
+                if (json.success) {
+                    $.notify("退出成功^_^", {
+                        position: "top center",
+                        className: "success"
+                    });
+                    setTimeout(function () {
+                        window.location = basePath;
+                    }, 1000);
+                } else {
+                    $.notify("退出失败", {
+                        position: "top center",
+                        className: "error"
+                    });
+                }
+            }, 'json');
         }
     /*]]>*/
     </script>
 </head>
-<body style="padding:0;background:#EAEEF5;">
+<body style="padding: 0; background: #EAEEF5;">
 <div id="topmenu" style="height: 30px;">
-    <img th:src="@{/images/header.png}" height="30px;" style="margin-left: 0.4%; margin-top: 2px;"/>
+    <img th:src="@{/pubs/images/header.png}" height="30px;" style="margin-left: 0.4%; margin-top: 2px;"/>
     <div style="float: right; margin-right: 0.4%; margin-top: 2px; height: 30px;">
         <button class="btn btn-success btn-sm" onclick="logout();">安全退出</button>
     </div>
 </div>
-<div id="layout" style="width:99.2%;margin:0 auto;margin-top:4px;">
+<div id="layout" style="width: 99.2%; margin: 4px auto 0;">
     <div id="accordion" position="left" title="主要菜单">
         <div title="功能列表" class="l-scroll">
-            <ul id="tree" style="margin-top:3px;"></ul>
+            <ul id="tree" style="margin-top: 3px;"></ul>
         </div>
     </div>
     <div id="framecenter" position="center">
-        <div tabid="home" title="我的主页" style="height:300px;">
-            <iframe frameborder="0" name="home" id="home" th:src="@{/html/welcome.htm}"></iframe>
+        <div tabid="home" title="我的主页" style="height: 300px;">
+            <iframe frameborder="0" name="home" id="home" th:src="@{/pubs/html/welcome.htm}"></iframe>
         </div>
     </div>
 </div>
-<div style="height:32px;line-height:32px;text-align:center;">
+<div style="height: 32px; line-height: 32px; text-align: center; display: none">
     Copyright © 2015-2016 www.findwhy.xyz
 </div>
-<div style="display:none"></div>
+<div style="display: none"></div>
 </body>
 </html>

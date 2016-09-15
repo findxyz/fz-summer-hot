@@ -47,11 +47,11 @@ public class UserController {
     public Map<String, Object> userPageList(@RequestParam(value = "draw", required = false, defaultValue = "0") int draw,
                                             @RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                             @RequestParam(value = "length", required = false, defaultValue = "20") int length,
-                                            @RequestParam("userName") String userName) {
+                                            @RequestParam("name") String name) {
 
         int curPage = (start / length);
         Map<String, Object> result = new HashMap<>();
-        Page<TUser> page = userService.userPageList(userName, curPage, length);
+        Page<TUser> page = userService.userPageList(name, curPage, length);
         result.put("draw", draw);
         result.put("recordsTotal", page.getTotalElements());
         result.put("recordsFiltered", page.getTotalElements());
@@ -87,6 +87,7 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             result.put("success", false);
+            result.put("message", e.getMessage());
         }
         return result;
     }

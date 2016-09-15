@@ -23,8 +23,6 @@ import java.util.Map;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final String defaultPassWord = "88888888";
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -38,11 +36,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<TUser> userPageList(String userName, int curPage, int pageSize) {
+    public Page<TUser> userPageList(String name, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(curPage, pageSize, sort);
-        return userDao.findByUserName(userName, pageable);
+        return userDao.findByName(name, pageable);
     }
 
     @Override
@@ -54,8 +52,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resetPassWord(Long id) {
         TUser user = userDao.findOne(id);
+        String defaultPassWord = "88888888";
         user.setPassWord(BaseUtil.sha1Hex(defaultPassWord));
         userDao.save(user);
+    }
+
+    @Override
+    public TUser findUser(String userName, String passWord) {
+        List<TUser> userList = userDao.findUserList(userName, BaseUtil.sha1Hex(passWord));
+        if (userList != null && userList.size() == 1) {
+            return userList.get(0);
+        } else {
+            return null;
+        }
     }
 
 

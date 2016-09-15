@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>index</title>
+    <meta charset="utf-8"/>
+    <baseTemplate th:include="utils/common::baseTemplate"></baseTemplate>
+    <script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    function loading() {
+        window.location = basePath + "login";
+    }
+    /*]]>*/
+    </script>
+</head>
+<body onload="loading();">
+loading...
+</body>
+</html>

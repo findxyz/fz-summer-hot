@@ -4,21 +4,20 @@
     <title>用户管理</title>
     <headerTemplate th:include="utils/common::headerTemplate"></headerTemplate>
     <script th:inline="javascript" type="text/javascript">
-        /*<![CDATA[*/
+    /*<![CDATA[*/
         function resetPassWord(me, id) {
             $(me).closest("tr").click();
             // done 重置密码
-            mask.open();
+            cleanMask.open();
             $.post(basePath + "user/resetPassWord", {
                 id: id
             }, function (json) {
-                mask.close();
+                cleanMask.close();
                 if (json.success) {
-                    $.notify("重置成功88888888(8个8)", {className: "success"});
+                    $(me).notify("密码成功重置为8个8", {className: "success", position: "right"});
                 } else {
-                    $.notify("重置失败", {className: "error"});
+                    $(me).notify("重置失败[" + json.message + "]", {className: "error", position: "right"});
                 }
-                search();
             }, 'json');
         }
 
@@ -31,7 +30,7 @@
         $(function () {
             var paramsFun = function(){
                 var params = {};
-                params.userName = $("#sUserName").val();
+                params.name = $("#sName").val();
                 return params;
             };
             var columns = [{
@@ -64,14 +63,14 @@
                 "targets": -2,
                 render: function (data, type, row) {
                     if (row.isActivity*1) {
-                        return "<font color='green'>有效</font>";
+                        return "<span style='color: green;'>有效</span>";
                     } else {
-                        return "<font color='red'>无效</font>";
+                        return "<span style='color: red;'>无效</span>";
                     }
                 }
             }];
             table = new XDataTables("shTab", basePath + "user/userPageList", paramsFun, columns, columnDefs);
-            $("#sUserName").bind("keypress", function (event) {
+            $("#sName").bind("keypress", function (event) {
                 if (event.keyCode == 13) {
                     search();
                 }
@@ -124,7 +123,7 @@
                 }]
             });
         });
-        /*]]>*/
+    /*]]>*/
     </script>
 </head>
 <body>
@@ -134,7 +133,7 @@
             <input id="addBtn" type="button" class="btn btn-success btn-xs" value="新增" />
         </div>
         <div>
-            账户名称：<input title="账户名称" id="sUserName" type="text" />
+            账户名称/真实姓名：<input title="账户名称/真实姓名" id="sName" type="text" />
             <input id="search" class="btn btn-info btn-xs" type="button" value="查询" />
         </div>
     </div>
@@ -153,18 +152,18 @@
         <tbody>
         </tbody>
     </table>
-    <div id="userDialog" title="新增用户">
+    <div id="userDialog" title="新增用户" style="display: none">
         <table width="300px;" style="border-collapse: separate; border-spacing: 5px;">
             <tr>
-                <td>账户名称：</td>
+                <td style="text-align: right">账户名称：</td>
                 <td><input title="账户名称" id="userName" /></td>
             </tr>
             <tr>
-                <td>真实姓名：</td>
+                <td style="text-align: right">真实姓名：</td>
                 <td><input title="真实姓名" id="realName" /></td>
             </tr>
             <tr>
-                <td>密码：</td>
+                <td style="text-align: right">密码：</td>
                 <td><input title="密码" type="password" id="passWord" /></td>
             </tr>
         </table>

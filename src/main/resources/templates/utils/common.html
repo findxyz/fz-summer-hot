@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <headerTemplate th:fragment="headerTemplate">
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
         <!-- local custom -->
-        <link th:href="@{/jqueryUI/jquery-ui.min.css}" rel="stylesheet" />
+        <link th:href="@{/pubs/jqueryUI/jquery-ui.min.css}" rel="stylesheet"/>
 
         <!-- cdn -->
         <!--<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" />-->
@@ -17,31 +17,37 @@
         <!--<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>-->
 
         <!-- local -->
-        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
-        <script type="text/javascript" th:src="@{/js/jquery-1.12.4.min.js}"></script>
-        <script type="text/javascript" th:src="@{/jqueryUI/jquery-ui.min.js}"></script>
-        <link rel="stylesheet" type="text/css" th:href="@{/datatables/jquery.dataTables.css}" />
-        <script type="text/javascript" charset="utf8" th:src="@{/datatables/jquery.dataTables.js}"></script>
-        <script th:src="@{/js/notify.min.js}"></script>
+        <link th:href="@{/pubs/css/bootstrap.min.css}" rel="stylesheet"/>
+        <script type="text/javascript" th:src="@{/pubs/js/jquery-1.12.4.min.js}"></script>
+        <script type="text/javascript" th:src="@{/pubs/jqueryUI/jquery-ui.min.js}"></script>
+        <link rel="stylesheet" type="text/css" th:href="@{/pubs/datatables/jquery.dataTables.css}"/>
+        <script type="text/javascript" charset="utf8" th:src="@{/pubs/datatables/jquery.dataTables.js}"></script>
+        <script th:src="@{/pubs/js/notify.min.js}"></script>
 
         <!-- local setting -->
         <style type="text/css">
-            .dtLeft {}
+            .dtLeft {
+            }
+
             .dtCenter {
                 text-align: center;
             }
+
             .dtNoWrap {
                 text-align: left;
                 white-space: nowrap;
             }
+
             .dtWrap {
                 text-align: left;
                 word-break: break-all;
             }
+
             .dataTables_length {
                 margin-top: 10px;
                 margin-left: 10px;
             }
+
             .row-margin-bottom {
                 margin-bottom: 5px;
             }
@@ -51,11 +57,17 @@
                 border-collapse: collapse;
                 border: 1px solid black;
             }
+
             .normalTable > thead, .normalTable > tbody {
                 text-align: center;
             }
+
             .normalTable td, .normalTable th {
                 border: 1px solid black;
+            }
+
+            .ui-dialog {
+                font-size: 16px;
             }
 
             .dataLoading {
@@ -69,6 +81,7 @@
                 width: 100%;
                 background: rgba(255, 255, 255, .0);
             }
+
             .masking {
                 text-align: center;
                 padding-top: 200px;
@@ -81,9 +94,23 @@
                 width: 100%;
                 background: rgba(255, 255, 255, .5);
             }
+
+            .cleanMasking {
+                text-align: center;
+                padding-top: 200px;
+                display: none;
+                position: fixed;
+                z-index: 9000;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                background: rgba(255, 255, 255, 0);
+            }
         </style>
         <script type="text/javascript" th:inline="javascript">
-        /*<![CDATA[*/
+            /*<![CDATA[*/
+
             var basePath = [[${#httpServletRequest.getAttribute("basePath")}]];
 
             $.notify.defaults({
@@ -99,26 +126,26 @@
                 processing: false,
                 serverSide: true,
                 "language": {
-                    "sProcessing":   "处理中...",
-                    "sLengthMenu":   "显示 _MENU_ 项结果",
-                    "sZeroRecords":  "没有匹配结果",
-                    "sInfo":         "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-                    "sInfoEmpty":    "显示第 0 至 0 项结果，共 0 项",
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
                     "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-                    "sInfoPostFix":  "",
-                    "sSearch":       "搜索:",
-                    "sUrl":          "",
-                    "sEmptyTable":     "表中数据为空",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
                     "sLoadingRecords": "载入中...",
-                    "sInfoThousands":  ",",
+                    "sInfoThousands": ",",
                     "oPaginate": {
-                        "sFirst":    "首页",
+                        "sFirst": "首页",
                         "sPrevious": "上页",
-                        "sNext":     "下页",
-                        "sLast":     "末页"
+                        "sNext": "下页",
+                        "sLast": "末页"
                     },
                     "oAria": {
-                        "sSortAscending":  ": 以升序排列此列",
+                        "sSortAscending": ": 以升序排列此列",
                         "sSortDescending": ": 以降序排列此列"
                     }
                 }
@@ -130,7 +157,7 @@
                     tabId = "#" + tabId;
                 }
                 // 位置默认居中
-                for (var i=0; i<columns.length; i++) {
+                for (var i = 0; i < columns.length; i++) {
                     if (!columns[i].className) {
                         columns[i].className = "dtLeft";
                     }
@@ -147,7 +174,7 @@
                     targets: 0,
                     data: null,
                     render: function (data, type, row, meta) {
-                        return (meta.row*1 + 1);
+                        return (meta.row * 1 + 1);
                     }
                 };
                 columnDefs.unshift(seqColumnDef);
@@ -159,7 +186,7 @@
                     ajax: {
                         url: dataUrl,
                         type: "POST",
-                        data: function(sendData) {
+                        data: function (sendData) {
                             var params = $.extend({}, paramsFun());
                             params.draw = sendData.draw;
                             params.length = sendData.length;
@@ -185,7 +212,7 @@
                 $(toolbar).prependTo($(tabId + "_wrapper"));
                 $("#allSelectBtn").click(function () {
                     var trs = $(tabId + " > tbody > tr");
-                    for (var i=0; i<trs.length; i++) {
+                    for (var i = 0; i < trs.length; i++) {
                         if (!$(trs[i]).hasClass('selected')) {
                             $(trs[i]).addClass('selected');
                         }
@@ -193,7 +220,7 @@
                 });
                 $("#allDeSelectBtn").click(function () {
                     var trs = $(tabId + " > tbody > tr");
-                    for (var i=0; i<trs.length; i++) {
+                    for (var i = 0; i < trs.length; i++) {
                         if ($(trs[i]).hasClass('selected')) {
                             $(trs[i]).removeClass('selected');
                         }
@@ -207,10 +234,10 @@
                     tabBodyId = "#" + tabBodyId;
                 }
                 $(tabBodyId).html("");
-                for (var m=0; m<datas.length; m++) {
+                for (var m = 0; m < datas.length; m++) {
                     var tr = "<tr>";
                     var data = datas[m];
-                    for (var n=0; n<datasDefs.length; n++) {
+                    for (var n = 0; n < datasDefs.length; n++) {
                         var dataDef = datasDefs[n];
                         if (dataDef.width) {
                             if ((dataDef.width + "").indexOf("px") == -1) {
@@ -234,7 +261,16 @@
                     $("#masking").hide();
                 }
             };
-        /*]]>*/
+
+            var cleanMask = {
+                open: function () {
+                    $("#cleanMasking").show();
+                },
+                close: function () {
+                    $("#cleanMasking").hide();
+                }
+            };
+            /*]]>*/
         </script>
         <div id="dataLoading" class="dataLoading">
             <span style="color: #ffffff; font-size: 12px; top: 95%; right: 0; position: fixed;">loading...</span>
@@ -242,7 +278,16 @@
         <div id="masking" class="masking">
             <h1 style="color: #5e8dff">正在处理，请稍等。。。</h1>
         </div>
+        <div id="cleanMasking" class="cleanMasking"></div>
     </headerTemplate>
+
+    <baseTemplate th:fragment="baseTemplate">
+        <script type="text/javascript" th:inline="javascript">
+            /*<![CDATA[*/
+            var basePath = [[${#httpServletRequest.getAttribute("basePath")}]];
+            /*]]>*/
+        </script>
+    </baseTemplate>
 </head>
 <body>
 </body>

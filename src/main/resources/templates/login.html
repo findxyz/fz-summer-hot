@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>登陆</title>
+    <headerTemplate th:include="utils/common::headerTemplate"></headerTemplate>
+    <style type="text/css">
+        body {
+            background-image: url("/pubs/images/index-bg2.jpg");
+        }
+        .input {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: solid 1px gray;
+        }
+        .ui-dialog {
+            font-size: 28px !important;
+        }
+        .diaLabel {
+            display: inline-block;
+            width: 120px;
+            margin-right: 10px;
+            text-align: right;
+        }
+    </style>
+    <script th:inline="javascript" type="text/javascript">
+    /*<![CDATA[*/
+    $(function () {
+        function sub() {
+            var userName = $("#userName").val();
+            var passWord = $("#passWord").val();
+            var valCode = $("#valCode").val();
+            if (!(userName && passWord && valCode)) {
+                $.notify("用户名和密码还有验证码都不能为空");
+                return false;
+            }
+            cleanMask.open();
+            $.post(basePath + "login", {
+                userName: userName,
+                passWord: passWord,
+                valCode: valCode
+            }, function (json) {
+                cleanMask.close();
+                if (json.success) {
+                    $.notify("登陆成功");
+                    setTimeout(function () {
+                        window.location = basePath + "home";
+                    }, 1000);
+                } else {
+                    $.notify("用户名或密码错误", {className: "error"});
+                }
+            }, 'json');
+        }
+
+        $("#loginDialog").dialog({
+            autoOpen: true,
+            modal: true,
+            width: 550,
+            height: 420,
+            buttons: [{
+                text: "登陆",
+                click: sub
+            }]
+        });
+
+        $(".ui-dialog-titlebar-close").hide();
+        $("#userName").val("").focus();
+        $("#passWord").val("");
+        $("#valCode").val("").keypress(function (event) {
+            if (event.keyCode == 13) {
+                sub();
+            }
+        });
+    });
+    /*]]>*/
+    </script>
+</head>
+<body>
+    <div id="loginDialog" title="Login" style="display: none;">
+        <div style="width: 500px; margin-top: 10px;">
+            <div class="diaLabel">用户名：</div>
+            <span><input title="用户名" id="userName" class="input" /></span>
+        </div>
+        <div style="width: 500px; margin-top: 20px;">
+            <div class="diaLabel">密码：</div>
+            <span><input title="密码" type="password" id="passWord" class="input" /></span>
+        </div>
+        <div style="width: 500px; margin-top: 20px;">
+            <div class="diaLabel">验证码：</div>
+            <span><input title="验证码" id="valCode" class="input" /></span>
+        </div>
+    </div>
+</body>
+</html>
