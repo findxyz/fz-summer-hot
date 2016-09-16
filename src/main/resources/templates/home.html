@@ -22,6 +22,24 @@
             margin: 0;
             overflow: hidden;
         }
+
+        #treeSearch {
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            border-bottom: 1px dashed yellowgreen !important;
+            font-size: 16px;
+            width: 135px;
+            color: red;
+            margin-top: 5px;
+            text-indent: 2px;
+        }
+
+        #treeSearchDiv {
+            font-size: 16px;
+            color: blue;
+            display: none;
+        }
     </style>
     <script type="text/javascript">
         var treeData = [{text: '用户管理', isexpand: true, children: [{url: "user/main", text: "用户列表"}]}];
@@ -116,6 +134,30 @@
             tab = liger.get("framecenter");
             accordion = liger.get("accordion");
 
+            $("#treeSearchDiv").show();
+            $("#treeSearch").bind("keypress", function (event) {
+                if (event.keyCode == 13) {
+                    var treeSearchStr = $("#treeSearch").val();
+                    if (treeSearchStr) {
+                        var treeSearchResult = {"text": "搜索结果", isexpand: true, children: []};
+                        for (var i=0; i<treeData.length; i++) {
+                            var treeDataChildren = treeData[i].children;
+                            for (var j=0; j<treeDataChildren.length; j++) {
+                                var treeDataChild = treeDataChildren[j];
+                                if (treeDataChild.text.indexOf(treeSearchStr) > -1) {
+                                    treeSearchResult.children.push(treeDataChild);
+                                }
+                            }
+                        }
+                        tree.clear();
+                        tree.append(null, [treeSearchResult]);
+                    } else {
+                        tree.clear();
+                        tree.append(null, treeData);
+                    }
+                }
+            });
+
             pages_init();
         });
 
@@ -185,6 +227,9 @@
 <div id="layout" style="width: 99.2%; margin: 4px auto 0;">
     <div id="accordion" position="left" title="主要菜单">
         <div title="功能列表" class="l-scroll">
+            <div id="treeSearchDiv">
+                搜索：<input title="搜索" id="treeSearch" />
+            </div>
             <ul id="tree" style="margin-top: 3px;"></ul>
         </div>
     </div>
