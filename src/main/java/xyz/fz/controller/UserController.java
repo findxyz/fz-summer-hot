@@ -92,4 +92,52 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping("/start")
+    @ResponseBody
+    public Map<String, Object> start(@RequestParam("id") Long id) {
+
+        Map<String, Object> result = new HashMap<>();
+        try {
+            userService.start(id);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping("/stop")
+    @ResponseBody
+    public Map<String, Object> stop(@RequestParam("id") Long id) {
+
+        Map<String, Object> result = new HashMap<>();
+        try {
+            userService.stop(id);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping("/del")
+    @ResponseBody
+    public Map<String, Object> del(@RequestParam("id") Long id) {
+
+        Map<String, Object> result = new HashMap<>();
+        try {
+            userService.del(id);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
 }

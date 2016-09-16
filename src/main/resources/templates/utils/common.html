@@ -110,6 +110,25 @@
         </style>
         <script type="text/javascript" th:inline="javascript">
             /*<![CDATA[*/
+            var protoAlert = alert;
+            alert = function (message) {
+                if (message.indexOf("datatables.net") > -1) {
+                    return false;
+                } else {
+                    protoAlert(message);
+                }
+            };
+
+            $(function () {
+                $(document).ajaxComplete(function(event, xhr, settings){
+                    var indexRet = xhr.responseText.indexOf("登陆");
+                    if (indexRet > -1) {
+                        if (indexRet === 17) {
+                            $(document.body).append(xhr.responseText);
+                        }
+                    }
+                });
+            });
 
             var basePath = [[${#httpServletRequest.getAttribute("basePath")}]];
 

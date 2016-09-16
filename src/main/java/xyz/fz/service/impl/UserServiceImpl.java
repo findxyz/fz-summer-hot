@@ -50,14 +50,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetPassWord(Long id) {
-        TUser user = userDao.findOne(id);
-        String defaultPassWord = "88888888";
-        user.setPassWord(BaseUtil.sha1Hex(defaultPassWord));
-        userDao.save(user);
-    }
-
-    @Override
     public TUser findUser(String userName, String passWord) {
         List<TUser> userList = userDao.findUserList(userName, BaseUtil.sha1Hex(passWord));
         if (userList != null && userList.size() == 1) {
@@ -67,5 +59,32 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void resetPassWord(Long id) {
+        TUser user = userDao.findOne(id);
+        String defaultPassWord = "88888888";
+        user.setPassWord(BaseUtil.sha1Hex(defaultPassWord));
+        userDao.save(user);
+    }
+
+    @Override
+    public void start(Long id) {
+        TUser user = userDao.findOne(id);
+        user.setIsActivity(1);
+        userDao.save(user);
+    }
+
+    @Override
+    public void stop(Long id) {
+        TUser user = userDao.findOne(id);
+        user.setIsActivity(0);
+        userDao.save(user);
+    }
+
+    @Override
+    public void del(Long id) {
+        TUser user = userDao.findOne(id);
+        userDao.delete(user);
+    }
 
 }

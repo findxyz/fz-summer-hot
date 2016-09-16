@@ -17,7 +17,13 @@ public interface UserService {
 
     TUser saveUser(TUser user);
 
+    TUser findUser(String userName, String passWord);
+
     void resetPassWord(Long id);
 
-    TUser findUser(String userName, String passWord);
+    void start(Long id);
+
+    void stop(Long id);
+
+    void del(Long id);
 }

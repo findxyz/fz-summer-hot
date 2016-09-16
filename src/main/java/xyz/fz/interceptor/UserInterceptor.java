@@ -24,7 +24,7 @@ public class UserInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         TUser user = (TUser) httpServletRequest.getSession().getAttribute("curUser");
         if (user == null) {
-            String returnIndex = "<script>setTimeout(function(){window.location='" + basePath + "';}, 1000);alert('请先登录...');</script>";
+            String returnIndex = "<script>alert('请先登陆...');window.parent.location='" + basePath + "';</script>";
             httpServletRequest.setCharacterEncoding("utf-8");
             httpServletResponse.setContentType("text/html; charset=utf-8");
             httpServletResponse.getWriter().print(returnIndex);
