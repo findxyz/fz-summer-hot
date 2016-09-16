@@ -1,6 +1,9 @@
 package xyz.fz.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,7 @@ import java.util.Map;
  */
 @Service
 @Transactional
+@CacheConfig(cacheNames = "users")
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -30,12 +34,14 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
+    @Cacheable
     public List<Map<String, Object>> userAllMapList() {
 
         return jdbcTemplate.queryForList("select * from summer_hot");
     }
 
     @Override
+    @Cacheable
     public Page<TUser> userPageList(String name, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -44,12 +50,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public TUser saveUser(TUser user) {
 
         return userDao.save(user);
     }
 
     @Override
+    @Cacheable
     public TUser findUser(String userName, String passWord) {
         List<TUser> userList = userDao.findUserList(userName, BaseUtil.sha1Hex(passWord));
         if (userList != null && userList.size() == 1) {
@@ -60,6 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public void resetPassWord(Long id) {
         TUser user = userDao.findOne(id);
         String defaultPassWord = "88888888";
@@ -68,6 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public void start(Long id) {
         TUser user = userDao.findOne(id);
         user.setIsActivity(1);
@@ -75,6 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public void stop(Long id) {
         TUser user = userDao.findOne(id);
         user.setIsActivity(0);
@@ -82,6 +93,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public void del(Long id) {
         TUser user = userDao.findOne(id);
         userDao.delete(user);
