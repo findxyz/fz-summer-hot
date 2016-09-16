@@ -29,7 +29,14 @@
         function sub() {
             var userName = $("#userName").val();
             var passWord = $("#passWord").val();
-            var valCode = $("#valCode").val();
+            var $valCode = $("#valCode");
+            var valCode = $valCode.val();
+
+            if (valCode.length != 4) {
+                $valCode.val("");
+                return false;
+            }
+
             if (!(userName && passWord && valCode)) {
                 $.notify("用户名和密码还有验证码都不能为空");
                 return false;
@@ -47,7 +54,9 @@
                         window.location = basePath + "home";
                     }, 1000);
                 } else {
-                    $.notify("用户名或密码错误", {className: "error"});
+                    $valCode.val("");
+                    $.notify(json.message, {className: "error"});
+                    changeValCode();
                 }
             }, 'json');
         }
@@ -72,6 +81,10 @@
             }
         });
     });
+
+    function changeValCode() {
+        $("#valCodeImg").attr("src", basePath + "index/valCode?" + Math.random());
+    }
     /*]]>*/
     </script>
 </head>
@@ -87,7 +100,10 @@
         </div>
         <div style="width: 500px; margin-top: 20px;">
             <div class="diaLabel">验证码：</div>
-            <span><input title="验证码" id="valCode" class="input" /></span>
+            <span>
+                <input title="验证码" id="valCode" class="input" style="width: 210px" />
+                <img id="valCodeImg" alt="验证码" th:src="@{index/valCode}" onclick="changeValCode();" style="display: inline-block" width="80" height="40" />
+            </span>
         </div>
     </div>
 </body>
