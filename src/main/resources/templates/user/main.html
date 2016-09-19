@@ -89,13 +89,13 @@
             width: 80
         }, {
             data: "realName",
-            width: 80
+            width: 60
         }, {
             data: "createTime",
             width: 150
         }, {
             data: "isActivity",
-            width: 80
+            width: 60
         }, {
             data: null,
             defaultContent: ''
@@ -112,7 +112,7 @@
                 } else {
                     options += "<button class='btn btn-default btn-xs' onclick='start(this, " + row.id + ")'>启用</button>";
                 }
-                options += " <button class='btn btn-warning btn-xs' onclick='resetPassWord(this, " + row.id + ")'>重置密码</button>";
+                options += " <button class='btn btn-warning btn-xs' onclick='resetPassWord(this, " + row.id + ")'>重置</button>";
                 options += " <button class='btn btn-danger btn-xs' onclick='del(this, " + row.id + ")'>删除</button>";
                 return options;
             }

@@ -170,7 +170,8 @@
                 }
             });
 
-            function XDataTables(tabId, dataUrl, paramsFun, columns, columnDefs) {
+            function XDataTables(tabId, dataUrl, paramsFun, columns, columnDefs, singleSelected) {
+                var singleSelected = singleSelected || false;
                 // id容错处理
                 if (tabId.substr(0, 1) != "#") {
                     tabId = "#" + tabId;
@@ -217,34 +218,42 @@
                     "columnDefs": columnDefs || []
                 };
                 var table = $(tabId).DataTable(config);
-                $(tabId + ' tbody').on('click', 'tr', function () {
-                    $(this).toggleClass('selected');
-                });
                 table.on('processing.dt', function (e, settings, processing) {
                     $('#dataLoading').css('display', processing ? 'block' : 'none');
                 });
-                // 全选/取消 工具栏
-                var toolbar = '<div style="position: absolute; top: 1px; z-index: 27;">';
-                toolbar += '<input id="allSelectBtn" type="button" class="btn btn-info btn-xs" value="全"/>';
-                toolbar += '<input id="allDeSelectBtn" type="button" class="btn btn-default btn-xs" value="空">';
-                toolbar += '</div>';
-                $(toolbar).prependTo($(tabId + "_wrapper"));
-                $("#allSelectBtn").click(function () {
-                    var trs = $(tabId + " > tbody > tr");
-                    for (var i = 0; i < trs.length; i++) {
-                        if (!$(trs[i]).hasClass('selected')) {
-                            $(trs[i]).addClass('selected');
+                if (singleSelected) {
+                    // 单选
+                    $(tabId + ' tbody').on('click', 'tr', function () {
+                        table.$('tr.selected').removeClass('selected');
+                        $(this).addClass('selected');
+                    });
+                } else {
+                    $(tabId + ' tbody').on('click', 'tr', function () {
+                        $(this).toggleClass('selected');
+                    });
+                    // 全选/取消 工具栏
+                    var toolbar = '<div style="position: absolute; top: 1px; z-index: 27;">';
+                    toolbar += '<input id="allSelectBtn" type="button" class="btn btn-info btn-xs" value="全"/>';
+                    toolbar += '<input id="allDeSelectBtn" type="button" class="btn btn-default btn-xs" value="空">';
+                    toolbar += '</div>';
+                    $(toolbar).prependTo($(tabId + "_wrapper"));
+                    $("#allSelectBtn").click(function () {
+                        var trs = $(tabId + " > tbody > tr");
+                        for (var i = 0; i < trs.length; i++) {
+                            if (!$(trs[i]).hasClass('selected')) {
+                                $(trs[i]).addClass('selected');
+                            }
                         }
-                    }
-                });
-                $("#allDeSelectBtn").click(function () {
-                    var trs = $(tabId + " > tbody > tr");
-                    for (var i = 0; i < trs.length; i++) {
-                        if ($(trs[i]).hasClass('selected')) {
-                            $(trs[i]).removeClass('selected');
+                    });
+                    $("#allDeSelectBtn").click(function () {
+                        var trs = $(tabId + " > tbody > tr");
+                        for (var i = 0; i < trs.length; i++) {
+                            if ($(trs[i]).hasClass('selected')) {
+                                $(trs[i]).removeClass('selected');
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 return table;
             }
 
