@@ -45,7 +45,8 @@
 
             .dataTables_length {
                 margin-top: 10px;
-                margin-left: 10px;
+                margin-left: 0;
+                color: #3b4cff !important;
             }
 
             .row-margin-bottom {
@@ -170,8 +171,12 @@
                 }
             });
 
-            function XDataTables(tabId, dataUrl, paramsFun, columns, columnDefs, singleSelected) {
-                var singleSelected = singleSelected || false;
+            function XDataTables(tabId, dataUrl, paramsFun, columns, columnDefs, singleSelected, xExtends) {
+                singleSelected = singleSelected || false;
+                var scrollY = 400;
+                if (xExtends) {
+                    scrollY = xExtends.scrollY || scrollY;
+                }
                 // id容错处理
                 if (tabId.substr(0, 1) != "#") {
                     tabId = "#" + tabId;
@@ -201,7 +206,7 @@
                 var config = {
                     dom: '<"toolbar"rtip><"bottom"l>',
                     scrollX: true,
-                    scrollY: 400,
+                    scrollY: scrollY,
                     select: true,
                     ajax: {
                         url: dataUrl,

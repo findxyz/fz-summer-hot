@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>角色管理</title>
+    <headerTemplate th:include="utils/common::headerTemplate"></headerTemplate>
+    <script th:inline="javascript" type="text/javascript">
+        /*<![CDATA[*/
+        var table;
+
+        function search() {
+            table.ajax.reload();
+        }
+
+        $(function () {
+            var paramsFun = function(){
+                var params = {};
+                params.name = $("#sName").val();
+                return params;
+            };
+            var columns = [{
+                data: "id"
+            }, {
+                data: "roleName",
+                width: 80
+            }, {
+                data: "isActivity",
+                width: 60
+            }, {
+                data: null,
+                defaultContent: ''
+            }];
+            var columnDefs = [{
+                "visible": false,
+                "targets": [1]
+            }, {
+                "targets": -1,
+                render: function (data, type, row) {
+                    var options = "";
+                    return options;
+                }
+            }, {
+                "targets": -2,
+                render: function (data, type, row) {
+                    if (row.isActivity) {
+                        return "<span style='color: green;'>有效</span>";
+                    } else {
+                        return "<span style='color: red;'>无效</span>";
+                    }
+                }
+            }];
+            table = new XDataTables("dtTab", basePath + "role/rolePageList", paramsFun, columns, columnDefs, true, {scrollY: 320});
+            $("#sName").bind("keypress", function (event) {
+                if (event.keyCode == 13) {
+                    search();
+                }
+            });
+            $("#search").bind("click", function () {
+                search();
+            });
+        });
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div style="margin: 5px; display: inline-block; width: 400px;">
+    <div id="toolBar" style="margin-bottom: 5px;">
+        <div><input id="addBtn" type="button" value="新增" class="btn btn-info btn-xs"/></div>
+        <div>
+            角色名称：<input id="sName" />
+            <input id="search" class="btn btn-success btn-xs" type="button" value="查询" />
+        </div>
+    </div>
+    <table id="dtTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>ID</th>
+            <th>角色名称</th>
+            <th>有效</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
