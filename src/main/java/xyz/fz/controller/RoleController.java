@@ -47,4 +47,19 @@ public class RoleController {
         return result;
     }
 
+    @RequestMapping("/saveRole")
+    @ResponseBody
+    public Map<String, Object> saveRole(TRole role) {
+
+        Map<String, Object> result = new HashMap<>();
+        role.setIsActivity(1);
+        TRole sRole = roleService.saveRole(role);
+        if (sRole.getId() > 0) {
+            result.put("success", true);
+        } else {
+            result.put("success", false);
+        }
+        return result;
+    }
+
 }

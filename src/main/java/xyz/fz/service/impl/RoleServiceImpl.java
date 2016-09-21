@@ -2,6 +2,8 @@ package xyz.fz.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +26,18 @@ public class RoleServiceImpl implements RoleService {
     private RoleDao roleDao;
 
     @Override
+    @Cacheable
     public Page<TRole> rolePageList(String roleName, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(curPage, pageSize, sort);
         return roleDao.findByName(roleName, pageable);
     }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public TRole saveRole(TRole role) {
+        return roleDao.save(role);
+    }
+
 }

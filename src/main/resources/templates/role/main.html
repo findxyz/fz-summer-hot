@@ -57,6 +57,44 @@
             $("#search").bind("click", function () {
                 search();
             });
+            $("#roleDialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 340,
+                height: 180,
+                buttons: [{
+                    text: "保存",
+                    click: function () {
+                        var roleName = $("#roleName").val();
+                        if (!(roleName)) {
+                            $.notify("请完善数据后保存");
+                            return false;
+                        }
+                        mask.open();
+                        $.post(basePath + "role/saveRole", {
+                            roleName: roleName
+                        }, function (json) {
+                            mask.close();
+                            if (json.success) {
+                                $.notify("保存成功", {className: "success"});
+                                search();
+                            } else {
+                                $.notify("保存失败", {className: "error"});
+                            }
+                        }, 'json');
+                        $(this).dialog("close");
+                    }
+                }, {
+                    text: "关闭",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }]
+            });
+            $("#addBtn").click(function () {
+                $("#roleName").val("");
+                $("#roleDialog").dialog("open");
+            });
         });
         /*]]>*/
     </script>
@@ -82,6 +120,14 @@
         </thead>
         <tbody>
         </tbody>
+    </table>
+</div>
+<div id="roleDialog" title="新增角色" style="display: none">
+    <table style="border-collapse: separate; border-spacing: 5px;">
+        <tr>
+            <td style="text-align: right">角色名称：</td>
+            <td><input title="角色名称" id="roleName" /></td>
+        </tr>
     </table>
 </div>
 </body>

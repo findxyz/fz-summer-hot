@@ -27,7 +27,6 @@ import java.util.Random;
  * Created by fz on 2016/9/15.
  */
 @Controller
-@RequestMapping("/")
 public class IndexController {
 
     @Autowired

@@ -9,4 +9,6 @@ import xyz.fz.domain.TRole;
 public interface RoleService {
 
     Page<TRole> rolePageList(String roleName, int curPage, int pageSize);
+
+    TRole saveRole(TRole role);
 }
