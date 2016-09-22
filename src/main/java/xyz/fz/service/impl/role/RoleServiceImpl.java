@@ -1,4 +1,4 @@
-package xyz.fz.service.impl;
+package xyz.fz.service.impl.role;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -10,9 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.fz.dao.RoleDao;
-import xyz.fz.domain.TRole;
-import xyz.fz.service.RoleService;
+import xyz.fz.dao.role.RoleDao;
+import xyz.fz.domain.role.TRole;
+import xyz.fz.service.role.RoleService;
 
 /**
  * Created by fz on 2016/9/19.

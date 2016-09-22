@@ -1,4 +1,4 @@
-package xyz.fz.domain;
+package xyz.fz.domain.role;
 
 import javax.persistence.*;
 

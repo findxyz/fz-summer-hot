@@ -1,4 +1,4 @@
-package xyz.fz.service.impl;
+package xyz.fz.service.impl.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -11,9 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.fz.dao.UserDao;
-import xyz.fz.domain.TUser;
-import xyz.fz.service.UserService;
+import xyz.fz.dao.user.UserDao;
+import xyz.fz.domain.user.TUser;
+import xyz.fz.service.user.UserService;
 import xyz.fz.utils.BaseUtil;
 
 import java.util.List;

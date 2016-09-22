@@ -14,12 +14,17 @@
     />
 
     <cache name="users"
-           maxEntriesLocalHeap="200"
-           timeToLiveSeconds="600">
+           maxEntriesLocalHeap="2000"
+           timeToLiveSeconds="86400">
     </cache>
 
     <cache name="roles"
            maxEntriesLocalHeap="200"
-           timeToLiveSeconds="600">
+           timeToLiveSeconds="86400">
+    </cache>
+
+    <cache name="menus"
+           maxEntriesLocalHeap="200"
+           timeToLiveSeconds="86400">
     </cache>
 </ehcache>

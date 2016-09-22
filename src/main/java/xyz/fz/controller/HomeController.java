@@ -3,7 +3,7 @@ package xyz.fz.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import xyz.fz.domain.TUser;
+import xyz.fz.domain.user.TUser;
 
 import javax.servlet.http.HttpSession;
 

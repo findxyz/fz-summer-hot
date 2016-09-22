@@ -1,7 +1,7 @@
-package xyz.fz.service;
+package xyz.fz.service.user;
 
 import org.springframework.data.domain.Page;
-import xyz.fz.domain.TUser;
+import xyz.fz.domain.user.TUser;
 
 import java.util.List;
 import java.util.Map;

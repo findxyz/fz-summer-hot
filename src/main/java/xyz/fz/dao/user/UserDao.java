@@ -1,4 +1,4 @@
-package xyz.fz.dao;
+package xyz.fz.dao.user;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import xyz.fz.domain.TUser;
+import xyz.fz.domain.user.TUser;
 
 import java.util.List;
 

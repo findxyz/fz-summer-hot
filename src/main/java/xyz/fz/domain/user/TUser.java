@@ -1,4 +1,4 @@
-package xyz.fz.domain;
+package xyz.fz.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

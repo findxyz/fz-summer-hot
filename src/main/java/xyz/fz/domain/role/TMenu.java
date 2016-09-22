@@ -1,4 +1,4 @@
-package xyz.fz.domain;
+package xyz.fz.domain.role;
 
 import javax.persistence.*;
 
@@ -20,6 +20,9 @@ public class TMenu {
 
     @Column(nullable = false, columnDefinition = "int(1) not null")
     private Integer isActivity;
+
+    @Column(nullable = false, columnDefinition = "int(4) not null")
+    private Integer sort;
 
     public Long getId() {
         return id;
@@ -51,5 +54,13 @@ public class TMenu {
 
     public void setIsActivity(Integer isActivity) {
         this.isActivity = isActivity;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 }

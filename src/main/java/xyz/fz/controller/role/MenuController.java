@@ -1,4 +1,4 @@
-package xyz.fz.controller;
+package xyz.fz.controller.role;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import xyz.fz.domain.TRole;
-import xyz.fz.service.RoleService;
+import xyz.fz.domain.role.TMenu;
+import xyz.fz.service.role.MenuService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,28 +18,28 @@ import java.util.Map;
  * Created by fz on 2016/8/8.
  */
 @Controller
-@RequestMapping("/role")
-public class RoleController {
+@RequestMapping("/role/menu")
+public class MenuController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
     @Autowired
-    private RoleService roleService;
+    private MenuService menuService;
 
     @RequestMapping("/main")
     public String main() {
-        return "role/main";
+        return "role/main_menu";
     }
 
-    @RequestMapping("/rolePageList")
+    @RequestMapping("/menuPageList")
     @ResponseBody
-    public Map<String, Object> rolePageList(@RequestParam(value = "draw", required = false, defaultValue = "0") int draw,
+    public Map<String, Object> menuPageList(@RequestParam(value = "draw", required = false, defaultValue = "0") int draw,
                                             @RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                             @RequestParam(value = "length", required = false, defaultValue = "20") int length,
                                             @RequestParam("name") String name) {
         int curPage = (start / length);
         Map<String, Object> result = new HashMap<>();
-        Page<TRole> page = roleService.rolePageList(name, curPage, length);
+        Page<TMenu> page = menuService.menuPageList(name, curPage, length);
         result.put("draw", draw);
         result.put("recordsTotal", page.getTotalElements());
         result.put("recordsFiltered", page.getTotalElements());
@@ -47,14 +47,14 @@ public class RoleController {
         return result;
     }
 
-    @RequestMapping("/saveRole")
+    @RequestMapping("/saveMenu")
     @ResponseBody
-    public Map<String, Object> saveRole(TRole role) {
+    public Map<String, Object> saveRole(TMenu menu) {
 
         Map<String, Object> result = new HashMap<>();
-        role.setIsActivity(1);
-        TRole sRole = roleService.saveRole(role);
-        if (sRole.getId() > 0) {
+        menu.setIsActivity(1);
+        TMenu sMenu = menuService.saveMenu(menu);
+        if (sMenu.getId() > 0) {
             result.put("success", true);
         } else {
             result.put("success", false);

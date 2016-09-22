@@ -1,7 +1,7 @@
-package xyz.fz.service;
+package xyz.fz.service.role;
 
 import org.springframework.data.domain.Page;
-import xyz.fz.domain.TRole;
+import xyz.fz.domain.role.TRole;
 
 /**
  * Created by fz on 2016/9/19.

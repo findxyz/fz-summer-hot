@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import xyz.fz.interceptor.UserInterceptor;
+import xyz.fz.interceptor.AuthInterceptor;
 
 @SpringBootApplication
 @ServletComponentScan
@@ -23,9 +23,9 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        UserInterceptor userInterceptor = new UserInterceptor();
-        userInterceptor.setBasePath(basePath);
-        registry.addInterceptor(userInterceptor)
+        AuthInterceptor authInterceptor = new AuthInterceptor();
+        authInterceptor.setBasePath(basePath);
+        registry.addInterceptor(authInterceptor)
                 .excludePathPatterns("/pubs/**")
                 .excludePathPatterns("/login/**")
                 .excludePathPatterns("/index/**")

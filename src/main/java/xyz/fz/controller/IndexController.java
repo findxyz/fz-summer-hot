@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import xyz.fz.domain.TUser;
-import xyz.fz.service.UserService;
+import xyz.fz.domain.user.TUser;
+import xyz.fz.service.user.UserService;
 import xyz.fz.utils.BaseUtil;
 
 import javax.imageio.ImageIO;
