@@ -49,7 +49,7 @@ public class MenuController {
 
     @RequestMapping("/saveMenu")
     @ResponseBody
-    public Map<String, Object> saveRole(TMenu menu) {
+    public Map<String, Object> saveMenu(TMenu menu) {
 
         Map<String, Object> result = new HashMap<>();
         menu.setIsActivity(1);
