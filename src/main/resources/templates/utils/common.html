@@ -174,8 +174,12 @@
             function XDataTables(tabId, dataUrl, paramsFun, columns, columnDefs, singleSelected, xExtends) {
                 singleSelected = singleSelected || false;
                 var scrollY = 400;
+                var autoLoad = true;
                 if (xExtends) {
                     scrollY = xExtends.scrollY || scrollY;
+                    if (xExtends.disAutoLoad) {
+                        autoLoad = false;
+                    }
                 }
                 // id容错处理
                 if (tabId.substr(0, 1) != "#") {
@@ -222,6 +226,9 @@
                     "columns": columns,
                     "columnDefs": columnDefs || []
                 };
+                if (!autoLoad) {
+                    config.deferLoading = 0;
+                }
                 var table = $(tabId).DataTable(config);
                 table.on('processing.dt', function (e, settings, processing) {
                     $('#dataLoading').css('display', processing ? 'block' : 'none');

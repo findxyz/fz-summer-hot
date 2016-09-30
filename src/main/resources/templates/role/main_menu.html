@@ -11,7 +11,22 @@
             table.ajax.reload();
         }
 
+        function getOneMenuId() {
+            if (table.rows('.selected').data().length == 0) {
+                return -1;
+            } else {
+                return table.rows('.selected').data()[0].id;
+            }
+        }
+
+        var table2;
+
+        function search2() {
+            table2.ajax.reload();
+        }
+
         $(function () {
+            // 菜单表格
             var paramsFun = function(){
                 var params = {};
                 params.name = $("#sName").val();
@@ -107,7 +122,104 @@
                 $("#sort").val("");
                 $("#menuDialog").dialog("open");
             });
+            $('#dtTab tbody').on('click', 'tr', function () {
+                search2();
+            });
+            // 权限表格
+            var paramsFun2 = function(){
+                var params = {};
+                params.menuId = getOneMenuId();
+                return params;
+            };
+            var columns2 = [{
+                data: "id"
+            }, {
+                data: "text",
+                width: 80
+            }, {
+                data: "url",
+                width: 120
+            }, {
+                data: "sort",
+                width: 50
+            }, {
+                data: "isActivity",
+                width: 60
+            }, {
+                data: null,
+                defaultContent: ''
+            }];
+            var columnDefs2 = [{
+                "visible": false,
+                "targets": [1]
+            }, {
+                "targets": -1,
+                render: function (data, type, row) {
+                    var options2 = "";
+                    return options2;
+                }
+            }, {
+                "targets": -2,
+                render: function (data, type, row) {
+                    if (row.isActivity) {
+                        return "<span style='color: green;'>有效</span>";
+                    } else {
+                        return "<span style='color: red;'>无效</span>";
+                    }
+                }
+            }];
+            table2 = new XDataTables("dtTab2", basePath + "role/auth/authPageList", paramsFun2, columns2, columnDefs2, true, {scrollY: 350, disAutoLoad: true});
+            $("#authDialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 360,
+                height: 250,
+                buttons: [{
+                    text: "保存",
+                    click: function () {
+                        var text = $("#text").val();
+                        var url = $("#url").val();
+                        var sort2 = $("#sort2").val();
+                        if (!(text && url && sort2)) {
+                            $.notify("请完善数据后保存");
+                            return false;
+                        }
+                        mask.open();
+                        $.post(basePath + "role/auth/saveAuth", {
+                            text: text,
+                            url: url,
+                            sort: sort2,
+                            menuId: getOneMenuId()
+                        }, function (json) {
+                            mask.close();
+                            if (json.success) {
+                                $.notify("保存成功", {className: "success"});
+                                search2();
+                            } else {
+                                $.notify("保存失败", {className: "error"});
+                            }
+                        }, 'json');
+                        $(this).dialog("close");
+                    }
+                }, {
+                    text: "关闭",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }]
+            });
+            $("#addBtn2").click(function () {
+                if (getOneMenuId() == -1) {
+                    $.notify("请选择所属菜单");
+                    return false;
+                }
+                $("#text").val("");
+                $("#url").val("");
+                $("#sort2").val("");
+                $("#authDialog").dialog("open");
+            });
         });
+
         /*]]>*/
     </script>
 </head>
@@ -136,6 +248,26 @@
         </tbody>
     </table>
 </div>
+<div style="margin: 5px; display: inline-block; width: 550px;">
+    <div id="toolBar2" style="margin-bottom: 5px;">
+        <div><input id="addBtn2" type="button" value="新增" class="btn btn-info btn-xs"/></div>
+    </div>
+    <table id="dtTab2" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>ID</th>
+            <th>权限名称</th>
+            <th>权限路径</th>
+            <th>排序</th>
+            <th>有效</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
 <div id="menuDialog" title="新增菜单" style="display: none">
     <table style="border-collapse: separate; border-spacing: 5px;">
         <tr>
@@ -149,6 +281,22 @@
         <tr>
             <td style="text-align: right">排序：</td>
             <td><input title="排序" id="sort" /></td>
+        </tr>
+    </table>
+</div>
+<div id="authDialog" title="新增权限" style="display: none">
+    <table style="border-collapse: separate; border-spacing: 5px;">
+        <tr>
+            <td style="text-align: right">权限名称：</td>
+            <td><input title="权限名称" id="text" /></td>
+        </tr>
+        <tr>
+            <td style="text-align: right">权限路径：</td>
+            <td><input title="权限路径" id="url" /></td>
+        </tr>
+        <tr>
+            <td style="text-align: right">排序：</td>
+            <td><input title="排序" id="sort2" /></td>
         </tr>
     </table>
 </div>
