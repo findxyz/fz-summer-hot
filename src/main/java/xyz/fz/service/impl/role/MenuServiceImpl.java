@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.fz.dao.role.MenuDao;
 import xyz.fz.domain.role.TMenu;
+import xyz.fz.service.role.AuthService;
 import xyz.fz.service.role.MenuService;
 
 /**
@@ -24,6 +25,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private MenuDao menuDao;
+
+    @Autowired
+    private AuthService authService;
 
     @Override
     @Cacheable
@@ -38,6 +42,21 @@ public class MenuServiceImpl implements MenuService {
     @CacheEvict(allEntries = true)
     public TMenu saveMenu(TMenu menu) {
         return menuDao.save(menu);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public void toggle(Long id, int isActivity) {
+        TMenu menu = menuDao.findOne(id);
+        menu.setIsActivity(isActivity);
+        menuDao.save(menu);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public void del(Long id) {
+        authService.deleteByMenuId(id);
+        menuDao.delete(id);
     }
 
 }

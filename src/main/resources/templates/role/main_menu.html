@@ -7,8 +7,107 @@
         /*<![CDATA[*/
         var table;
 
+        var table2;
+
         function search() {
-            table.ajax.reload();
+            table.ajax.reload(function () {
+                search2();
+            });
+        }
+
+        function search2() {
+            table2.ajax.reload();
+        }
+
+        function menuToggle(me, id, flag) {
+            var isActivity;
+            if (flag) {
+                isActivity = 1;
+            } else {
+                isActivity = 0;
+            }
+            $(me).closest("tr").click();
+            cleanMask.open();
+            $.post(basePath + "role/menu/toggle", {
+                id: id,
+                isActivity: isActivity
+            }, function (json) {
+                cleanMask.close();
+                if (json.success) {
+                    $.notify("操作成功");
+                    search();
+                } else {
+                    $(me).notify("操作失败[" + json.message + "]", {className: "error", position: "right"});
+                }
+            }, 'json');
+        }
+
+        function menuDel(me, id) {
+            $(me).closest("tr").click();
+            if (confirm("确定删除吗？")) {
+                cleanMask.open();
+                $.post(basePath + "role/menu/del", {
+                    id: id
+                }, function (json) {
+                    cleanMask.close();
+                    if (json.success) {
+                        $.notify("删除成功");
+                        search();
+                    } else {
+                        $.notify("删除失败[" + json.message + "]", {className: "error", position: "top"});
+                    }
+                }, 'json');
+            }
+        }
+
+        function authToggle(me, id, flag) {
+            var isActivity;
+            if (flag) {
+                isActivity = 1;
+            } else {
+                isActivity = 0;
+            }
+            $(me).closest("tr").click();
+            cleanMask.open();
+            $.post(basePath + "role/auth/toggle", {
+                id: id,
+                isActivity: isActivity
+            }, function (json) {
+                cleanMask.close();
+                if (json.success) {
+                    $.notify("操作成功");
+                    search2();
+                } else {
+                    $(me).notify("操作失败[" + json.message + "]", {className: "error", position: "right"});
+                }
+            }, 'json');
+        }
+
+        function authDel(me, id) {
+            $(me).closest("tr").click();
+            if (confirm("确定删除吗？")) {
+                cleanMask.open();
+                $.post(basePath + "role/auth/del", {
+                    id: id
+                }, function (json) {
+                    cleanMask.close();
+                    if (json.success) {
+                        $.notify("删除成功");
+                        search2();
+                    } else {
+                        $.notify("删除失败[" + json.message + "]", {className: "error", position: "top"});
+                    }
+                }, 'json');
+            }
+        }
+
+        function getOneMenu() {
+            var rows = table.rows('.selected').data();
+            if (table.rows('.selected').data().length == 0) {
+                return false;
+            } else {
+                return rows[0];
+            }
         }
 
         function getOneMenuId() {
@@ -17,12 +116,6 @@
             } else {
                 return table.rows('.selected').data()[0].id;
             }
-        }
-
-        var table2;
-
-        function search2() {
-            table2.ajax.reload();
         }
 
         $(function () {
@@ -54,9 +147,20 @@
                 "visible": false,
                 "targets": [1]
             }, {
+                "targets": 3,
+                render: function (data, type, row) {
+                    return "<span style='color: blue; font-weight: bold'>" + data + "</span>"
+                }
+            }, {
                 "targets": -1,
                 render: function (data, type, row) {
                     var options = "";
+                    if (row.isActivity) {
+                        options += "<button class='btn btn-default btn-xs' onclick='menuToggle(this, " + row.id + ", false)'>禁用</button>";
+                    } else {
+                        options += "<button class='btn btn-default btn-xs' onclick='menuToggle(this, " + row.id + ", true)'>启用</button>";
+                    }
+                    options += " <button class='btn btn-danger btn-xs' onclick='menuDel(this, " + row.id + ")'>删除</button>";
                     return options;
                 }
             }, {
@@ -101,10 +205,10 @@
                         }, function (json) {
                             mask.close();
                             if (json.success) {
-                                $.notify("保存成功", {className: "success"});
+                                $.notify("保存成功", {className: "success", position: "top right"});
                                 search();
                             } else {
-                                $.notify("保存失败", {className: "error"});
+                                $.notify("保存失败", {className: "error", position: "top right"});
                             }
                         }, 'json');
                         $(this).dialog("close");
@@ -138,13 +242,13 @@
                 width: 80
             }, {
                 data: "url",
-                width: 120
+                width: 150
             }, {
                 data: "sort",
-                width: 50
+                width: 30
             }, {
                 data: "isActivity",
-                width: 60
+                width: 40
             }, {
                 data: null,
                 defaultContent: ''
@@ -153,9 +257,20 @@
                 "visible": false,
                 "targets": [1]
             }, {
+                "targets": 3,
+                render: function (data, type, row) {
+                    return "<span style='color: green; font-weight: bold'>" + data + "</span>"
+                }
+            }, {
                 "targets": -1,
                 render: function (data, type, row) {
                     var options2 = "";
+                    if (row.isActivity) {
+                        options2 += "<button class='btn btn-default btn-xs' onclick='authToggle(this, " + row.id + ", false)'>禁用</button>";
+                    } else {
+                        options2 += "<button class='btn btn-default btn-xs' onclick='authToggle(this, " + row.id + ", true)'>启用</button>";
+                    }
+                    options2 += " <button class='btn btn-danger btn-xs' onclick='authDel(this, " + row.id + ")'>删除</button>";
                     return options2;
                 }
             }, {
@@ -178,7 +293,7 @@
                     text: "保存",
                     click: function () {
                         var text = $("#text").val();
-                        var url = $("#url").val();
+                        var url = $("#preUrl").val() + $("#url").val();
                         var sort2 = $("#sort2").val();
                         if (!(text && url && sort2)) {
                             $.notify("请完善数据后保存");
@@ -193,10 +308,10 @@
                         }, function (json) {
                             mask.close();
                             if (json.success) {
-                                $.notify("保存成功", {className: "success"});
+                                $.notify("保存成功", {className: "success", position: "top right"});
                                 search2();
                             } else {
-                                $.notify("保存失败", {className: "error"});
+                                $.notify("保存失败", {className: "error", position: "top right"});
                             }
                         }, 'json');
                         $(this).dialog("close");
@@ -210,11 +325,13 @@
             });
             $("#addBtn2").click(function () {
                 if (getOneMenuId() == -1) {
-                    $.notify("请选择所属菜单");
+                    $.notify("请选择所属菜单", {position: "top right"});
                     return false;
                 }
                 $("#text").val("");
-                $("#url").val("");
+                var menu = getOneMenu();
+                $("#preUrl").val(menu.menuPath);
+                $("#url").val("/");
                 $("#sort2").val("");
                 $("#authDialog").dialog("open");
             });
@@ -288,15 +405,15 @@
     <table style="border-collapse: separate; border-spacing: 5px;">
         <tr>
             <td style="text-align: right">权限名称：</td>
-            <td><input title="权限名称" id="text" /></td>
+            <td><input title="权限名称" id="text" style="width: 200px;" /></td>
         </tr>
         <tr>
             <td style="text-align: right">权限路径：</td>
-            <td><input title="权限路径" id="url" /></td>
+            <td><input title="权限前缀" id="preUrl" readonly="readonly" style="width: 80px; border: none; color: blue; font-weight: bold;" /><input title="权限路径" id="url" style="width: 120px; color: green; font-weight: bold;" /></td>
         </tr>
         <tr>
             <td style="text-align: right">排序：</td>
-            <td><input title="排序" id="sort2" /></td>
+            <td><input title="排序" id="sort2" style="width: 200px;" /></td>
         </tr>
     </table>
 </div>

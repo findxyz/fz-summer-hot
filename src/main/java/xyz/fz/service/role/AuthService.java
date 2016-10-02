@@ -11,4 +11,10 @@ public interface AuthService {
     Page<TAuth> authPageList(Long menuId, int curPage, int pageSize);
 
     TAuth saveAuth(TAuth auth);
+
+    void deleteByMenuId(Long menuId);
+
+    void toggle(Long id, int isActivity);
+
+    void del(Long id);
 }

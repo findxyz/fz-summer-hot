@@ -40,4 +40,26 @@ public class AuthServiceImpl implements AuthService {
         return authDao.save(auth);
     }
 
+    @Override
+    @CacheEvict(allEntries = true)
+    public void deleteByMenuId(Long menuId) {
+        authDao.deleteByMenuId(menuId);
+        // todo 删除角色权限中包含该菜单的权限
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public void toggle(Long id, int isActivity) {
+        TAuth auth = authDao.findOne(id);
+        auth.setIsActivity(isActivity);
+        authDao.save(auth);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public void del(Long id) {
+        authDao.delete(id);
+        // todo 删除角色权限中有该权限的权限
+    }
+
 }

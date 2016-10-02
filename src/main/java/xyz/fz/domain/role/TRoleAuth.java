@@ -18,6 +18,9 @@ public class TRoleAuth {
     @Column(nullable = false)
     private Long authId;
 
+    @Column(nullable = false)
+    private Long menuId;
+
     public Long getId() {
         return id;
     }
@@ -40,5 +43,13 @@ public class TRoleAuth {
 
     public void setAuthId(Long authId) {
         this.authId = authId;
+    }
+
+    public Long getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(Long menuId) {
+        this.menuId = menuId;
     }
 }

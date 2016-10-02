@@ -11,4 +11,8 @@ public interface MenuService {
     Page<TMenu> menuPageList(String menuName, int curPage, int pageSize);
 
     TMenu saveMenu(TMenu menu);
+
+    void toggle(Long id, int isActivity);
+
+    void del(Long id);
 }
