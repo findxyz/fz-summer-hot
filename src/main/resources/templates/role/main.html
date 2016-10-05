@@ -5,13 +5,182 @@
     <headerTemplate th:include="utils/common::headerTemplate"></headerTemplate>
     <script th:inline="javascript" type="text/javascript">
         /*<![CDATA[*/
+
+        // 角色表格
         var table;
+
+        // 菜单表格
+        var table2;
+
+        // 角色菜单表格
+        var table3;
+
+        // 角色权限表格
+        var table4;
 
         function search() {
             table.ajax.reload();
         }
 
+        function search2() {
+            table2.ajax.reload();
+        }
+
+        function search3(fn) {
+            table3.ajax.reload(function () {
+                if (fn) {
+                    fn();
+                }
+            });
+        }
+
+        function search4() {
+            table4.ajax.reload();
+        }
+
+        function getOneRoleId() {
+            if (table.rows('.selected').data().length == 0) {
+                return -1;
+            } else {
+                return table.rows('.selected').data()[0].id;
+            }
+        }
+
+        function getOneMenuId() {
+            if (table2.rows('.selected').data().length == 0) {
+                return -1;
+            } else {
+                return table2.rows('.selected').data()[0].menuId;
+            }
+        }
+
+        function addRoleMenu(me, roleId, menuId) {
+            // done 增加角色菜单
+            if (roleId > 0 && menuId > 0) {
+                cleanMask.open();
+                $.post(basePath + "role/roleAuth/saveRoleMenu", {
+                    roleId: roleId,
+                    menuId: menuId
+                }, function (json) {
+                    cleanMask.close();
+                    if (json.success) {
+                        $.notify("保存成功", {className: "success"});
+                        // 刷新菜单表格
+                        search2();
+                        // 更新当前添加菜单表格
+                        $(me).closest("td").html("<button class='btn btn-danger btn-xs' onclick='reduceRoleMenu(this, " + roleId + ", " + menuId + ")'>去除</button>");
+                    } else {
+                        $.notify("保存失败", {className: "error"});
+                    }
+                }, 'json');
+            }
+        }
+
+        function reduceRoleMenu(me, roleId, menuId) {
+            // done 减少角色菜单
+            if (roleId > 0 && menuId > 0) {
+                cleanMask.open();
+                $.post(basePath + "role/roleAuth/delRoleMenu", {
+                    roleId: roleId,
+                    menuId: menuId
+                }, function (json) {
+                    cleanMask.close();
+                    if (json.success) {
+                        $.notify("去除成功", {className: "success"});
+                        // 刷新菜单表格
+                        search2();
+                        // 更新当前添加菜单表格
+                        $(me).closest("td").html("<button class='btn btn-success btn-xs' onclick='addRoleMenu(this, " + roleId + ", " + menuId + ")'>增加</button>");
+                    } else {
+                        $.notify("去除失败", {className: "error"});
+                    }
+                }, 'json');
+            }
+        }
+
+        function addRoleAuth(me, roleId, menuId, authId) {
+            // done 增加角色权限
+            if (roleId > 0 && menuId > 0 && authId > 0) {
+                cleanMask.open();
+                $.post(basePath + "role/roleAuth/saveRoleAuth", {
+                    roleId: roleId,
+                    menuId: menuId,
+                    authId: authId
+                }, function (json) {
+                    cleanMask.close();
+                    if (json.success) {
+                        $.notify("保存成功", {className: "success"});
+                        // 刷新角色权限表格
+                        search4();
+                    } else {
+                        $.notify("保存失败", {className: "error"});
+                    }
+                }, 'json');
+            }
+        }
+
+        function reduceRoleAuth(me, roleAuthId) {
+            // done 减少角色权限
+            if (roleAuthId > 0) {
+                cleanMask.open();
+                $.post(basePath + "role/roleAuth/delRoleAuth", {
+                    roleAuthId: roleAuthId
+                }, function (json) {
+                    cleanMask.close();
+                    if (json.success) {
+                        $.notify("去除成功", {className: "success"});
+                        // 刷新角色权限表格
+                        search4();
+                    } else {
+                        $.notify("去除失败", {className: "error"});
+                    }
+                }, 'json');
+            }
+        }
+
+        function roleToggle(me, id, flag) {
+            var isActivity;
+            if (flag) {
+                isActivity = 1;
+            } else {
+                isActivity = 0;
+            }
+            $(me).closest("tr").click();
+            cleanMask.open();
+            $.post(basePath + "role/toggle", {
+                id: id,
+                isActivity: isActivity
+            }, function (json) {
+                cleanMask.close();
+                if (json.success) {
+                    $.notify("操作成功");
+                    search();
+                } else {
+                    $(me).notify("操作失败[" + json.message + "]", {className: "error", position: "right"});
+                }
+            }, 'json');
+        }
+
+        function roleDel(me, id) {
+            $(me).closest("tr").click();
+            if (confirm("确定删除吗？")) {
+                cleanMask.open();
+                $.post(basePath + "role/del", {
+                    id: id
+                }, function (json) {
+                    cleanMask.close();
+                    if (json.success) {
+                        $.notify("删除成功");
+                        search();
+                    } else {
+                        $.notify("删除失败[" + json.message + "]", {className: "error", position: "top"});
+                    }
+                }, 'json');
+            }
+        }
+
         $(function () {
+            // 角色表格
             var paramsFun = function(){
                 var params = {};
                 params.name = $("#sName").val();
@@ -36,6 +205,12 @@
                 "targets": -1,
                 render: function (data, type, row) {
                     var options = "";
+                    if (row.isActivity) {
+                        options += "<button class='btn btn-default btn-xs' onclick='roleToggle(this, " + row.id + ", false)'>禁用</button>";
+                    } else {
+                        options += "<button class='btn btn-default btn-xs' onclick='roleToggle(this, " + row.id + ", true)'>启用</button>";
+                    }
+                    options += " <button class='btn btn-danger btn-xs' onclick='roleDel(this, " + row.id + ")'>删除</button>";
                     return options;
                 }
             }, {
@@ -49,6 +224,14 @@
                 }
             }];
             table = new XDataTables("dtTab", basePath + "role/rolePageList", paramsFun, columns, columnDefs, true, {scrollY: 320});
+
+            var $dtTab = $("#dtTab");
+            $dtTab.on("draw.dt", function () {
+                search2();
+            });
+            $dtTab.find('tbody').on('click', 'tr', function () {
+                search2();
+            });
             $("#sName").bind("keypress", function (event) {
                 if (event.keyCode == 13) {
                     search();
@@ -57,6 +240,64 @@
             $("#search").bind("click", function () {
                 search();
             });
+            // 菜单表格
+            var paramsFun2 = function(){
+                var params = {};
+                // 角色Id
+                params.roleId = getOneRoleId();
+                return params;
+            };
+            var columns2 = [{
+                data: "id"
+            }, {
+                data: "menuId"
+            }, {
+                data: "menuName",
+                width: 80
+            }, {
+                data: "isActivity",
+                width: 40
+            }, {
+                data: null,
+                defaultContent: ''
+            }];
+            var columnDefs2 = [{
+                "visible": false,
+                "targets": [1, 2]
+            }, {
+                "targets": -1,
+                render: function (data, type, row) {
+                    var options = "";
+                    var roleId = getOneRoleId();
+                    var menuId = row.menuId;
+                    options += "<button class='btn btn-danger btn-xs' onclick='reduceRoleMenu(this, " + roleId + ", " + menuId + ")'>去除</button>";
+                    return options;
+                }
+            }, {
+                "targets": -3,
+                render: function (data, type, row) {
+                    return data + "<span style='color: blue'>(" + row.menuId + ")</span>";
+                }
+            }, {
+                "targets": -2,
+                render: function (data, type, row) {
+                    if (row.isActivity) {
+                        return "<span style='color: green;'>有效</span>";
+                    } else {
+                        return "<span style='color: red;'>无效</span>";
+                    }
+                }
+            }];
+            table2 = new XDataTables("dtTab2", basePath + "role/roleAuth/roleAuthMenuPageList", paramsFun2, columns2, columnDefs2, true, {scrollY: 320, disAutoLoad: true});
+
+            var $dtTab2 = $("#dtTab2");
+            $dtTab2.on("draw.dt", function () {
+                search4();
+            });
+            $dtTab2.find('tbody').on('click', 'tr', function () {
+                search4();
+            });
+
             $("#roleDialog").dialog({
                 autoOpen: false,
                 modal: true,
@@ -91,10 +332,136 @@
                     }
                 }]
             });
+
             $("#addBtn").click(function () {
                 $("#roleName").val("");
                 $("#roleDialog").dialog("open");
             });
+
+            // 角色菜单表格
+            var paramsFun3 = function(){
+                var params = {};
+                params.roleId = getOneRoleId();
+                return params;
+            };
+            var columns3 = [{
+                data: "id"
+            }, {
+                data: "menuId"
+            }, {
+                data: "menuName",
+                width: 80
+            }, {
+                data: "isActivity",
+                width: 60
+            }, {
+                data: null,
+                defaultContent: ''
+            }];
+            var columnDefs3 = [{
+                "visible": false,
+                "targets": [1, 2]
+            }, {
+                "targets": -1,
+                render: function (data, type, row) {
+                    var options = "";
+                    var roleId = getOneRoleId();
+                    var menuId = row.menuId;
+                    if (!row.id) {
+                        options += "<button class='btn btn-success btn-xs' onclick='addRoleMenu(this, " + roleId + ", " + menuId + ")'>增加</button>";
+                    } else {
+                        options += "<button class='btn btn-danger btn-xs' onclick='reduceRoleMenu(this, " + roleId + ", " + menuId + ")'>去除</button>";
+                    }
+                    return options;
+                }
+            }, {
+                "targets": -2,
+                render: function (data, type, row) {
+                    if (row.isActivity) {
+                        return "<span style='color: green;'>有效</span>";
+                    } else {
+                        return "<span style='color: red;'>无效</span>";
+                    }
+                }
+            }];
+            table3 = new XDataTables("roleMenuTab", basePath + "role/roleAuth/roleMenuPageList", paramsFun3, columns3, columnDefs3, true, {scrollY: 200, disAutoLoad: true});
+
+            $("#roleMenuDialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 550,
+                height: 520,
+                buttons: [{
+                    text: "关闭",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }]
+            });
+
+            $("#addBtn2").bind("click", function () {
+                if (getOneRoleId() < 0) {
+                    $.notify("请选择需要增加菜单的角色", {position: "top right"});
+                    return false;
+                }
+                cleanMask.open();
+                $("#roleMenuDialog").dialog("open");
+                search3(function () {
+                    cleanMask.close();
+                });
+            });
+
+            // 角色权限表格
+            var paramsFun4 = function(){
+                var params = {};
+                params.roleId = getOneRoleId();
+                params.menuId = getOneMenuId();
+                return params;
+            };
+            var columns4 = [{
+                data: "id"
+            }, {
+                data: "authId"
+            }, {
+                data: "authName",
+                width: 80
+            }, {
+                data: "isActivity",
+                width: 60
+            }, {
+                data: null,
+                defaultContent: ''
+            }];
+            var columnDefs4 = [{
+                "visible": false,
+                "targets": [1, 2]
+            }, {
+                "targets": -1,
+                render: function (data, type, row) {
+                    var roleId = getOneRoleId();
+                    var menuId = getOneMenuId();
+                    var authId = row.authId;
+                    var roleAuthId = row.id;
+                    var options = "";
+                    if (!row.id) {
+                        options += "<button class='btn btn-success btn-xs' onclick='addRoleAuth(this, " + roleId + ", " + menuId + ", " + authId + ")'>增加</button>";
+                    } else {
+                        options += "<button class='btn btn-danger btn-xs' onclick='reduceRoleAuth(this, " + roleAuthId + ")'>去除</button>";
+                    }
+                    return options;
+                }
+            }, {
+                "targets": -2,
+                render: function (data, type, row) {
+                    if (row.isActivity) {
+                        return "<span style='color: green;'>有效</span>";
+                    } else {
+                        return "<span style='color: red;'>无效</span>";
+                    }
+                }
+            }];
+            table4 = new XDataTables("roleAuthTab", basePath + "role/roleAuth/roleAuthPageList", paramsFun4, columns4, columnDefs4, true, {scrollY: 320, disAutoLoad: true});
+
         });
         /*]]>*/
     </script>
@@ -122,6 +489,43 @@
         </tbody>
     </table>
 </div>
+<div style="margin: 5px; display: inline-block; width: 300px;">
+    <div id="toolBar2" style="margin-bottom: 5px;">
+        <div><input id="addBtn2" type="button" value="菜单管理" class="btn btn-info btn-xs"/></div>
+    </div>
+    <table id="dtTab2" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>ID</th>
+            <th>menuID</th>
+            <th>菜单名称</th>
+            <th>有效</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div style="margin: 5px; display: inline-block; width: 300px;">
+    <div id="toolBar3" style="margin-bottom: 5px;">
+    </div>
+    <table id="roleAuthTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>ID</th>
+            <th>authID</th>
+            <th>权限名称</th>
+            <th>有效</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
 <div id="roleDialog" title="新增角色" style="display: none">
     <table style="border-collapse: separate; border-spacing: 5px;">
         <tr>
@@ -129,6 +533,24 @@
             <td><input title="角色名称" id="roleName" /></td>
         </tr>
     </table>
+</div>
+<div id="roleMenuDialog" title="增加角色菜单" style="display: block;">
+    <div style="width: 500px;">
+        <table id="roleMenuTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>ID</th>
+                <th>menuID</th>
+                <th>菜单名称</th>
+                <th>有效</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

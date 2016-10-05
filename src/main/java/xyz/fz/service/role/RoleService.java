@@ -11,4 +11,8 @@ public interface RoleService {
     Page<TRole> rolePageList(String roleName, int curPage, int pageSize);
 
     TRole saveRole(TRole role);
+
+    void toggle(Long id, int isActivity);
+
+    void del(Long id);
 }

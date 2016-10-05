@@ -18,18 +18,9 @@
            timeToLiveSeconds="86400">
     </cache>
 
-    <cache name="roles"
-           maxEntriesLocalHeap="200"
+    <cache name="roleMenuAuths"
+           maxEntriesLocalHeap="5000"
            timeToLiveSeconds="86400">
     </cache>
 
-    <cache name="menus"
-           maxEntriesLocalHeap="200"
-           timeToLiveSeconds="86400">
-    </cache>
-
-    <cache name="auths"
-           maxEntriesLocalHeap="500"
-           timeToLiveSeconds="86400">
-    </cache>
 </ehcache>

@@ -4,23 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import xyz.fz.dao.role.MenuDao;
 import xyz.fz.domain.role.TMenu;
 import xyz.fz.service.role.AuthService;
 import xyz.fz.service.role.MenuService;
+import xyz.fz.service.role.RoleAuthService;
+
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
 
 /**
  * Created by fz on 2016/9/19.
  */
 @Service
 @Transactional
-@CacheConfig(cacheNames = "menus")
+@CacheConfig(cacheNames = "roleMenuAuths", keyGenerator = "myCKG")
 public class MenuServiceImpl implements MenuService {
 
     @Autowired
@@ -29,13 +30,23 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private RoleAuthService roleAuthService;
+
     @Override
     @Cacheable
     public Page<TMenu> menuPageList(String menuName, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.ASC, "sort");
         Pageable pageable = new PageRequest(curPage, pageSize, sort);
-        return menuDao.findByName(menuName, pageable);
+        TMenu menu = new TMenu();
+        if (!StringUtils.isEmpty(menuName)) {
+            menu.setMenuName(menuName);
+        }
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withMatcher("menuName", contains().ignoreCase());
+        Example<TMenu> menuExample = Example.of(menu, matcher);
+        return menuDao.findAll(menuExample, pageable);
     }
 
     @Override
@@ -56,6 +67,8 @@ public class MenuServiceImpl implements MenuService {
     @CacheEvict(allEntries = true)
     public void del(Long id) {
         authService.deleteByMenuId(id);
+        // done 删除角色权限中属于该菜单的权限
+        roleAuthService.delRoleAuthByMenuId(id);
         menuDao.delete(id);
     }
 

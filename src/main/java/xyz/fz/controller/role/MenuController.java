@@ -36,7 +36,7 @@ public class MenuController {
     public Map<String, Object> menuPageList(@RequestParam(value = "draw", required = false, defaultValue = "0") int draw,
                                             @RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                             @RequestParam(value = "length", required = false, defaultValue = "20") int length,
-                                            @RequestParam("name") String name) {
+                                            @RequestParam(value = "name", required = false, defaultValue = "") String name) {
         int curPage = (start / length);
         Map<String, Object> result = new HashMap<>();
         Page<TMenu> page = menuService.menuPageList(name, curPage, length);

@@ -69,4 +69,36 @@ public class RoleController {
         return result;
     }
 
+    @RequestMapping("/toggle")
+    @ResponseBody
+    public Map<String, Object> toggle(@RequestParam("id") Long id,
+                                      @RequestParam("isActivity") int isActivity) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            roleService.toggle(id, isActivity);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping("/del")
+    @ResponseBody
+    public Map<String, Object> del(@RequestParam("id") Long id) {
+
+        Map<String, Object> result = new HashMap<>();
+        try {
+            roleService.del(id);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
 }

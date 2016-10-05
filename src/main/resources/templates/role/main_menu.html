@@ -10,9 +10,7 @@
         var table2;
 
         function search() {
-            table.ajax.reload(function () {
-                search2();
-            });
+            table.ajax.reload();
         }
 
         function search2() {
@@ -174,6 +172,11 @@
                 }
             }];
             table = new XDataTables("dtTab", basePath + "role/menu/menuPageList", paramsFun, columns, columnDefs, true, {scrollY: 350});
+            // 添加重绘事件
+            var $dtTab = $("#dtTab");
+            $dtTab.on("draw.dt", function () {
+                search2();
+            });
             $("#sName").bind("keypress", function (event) {
                 if (event.keyCode == 13) {
                     search();
@@ -226,7 +229,7 @@
                 $("#sort").val("");
                 $("#menuDialog").dialog("open");
             });
-            $('#dtTab tbody').on('click', 'tr', function () {
+            $('#dtTab').find('tbody').on('click', 'tr', function () {
                 search2();
             });
             // 权限表格

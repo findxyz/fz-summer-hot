@@ -27,7 +27,8 @@
     /*<![CDATA[*/
     $(function () {
         function sub() {
-            var userName = $("#userName").val();
+            var $userName = $("#userName");
+            var userName = $userName.val();
             var passWord = $("#passWord").val();
             var $valCode = $("#valCode");
             var valCode = $valCode.val();
@@ -42,6 +43,7 @@
                 return false;
             }
             cleanMask.open();
+            $userName.focus();
             $.post(basePath + "login", {
                 userName: userName,
                 passWord: passWord,
@@ -55,6 +57,7 @@
                     }, 1000);
                 } else {
                     $valCode.val("");
+                    $valCode.focus();
                     $.notify(json.message, {className: "error"});
                     changeValCode();
                 }
