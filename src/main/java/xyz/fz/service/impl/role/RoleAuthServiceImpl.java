@@ -57,35 +57,37 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     @Cacheable
     public PagerData<Map> roleMenuPageList(Long roleId, int curPage, int pageSize) {
 
-        String countSql = "";
-        String sql = "";
-        String countHeaderSql = "SELECT count(*) ";
-        String rowHeaderSql = "";
-        rowHeaderSql += "SELECT ";
-        rowHeaderSql += "ra.id, ";
-        rowHeaderSql += "m.id as menuId, ";
-        rowHeaderSql += "m.menu_name as menuName, ";
-        rowHeaderSql += "m.is_activity as isActivity ";
-        String sqlBody = "";
-        sqlBody += "FROM ";
-        sqlBody += "t_menu m ";
-        sqlBody += "LEFT JOIN ( ";
-        sqlBody += "SELECT ";
-        sqlBody += "ra.* ";
-        sqlBody += "FROM ";
-        sqlBody += "t_role_auth ra ";
-        sqlBody += "WHERE ";
-        sqlBody += "1 = 1 ";
-        sqlBody += "AND ra.role_id = :roleId ";
-        sqlBody += "AND ra.auth_id = 0 ";
-        sqlBody += ") ra ON m.id = ra.menu_id ";
-        sqlBody += "WHERE ";
-        sqlBody += "1 = 1 ";
+        String countSql = "SELECT count(*) ";
+
+        String dataSql = "";
+        dataSql += "SELECT ";
+        dataSql += "ra.id, ";
+        dataSql += "m.id as menuId, ";
+        dataSql += "m.menu_name as menuName, ";
+        dataSql += "m.is_activity as isActivity ";
+
+        String bodySql = "";
+        bodySql += "FROM ";
+        bodySql += "t_menu m ";
+        bodySql += "LEFT JOIN ( ";
+        bodySql += "SELECT ";
+        bodySql += "ra.* ";
+        bodySql += "FROM ";
+        bodySql += "t_role_auth ra ";
+        bodySql += "WHERE ";
+        bodySql += "1 = 1 ";
+        bodySql += "AND ra.role_id = :roleId ";
+        bodySql += "AND ra.auth_id = 0 ";
+        bodySql += ") ra ON m.id = ra.menu_id ";
+        bodySql += "WHERE ";
+        bodySql += "1 = 1 ";
+
         Map<String, Object> params = new HashMap<>();
         params.put("roleId", roleId);
-        countSql += countHeaderSql + sqlBody;
-        sql += rowHeaderSql + sqlBody + "order by m.sort limit " + (curPage * pageSize) + ", " + pageSize;
-        return commonDao.queryPagerDataBySql(countSql, sql, params, Map.class);
+        countSql += bodySql;
+        dataSql += bodySql + "order by m.sort limit " + (curPage * pageSize) + ", " + pageSize;
+
+        return commonDao.queryPagerDataBySql(countSql, dataSql, params, Map.class);
     }
 
     @Override
@@ -98,35 +100,38 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     @Cacheable
     public PagerData<Map> roleAuthPageList(Long roleId, Long menuId, int curPage, int pageSize) {
 
-        String countSql = "";
-        String sql = "";
-        String countHeaderSql = "SELECT count(*) ";
-        String rowHeaderSql = "";
-        rowHeaderSql += "SELECT ";
-        rowHeaderSql += "ra.id, ";
-        rowHeaderSql += "a.id AS authId, ";
-        rowHeaderSql += "a.text AS authName, ";
-        rowHeaderSql += "a.is_activity AS isActivity ";
-        String sqlBody = "";
-        sqlBody += "FROM ";
-        sqlBody += "t_auth a ";
-        sqlBody += "LEFT JOIN ( ";
-        sqlBody += "SELECT ";
-        sqlBody += "* ";
-        sqlBody += "FROM ";
-        sqlBody += "t_role_auth ra ";
-        sqlBody += "WHERE ";
-        sqlBody += "ra.role_id = :roleId ";
-        sqlBody += "AND ra.menu_id = :menuId ";
-        sqlBody += ") ra ON a.id = ra.auth_id ";
-        sqlBody += "WHERE ";
-        sqlBody += "a.menu_id = :menuId ";
+        String countSql = "SELECT count(*) ";
+
+        String dataSql = "";
+        dataSql += "SELECT ";
+        dataSql += "ra.id, ";
+        dataSql += "a.id AS authId, ";
+        dataSql += "a.text AS authName, ";
+        dataSql += "a.is_activity AS isActivity ";
+
+        String bodySql = "";
+        bodySql += "FROM ";
+        bodySql += "t_auth a ";
+        bodySql += "LEFT JOIN ( ";
+        bodySql += "SELECT ";
+        bodySql += "* ";
+        bodySql += "FROM ";
+        bodySql += "t_role_auth ra ";
+        bodySql += "WHERE ";
+        bodySql += "ra.role_id = :roleId ";
+        bodySql += "AND ra.menu_id = :menuId ";
+        bodySql += ") ra ON a.id = ra.auth_id ";
+        bodySql += "WHERE ";
+        bodySql += "a.menu_id = :menuId ";
+
         Map<String, Object> params = new HashMap<>();
         params.put("roleId", roleId);
         params.put("menuId", menuId);
-        countSql += countHeaderSql + sqlBody;
-        sql += rowHeaderSql + sqlBody + "order by a.sort limit " + (curPage * pageSize) + ", " + pageSize;
-        return commonDao.queryPagerDataBySql(countSql, sql, params, Map.class);
+
+        countSql += bodySql;
+        dataSql += bodySql + "order by a.sort limit " + (curPage * pageSize) + ", " + pageSize;
+
+        return commonDao.queryPagerDataBySql(countSql, dataSql, params, Map.class);
     }
 
     @Override

@@ -3,18 +3,17 @@ package xyz.fz.controller.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import xyz.fz.dao.PagerData;
 import xyz.fz.domain.user.TUser;
 import xyz.fz.service.user.UserService;
 import xyz.fz.utils.BaseUtil;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,13 +34,6 @@ public class UserController {
         return "user/main";
     }
 
-    @RequestMapping("/userAllMapList")
-    @ResponseBody
-    public List<Map<String, Object>> userAllMapList() {
-
-        return userService.userAllMapList();
-    }
-
     @RequestMapping("/userPageList")
     @ResponseBody
     public Map<String, Object> userPageList(@RequestParam(value = "draw", required = false, defaultValue = "0") int draw,
@@ -51,11 +43,11 @@ public class UserController {
 
         int curPage = (start / length);
         Map<String, Object> result = new HashMap<>();
-        Page<TUser> page = userService.userPageList(name, curPage, length);
+        PagerData<Map> page = userService.userPageList(name, curPage, length);
         result.put("draw", draw);
-        result.put("recordsTotal", page.getTotalElements());
-        result.put("recordsFiltered", page.getTotalElements());
-        result.put("data", page.getContent());
+        result.put("recordsTotal", page.getTotalCount());
+        result.put("recordsFiltered", page.getTotalCount());
+        result.put("data", page.getData());
         return result;
     }
 
@@ -131,6 +123,40 @@ public class UserController {
         Map<String, Object> result = new HashMap<>();
         try {
             userService.del(id);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping("/userRolePageList")
+    @ResponseBody
+    public Map<String, Object> userRolePageList(@RequestParam(value = "draw", required = false, defaultValue = "0") int draw,
+                                                @RequestParam(value = "start", required = false, defaultValue = "0") int start,
+                                                @RequestParam(value = "length", required = false, defaultValue = "20") int length,
+                                                @RequestParam("userId") Long userId) {
+
+        int curPage = (start / length);
+        Map<String, Object> result = new HashMap<>();
+        PagerData<Map> page = userService.userRolePageList(userId, curPage, length);
+        result.put("draw", draw);
+        result.put("recordsTotal", page.getTotalCount());
+        result.put("recordsFiltered", page.getTotalCount());
+        result.put("data", page.getData());
+        return result;
+    }
+
+    @RequestMapping("/roleChange")
+    @ResponseBody
+    public Map<String, Object> roleChange(@RequestParam("roleId") Long roleId,
+                                          @RequestParam("userId") Long userId) {
+
+        Map<String, Object> result = new HashMap<>();
+        try {
+            userService.roleChange(roleId, userId);
             result.put("success", true);
         } catch (Exception e) {
             e.printStackTrace();

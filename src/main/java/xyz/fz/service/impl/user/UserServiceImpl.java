@@ -4,18 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import xyz.fz.dao.CommonDao;
+import xyz.fz.dao.PagerData;
 import xyz.fz.dao.user.UserDao;
 import xyz.fz.domain.user.TUser;
 import xyz.fz.service.user.UserService;
 import xyz.fz.utils.BaseUtil;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,29 +23,57 @@ import java.util.Map;
  */
 @Service
 @Transactional
-@CacheConfig(cacheNames = "users")
+@CacheConfig(cacheNames = "users", keyGenerator = "myCKG")
 public class UserServiceImpl implements UserService {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private UserDao userDao;
 
-    @Override
-    @Cacheable
-    public List<Map<String, Object>> userAllMapList() {
-
-        return jdbcTemplate.queryForList("select * from summer_hot");
-    }
+    @Autowired
+    private CommonDao commonDao;
 
     @Override
-    @Cacheable
-    public Page<TUser> userPageList(String name, int curPage, int pageSize) {
+    public PagerData<Map> userPageList(String name, int curPage, int pageSize) {
 
-        Sort sort = new Sort(Sort.Direction.DESC, "id");
-        Pageable pageable = new PageRequest(curPage, pageSize, sort);
-        return userDao.findByName(name, pageable);
+        String countSql = "SELECT count(*) ";
+
+        String dataSql = "";
+        dataSql += "SELECT ";
+        dataSql += "u.id, ";
+        dataSql += "u.user_name AS userName, ";
+        dataSql += "u.real_name AS realName, ";
+        dataSql += "u.is_activity AS isActivity, ";
+        dataSql += "DATE_FORMAT( ";
+        dataSql += "u.create_time, ";
+        dataSql += "'%Y-%m-%d %H:%i:%s' ";
+        dataSql += ") AS createTime, ";
+        dataSql += "( ";
+        dataSql += "CASE ";
+        dataSql += "WHEN r.role_name IS NULL THEN ";
+        dataSql += "'无' ";
+        dataSql += "ELSE ";
+        dataSql += "r.role_name ";
+        dataSql += "END ";
+        dataSql += ") AS roleName ";
+
+        String bodySql = "";
+        bodySql += "FROM ";
+        bodySql += "t_user u ";
+        bodySql += "LEFT JOIN t_role r ON u.role_id = r.id ";
+        bodySql += "WHERE ";
+        bodySql += "1 = 1 ";
+
+        Map<String, Object> params = new HashMap<>();
+        if (!StringUtils.isEmpty(name)) {
+            bodySql += "AND (u.user_name like concat('%', :name, '%') OR u.real_name like concat('%', :name, '%')) ";
+            params.put("name", name);
+        }
+
+        countSql += bodySql;
+        dataSql += bodySql + "order by u.create_time desc limit " + (curPage * pageSize) + ", " + pageSize;
+
+        return commonDao.queryPagerDataBySql(countSql, dataSql, params, Map.class);
+
     }
 
     @Override
@@ -97,6 +124,49 @@ public class UserServiceImpl implements UserService {
     public void del(Long id) {
         TUser user = userDao.findOne(id);
         userDao.delete(user);
+    }
+
+    @Override
+    public PagerData<Map> userRolePageList(Long userId, int curPage, int pageSize) {
+        String countSql = "SELECT count(*) ";
+
+        String dataSql = "";
+        dataSql += "SELECT ";
+        dataSql += "r.id, ";
+        dataSql += "r.role_name AS roleName, ";
+        dataSql += "r.is_activity AS isActivity, ";
+        dataSql += "u.id AS userId ";
+
+        String bodySql = "";
+        bodySql += "FROM ";
+        bodySql += "t_role r ";
+        bodySql += "LEFT JOIN ( ";
+        bodySql += "SELECT ";
+        bodySql += "u.id, ";
+        bodySql += "u.role_id ";
+        bodySql += "FROM ";
+        bodySql += "t_user u ";
+        bodySql += "WHERE ";
+        bodySql += "u.id = :userId ";
+        bodySql += ") u ON u.role_id = r.id ";
+        bodySql += "WHERE ";
+        bodySql += "1 = 1 ";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+
+        countSql += bodySql;
+        dataSql += bodySql + "order by r.id limit " + (curPage * pageSize) + ", " + pageSize;
+
+        return commonDao.queryPagerDataBySql(countSql, dataSql, params, Map.class);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public void roleChange(Long roleId, Long userId) {
+        TUser user = userDao.findOne(userId);
+        user.setRoleId(roleId);
+        userDao.save(user);
     }
 
 }

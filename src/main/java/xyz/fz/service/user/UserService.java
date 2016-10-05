@@ -1,9 +1,8 @@
 package xyz.fz.service.user;
 
-import org.springframework.data.domain.Page;
+import xyz.fz.dao.PagerData;
 import xyz.fz.domain.user.TUser;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,9 +10,7 @@ import java.util.Map;
  */
 public interface UserService {
 
-    List<Map<String, Object>> userAllMapList();
-
-    Page<TUser> userPageList(String userName, int curPage, int pageSize);
+    PagerData<Map> userPageList(String userName, int curPage, int pageSize);
 
     TUser saveUser(TUser user);
 
@@ -26,4 +23,8 @@ public interface UserService {
     void stop(Long id);
 
     void del(Long id);
+
+    PagerData<Map> userRolePageList(Long userId, int curPage, int pageSize);
+
+    void roleChange(Long roleId, Long userId);
 }
