@@ -41,8 +41,10 @@
             display: none;
         }
     </style>
-    <script type="text/javascript">
-        var treeData = [{text: '用户管理', isexpand: true, children: [{url: "user/main", text: "用户列表"}]}, {text: '角色管理', isexpand: true, children: [{url: "role/main", text: "角色列表"}, {url: "role/menu/main", text: "菜单列表"}]}];
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var treeData = [[${#httpServletRequest.getAttribute("treeData")}]];
+        /*]]>*/
     </script>
     <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/

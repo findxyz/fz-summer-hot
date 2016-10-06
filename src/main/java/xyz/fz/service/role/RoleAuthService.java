@@ -3,6 +3,7 @@ package xyz.fz.service.role;
 import xyz.fz.dao.PagerData;
 import xyz.fz.domain.role.TRoleAuth;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,4 +28,12 @@ public interface RoleAuthService {
     void delRoleAuthByAuthId(Long authId);
 
     void delRoleAuthByRoleId(Long roleId);
+
+    List<Map> getRoleAuthData(Long roleId);
+
+    Map<String, Object> getRoleAuthMap(Long roleId);
+
+    List<Map> getTreeData(Long roleId);
+
+    List<Map> getAllTreeData();
 }

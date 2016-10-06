@@ -276,7 +276,7 @@
             }, {
                 "targets": -3,
                 render: function (data, type, row) {
-                    return data + "<span style='color: blue'>(" + row.menuId + ")</span>";
+                    return "<span style='color: blue'>" + data + "</span>";
                 }
             }, {
                 "targets": -2,
@@ -535,7 +535,7 @@
     </table>
 </div>
 <div id="roleMenuDialog" title="增加角色菜单" style="display: block;">
-    <div style="width: 500px;">
+    <div style="font-size: 14px; width: 500px;">
         <table id="roleMenuTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
             <thead>
             <tr>

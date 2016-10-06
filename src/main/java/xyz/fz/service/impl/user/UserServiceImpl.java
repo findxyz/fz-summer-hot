@@ -49,8 +49,10 @@ public class UserServiceImpl implements UserService {
         dataSql += ") AS createTime, ";
         dataSql += "( ";
         dataSql += "CASE ";
-        dataSql += "WHEN r.role_name IS NULL THEN ";
+        dataSql += "WHEN u.role_id IS NULL THEN ";
         dataSql += "'无' ";
+        dataSql += "WHEN u.role_id = 0 THEN ";
+        dataSql += "'超级管理员' ";
         dataSql += "ELSE ";
         dataSql += "r.role_name ";
         dataSql += "END ";

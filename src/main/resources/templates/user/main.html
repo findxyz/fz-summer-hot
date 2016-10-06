@@ -136,7 +136,7 @@
             width: 80
         }, {
             data: "realName",
-            width: 60
+            width: 80
         }, {
             data: "createTime",
             width: 150
@@ -157,14 +157,18 @@
             "targets": -1,
             render: function (data, type, row) {
                 var options = "";
-                if (row.isActivity) {
-                    options += "<button class='btn btn-default btn-xs' onclick='stop(this, " + row.id + ")'>禁用</button>";
+                if (row.roleName != "超级管理员") {
+                    if (row.isActivity) {
+                        options += "<button class='btn btn-default btn-xs' onclick='stop(this, " + row.id + ")'>禁用</button>";
+                    } else {
+                        options += "<button class='btn btn-default btn-xs' onclick='start(this, " + row.id + ")'>启用</button>";
+                    }
+                    options += " <button class='btn btn-success btn-xs' onclick='roleSet(this, " + row.id + ")'>角色授权</button>";
+                    options += " <button class='btn btn-warning btn-xs' onclick='resetPassWord(this, " + row.id + ")'>重置</button>";
+                    options += " <button class='btn btn-danger btn-xs' onclick='del(this, " + row.id + ")'>删除</button>";
                 } else {
-                    options += "<button class='btn btn-default btn-xs' onclick='start(this, " + row.id + ")'>启用</button>";
+                    options += "<span style='color: red;'>suuuuuuuuuuper admin</span>";
                 }
-                options += " <button class='btn btn-success btn-xs' onclick='roleSet(this, " + row.id + ")'>角色授权</button>";
-                options += " <button class='btn btn-warning btn-xs' onclick='resetPassWord(this, " + row.id + ")'>重置</button>";
-                options += " <button class='btn btn-danger btn-xs' onclick='del(this, " + row.id + ")'>删除</button>";
                 return options;
             }
         }, {
@@ -341,7 +345,7 @@
 </div>
 <div id="roleDialog" title="角色授权" style="display: block;">
     <input type="hidden" id="userId" />
-    <div style="width: 500px;">
+    <div style="font-size: 14px; width: 500px;">
         <table id="roleTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
             <thead>
             <tr>
