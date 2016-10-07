@@ -35,6 +35,7 @@ public class Application extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/login/**")
                 .excludePathPatterns("/logout/**")
                 .excludePathPatterns("/index/**")
+                .excludePathPatterns("/error/**")
                 .addPathPatterns("/*/**");
     }
 

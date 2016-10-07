@@ -194,7 +194,8 @@
         }
 
         function saveTabStatus() {
-            $.cookie('liger-home-tab', JSON2.stringify(tabItems));
+            // 会影响一些样式的显示效果，不启用下次登陆选项卡保持功能
+            // $.cookie('liger-home-tab', JSON2.stringify(tabItems));
         }
 
         function logout() {

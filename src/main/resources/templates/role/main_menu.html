@@ -208,10 +208,10 @@
                         }, function (json) {
                             mask.close();
                             if (json.success) {
-                                $.notify("保存成功", {className: "success", position: "top right"});
+                                $.notify("保存成功", {className: "success"});
                                 search();
                             } else {
-                                $.notify("保存失败", {className: "error", position: "top right"});
+                                $.notify("保存失败", {className: "error"});
                             }
                         }, 'json');
                         $(this).dialog("close");
@@ -229,7 +229,7 @@
                 $("#sort").val("");
                 $("#menuDialog").dialog("open");
             });
-            $('#dtTab').find('tbody').on('click', 'tr', function () {
+            $dtTab.find('tbody').on('click', 'tr', function () {
                 search2();
             });
             // 权限表格
@@ -311,10 +311,10 @@
                         }, function (json) {
                             mask.close();
                             if (json.success) {
-                                $.notify("保存成功", {className: "success", position: "top right"});
+                                $.notify("保存成功", {className: "success"});
                                 search2();
                             } else {
-                                $.notify("保存失败", {className: "error", position: "top right"});
+                                $.notify("保存失败", {className: "error"});
                             }
                         }, 'json');
                         $(this).dialog("close");
@@ -333,8 +333,8 @@
                 }
                 $("#text").val("");
                 var menu = getOneMenu();
-                $("#preUrl").val(menu.menuPath);
-                $("#url").val("/");
+                $("#preUrl").val(menu.menuPath + "/");
+                $("#url").val("");
                 $("#sort2").val("");
                 $("#authDialog").dialog("open");
             });
@@ -348,7 +348,7 @@
     <div id="toolBar" style="margin-bottom: 5px;">
         <div><input id="addBtn" type="button" value="新增" class="btn btn-info btn-xs"/></div>
         <div>
-            菜单名称：<input id="sName" />
+            <label for="sName">菜单名称：</label><input id="sName" />
             <input id="search" class="btn btn-success btn-xs" type="button" value="查询" />
         </div>
     </div>
