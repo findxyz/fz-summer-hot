@@ -122,11 +122,29 @@
 
             $(function () {
                 $(document).ajaxComplete(function(event, xhr, settings){
-                    var indexRet = xhr.responseText.indexOf("登陆");
-                    if (indexRet > -1) {
-                        if (indexRet === 17) {
-                            $(document.body).append(xhr.responseText);
+                    var reLoginIndex = xhr.responseText.indexOf("登陆");
+                    if (reLoginIndex > -1) {
+                        if (reLoginIndex === 17) {
+                            // 提示优化
+                            // 原提示方案：$(document.body).append(xhr.responseText);
+                            // 新提示方案，使用notify进行平滑提示
+                            $.notify("当前登录失效，请重新登陆", {className: "error"});
+                            setTimeout(function () {
+                                window.parent.location = '/login';
+                            }, 2000);
+                            return false;
                         }
+                    }
+
+                    var noAccessFlag = "@#@noAccess@#@";
+                    var noAccessIndex = xhr.responseText.indexOf(noAccessFlag);
+                    if (noAccessIndex > -1) {
+                        var noAccessMsg = xhr.responseText.replace(noAccessFlag, "");
+                        $.notify("当前请求失效或无权访问", {className: "error"});
+                        setTimeout(function () {
+                            document.write(noAccessMsg);
+                        }, 2000);
+                        return false;
                     }
                 });
             });

@@ -46,8 +46,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             httpServletResponse.getWriter().print(returnIndex);
             return false;
         } else {
+            String noAccessFlag = "@#@noAccess@#@";
             if (user.getRoleId() == null) {
-                String message = "当前用户尚未分配角色";
+                String message = "当前用户尚未分配角色" + noAccessFlag;
                 httpServletRequest.setCharacterEncoding("utf-8");
                 httpServletResponse.setContentType("text/html; charset=utf-8");
                 httpServletResponse.getWriter().print(message);
@@ -67,7 +68,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 Set<String> authNoSet = (Set<String>) roleAuthMap.get("authNoSet");
                 // done 判断菜单是否可以访问，菜单为第一个/path路径，若没有菜单权限，则之后的权限路径统统禁止访问
                 if (menuSet == null || !menuSet.contains("/" + requestURIs[1])) {
-                    String message = "当前用户没有该菜单的访问权限";
+                    String message = "当前用户没有该菜单的访问权限" + noAccessFlag;
                     httpServletRequest.setCharacterEncoding("utf-8");
                     httpServletResponse.setContentType("text/html; charset=utf-8");
                     httpServletResponse.getWriter().print(message);
@@ -75,7 +76,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 }
                 // done 匹配不可访问的权限，匹配上则不可访问
                 if (authNoSet != null && authNoSet.contains(requestURI)) {
-                    String message = "当前用户没有该请求的访问权限";
+                    String message = "当前用户没有该请求的访问权限" + noAccessFlag;
                     httpServletRequest.setCharacterEncoding("utf-8");
                     httpServletResponse.setContentType("text/html; charset=utf-8");
                     httpServletResponse.getWriter().print(message);
