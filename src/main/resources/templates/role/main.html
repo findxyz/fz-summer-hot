@@ -153,7 +153,7 @@
             }, function (json) {
                 cleanMask.close();
                 if (json.success) {
-                    $.notify("操作成功");
+                    $.notify("操作成功", {className: "success"});
                     search();
                 } else {
                     $(me).notify("操作失败[" + json.message + "]", {className: "error", position: "right"});
@@ -170,7 +170,7 @@
                 }, function (json) {
                     cleanMask.close();
                     if (json.success) {
-                        $.notify("删除成功");
+                        $.notify("删除成功", {className: "success"});
                         search();
                     } else {
                         $.notify("删除失败[" + json.message + "]", {className: "error", position: "top"});

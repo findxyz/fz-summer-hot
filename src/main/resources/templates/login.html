@@ -51,7 +51,7 @@
             }, function (json) {
                 cleanMask.close();
                 if (json.success) {
-                    $.notify("登陆成功");
+                    $.notify("登陆成功", {className: "success"});
                     setTimeout(function () {
                         window.location = basePath + "home";
                     }, 1000);

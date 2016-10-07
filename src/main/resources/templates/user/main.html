@@ -31,7 +31,7 @@
         }, function (json) {
             cleanMask.close();
             if (json.success) {
-                $.notify("开启成功");
+                $.notify("开启成功", {className: "success"});
                 search();
             } else {
                 $(me).notify("开启失败[" + json.message + "]", {className: "error", position: "right"});
@@ -47,7 +47,7 @@
         }, function (json) {
             cleanMask.close();
             if (json.success) {
-                $.notify("禁用成功");
+                $.notify("禁用成功", {className: "success"});
                 search();
             } else {
                 $(me).notify("禁用失败[" + json.message + "]", {className: "error", position: "right"});
@@ -64,7 +64,7 @@
             }, function (json) {
                 cleanMask.close();
                 if (json.success) {
-                    $.notify("删除成功");
+                    $.notify("删除成功", {className: "success"});
                     search();
                 } else {
                     $(me).notify("删除失败[" + json.message + "]", {className: "error", position: "right"});
