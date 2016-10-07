@@ -55,7 +55,7 @@ public class IndexController {
                                      @RequestParam("valCode") String valCode) {
 
         Map<String, Object> result = new HashMap<>();
-        String sessionValCode = session.getAttribute("valCode") != null ? session.getAttribute("valCode").toString() : "";
+        String sessionValCode = session.getAttribute("valCode") != null ? session.getAttribute("valCode").toString() : session.toString();
         if (StringUtils.equals(sessionValCode, valCode)) {
             TUser user = userService.findUser(userName, passWord);
             if (user != null) {
