@@ -1,12 +1,12 @@
 package xyz.fz.service.impl.user;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import xyz.fz.dao.CommonDao;
 import xyz.fz.dao.PagerData;
 import xyz.fz.dao.user.UserDao;

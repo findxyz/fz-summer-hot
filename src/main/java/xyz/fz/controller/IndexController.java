@@ -1,6 +1,6 @@
 package xyz.fz.controller;
 
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +55,7 @@ public class IndexController {
                                      @RequestParam("valCode") String valCode) {
 
         Map<String, Object> result = new HashMap<>();
-        String sessionValCode = session.getAttribute("valCode").toString();
+        String sessionValCode = session.getAttribute("valCode") != null ? session.getAttribute("valCode").toString() : "";
         if (StringUtils.equals(sessionValCode, valCode)) {
             TUser user = userService.findUser(userName, passWord);
             if (user != null) {

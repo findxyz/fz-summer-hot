@@ -1,8 +1,8 @@
 package xyz.fz.interceptor;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.thymeleaf.util.StringUtils;
 import xyz.fz.domain.user.TUser;
 import xyz.fz.service.role.RoleAuthService;
 
