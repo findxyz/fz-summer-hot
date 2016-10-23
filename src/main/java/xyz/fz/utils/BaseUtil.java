@@ -10,9 +10,9 @@ import java.util.Random;
  */
 public class BaseUtil {
 
-    public static String sha1Hex(String str) {
+    public static String sha256Hex(String str) {
         final String random = "70c1@Y_i$_@_$unnY_c1@Y";
-        return DigestUtils.sha1Hex(random + str);
+        return DigestUtils.sha256Hex(random + str);
     }
 
     public static Color getRandColor(int fc, int bc) {
@@ -30,7 +30,7 @@ public class BaseUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(sha1Hex("sadmin"));
-        System.out.println(DigestUtils.sha1Hex("sadmin"));
+        System.out.println(sha256Hex("sadmin"));
+        System.out.println(DigestUtils.sha256Hex("sadmin"));
     }
 }

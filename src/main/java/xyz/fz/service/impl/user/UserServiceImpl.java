@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable
     public TUser findUser(String userName, String passWord) {
-        List<TUser> userList = userDao.findUserList(userName, BaseUtil.sha1Hex(passWord));
+        List<TUser> userList = userDao.findUserList(userName, BaseUtil.sha256Hex(passWord));
         if (userList != null && userList.size() == 1) {
             return userList.get(0);
         } else {
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
     public void resetPassWord(Long id) {
         TUser user = userDao.findOne(id);
         String defaultPassWord = "88888888";
-        user.setPassWord(BaseUtil.sha1Hex(defaultPassWord));
+        user.setPassWord(BaseUtil.sha256Hex(defaultPassWord));
         userDao.save(user);
     }
 

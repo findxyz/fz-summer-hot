@@ -56,7 +56,7 @@ public class UserController {
     public Map<String, Object> saveUser(TUser user) {
 
         Map<String, Object> result = new HashMap<>();
-        user.setPassWord(BaseUtil.sha1Hex(user.getPassWord()));
+        user.setPassWord(BaseUtil.sha256Hex(user.getPassWord()));
         user.setCreateTime(new Date());
         user.setIsActivity(1);
         TUser sUser = userService.saveUser(user);
