@@ -7,31 +7,10 @@
     <script type="text/javascript" th:src="@{/pubs/js/jquery-1.12.4.min.js}"></script>
     <script type="text/javascript" th:src="@{/pubs/jqueryUI/jquery-ui.min.js}"></script>
     <script th:src="@{/pubs/js/notify.min.js}"></script>
+    <link th:href="@{/pubs/css/login.css}" rel="stylesheet"/>
     <style type="text/css">
         body {
             background-image: url("/pubs/images/index-bg2.jpg");
-        }
-
-        .input {
-            border-top: none;
-            border-left: none;
-            border-right: none;
-            border-bottom: solid 1px gray;
-        }
-
-        .ui-dialog {
-            font-size: 28px !important;
-        }
-
-        .no-close .ui-dialog-titlebar-close {
-            display: none;
-        }
-
-        .diaLabel {
-            display: inline-block;
-            width: 120px;
-            margin-right: 10px;
-            text-align: right;
         }
 
         .cleanMasking {
@@ -50,7 +29,13 @@
     <script th:inline="javascript" type="text/javascript">
     /*<![CDATA[*/
     $(function () {
+        var successLock = false;
         function sub() {
+
+            if (successLock) {
+                return false;
+            }
+
             var $userName = $("#userName");
             var userName = $userName.val();
             var passWord = $("#passWord").val();
@@ -75,6 +60,7 @@
             }, function (json) {
                 cleanMask.close();
                 if (json.success) {
+                    successLock = true;
                     $.notify("登陆成功", {className: "success"});
                     setTimeout(function () {
                         window.location = basePath + "home";
@@ -88,18 +74,8 @@
             }, 'json');
         }
 
-        $("#loginDialog").dialog({
-            dialogClass: "no-close",
-            closeOnEscape: false,
-            draggable: false,
-            autoOpen: true,
-            modal: true,
-            width: 550,
-            height: 420,
-            buttons: [{
-                text: "登陆",
-                click: sub
-            }]
+        $("#sub").bind("click", function () {
+            sub();
         });
 
         $("#userName").val("").focus();
@@ -132,22 +108,21 @@
     </script>
 </head>
 <body>
-    <div id="loginDialog" title="夏天的风" style="display: none;">
-        <div style="width: 500px; margin-top: 10px;">
-            <div class="diaLabel">用户名：</div>
-            <span><input title="用户名" id="userName" class="input" /></span>
-        </div>
-        <div style="width: 500px; margin-top: 20px;">
-            <div class="diaLabel">密码：</div>
-            <span><input title="密码" type="password" id="passWord" class="input" /></span>
-        </div>
-        <div style="width: 500px; margin-top: 20px;">
-            <div class="diaLabel">验证码：</div>
-            <span>
-                <input title="验证码" id="valCode" class="input" style="width: 210px" />
-                <img id="valCodeImg" alt="code" th:src="@{index/valCode}" onclick="changeValCode();" style="display: inline-block" width="80" height="40" />
-            </span>
-        </div>
+<section class="container">
+    <div class="login">
+        <h1>夏天的风</h1>
+        <form>
+            <p><input type="text" id="userName" value="" placeholder="用户名"/></p>
+            <p><input type="password" id="passWord" value="" placeholder="密码"/></p>
+            <p style="margin-top: 15px;">
+                <input type="text" id="valCode" placeholder="验证码" style="width: 188px !important;"/>
+                <span style="text-align: center; margin: 0 auto;">
+                    <img src="" id="valCodeImg" alt="code" th:src="@{index/valCode}" onclick="changeValCode();" width="80" height="35" style="position: relative; top: 12px;"/>
+                </span>
+            </p>
+            <p class="submit"><img src="" th:src="@{/favicon.ico}"/><input type="button" id="sub" value="登陆"/></p>
+        </form>
     </div>
+</section>
 </body>
 </html>

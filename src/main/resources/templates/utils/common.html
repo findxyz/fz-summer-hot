@@ -344,6 +344,8 @@
     </headerTemplate>
 
     <baseTemplate th:fragment="baseTemplate">
+        <link rel="shortcut icon" th:href="@{/favicon.ico}" />
+        <link rel="bookmark" th:href="@{/favicon.ico}" type="image/x-icon" />
         <script type="text/javascript" th:inline="javascript">
             /*<![CDATA[*/
             var basePath = [[${#httpServletRequest.getAttribute("basePath")}]];
