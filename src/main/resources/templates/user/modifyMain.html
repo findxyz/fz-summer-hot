@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>密码修改</title>
+    <headerTemplate th:include="utils/common::headerTemplate"></headerTemplate>
+    <script th:inline="javascript" type="text/javascript">
+    /*<![CDATA[*/
+    $(function () {
+        $("#modifyDialog").dialog({
+            autoOpen: true,
+            modal: true,
+            width: 350,
+            height: 220,
+            buttons: [{
+                text: "修改",
+                click: function () {
+                    var oldPassWord = $("#oldPassWord").val();
+                    var newPassWord = $("#newPassWord").val();
+                    if (oldPassWord && newPassWord) {
+                        mask.open();
+                        $.post(basePath + "user/modifyPassWord", {
+                            oldPassWord: oldPassWord,
+                            newPassWord: newPassWord
+                        }, function (json) {
+                            mask.close();
+                            if (json.success) {
+                                $("#oldPassWord").val("");
+                                $("#newPassWord").val("");
+                                $.notify("密码修改成功", {className: "success"});
+                            } else {
+                                $.notify(json.message, {className: "error"});
+                            }
+                        }, 'json');
+                    }
+                }
+            }]
+        });
+    });
+    /*]]>*/
+    </script>
+</head>
+<body>
+<div id="modifyDialog" title="密码修改" style="display: block;">
+    <table width="300px;" style="border-collapse: separate; border-spacing: 5px;">
+        <tr>
+            <td style="text-align: right">原密码：</td>
+            <td><input title="原密码" id="oldPassWord" /></td>
+        </tr>
+        <tr>
+            <td style="text-align: right">新密码：</td>
+            <td><input title="新密码" id="newPassWord" /></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

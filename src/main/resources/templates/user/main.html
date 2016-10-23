@@ -181,7 +181,7 @@
                 }
             }
         }];
-        table = new XDataTables("shTab", basePath + "user/userPageList", paramsFun, columns, columnDefs);
+        table = new XDataTables("userTab", basePath + "user/userPageList", paramsFun, columns, columnDefs);
         $("#sName").bind("keypress", function (event) {
             if (event.keyCode == 13) {
                 search();
@@ -310,7 +310,7 @@
             <input id="search" class="btn btn-success btn-xs" type="button" value="查询" />
         </div>
     </div>
-    <table id="shTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+    <table id="userTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
         <thead>
         <tr>
             <th>序号</th>
@@ -326,22 +326,22 @@
         <tbody>
         </tbody>
     </table>
-    <div id="userDialog" title="新增用户" style="display: none">
-        <table width="300px;" style="border-collapse: separate; border-spacing: 5px;">
-            <tr>
-                <td style="text-align: right">账户名称：</td>
-                <td><input title="账户名称" id="userName" /></td>
-            </tr>
-            <tr>
-                <td style="text-align: right">真实姓名：</td>
-                <td><input title="真实姓名" id="realName" /></td>
-            </tr>
-            <tr>
-                <td style="text-align: right">密码：</td>
-                <td><input title="密码" type="password" id="passWord" /></td>
-            </tr>
-        </table>
-    </div>
+</div>
+<div id="userDialog" title="新增用户" style="display: none">
+    <table width="300px;" style="border-collapse: separate; border-spacing: 5px;">
+        <tr>
+            <td style="text-align: right">账户名称：</td>
+            <td><input title="账户名称" id="userName" /></td>
+        </tr>
+        <tr>
+            <td style="text-align: right">真实姓名：</td>
+            <td><input title="真实姓名" id="realName" /></td>
+        </tr>
+        <tr>
+            <td style="text-align: right">密码：</td>
+            <td><input title="密码" type="password" id="passWord" /></td>
+        </tr>
+    </table>
 </div>
 <div id="roleDialog" title="角色授权" style="display: block;">
     <input type="hidden" id="userId" />

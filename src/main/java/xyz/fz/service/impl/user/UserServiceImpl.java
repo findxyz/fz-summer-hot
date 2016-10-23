@@ -171,4 +171,16 @@ public class UserServiceImpl implements UserService {
         userDao.save(user);
     }
 
+    @Override
+    @CacheEvict(allEntries = true)
+    public void modifyPassWord(Long id, String oldPassWord, String newPassWord) {
+        TUser user = userDao.findOne(id);
+        if (StringUtils.equals(BaseUtil.sha256Hex(oldPassWord), user.getPassWord())) {
+            user.setPassWord(BaseUtil.sha256Hex(newPassWord));
+            userDao.save(user);
+        } else {
+            throw new RuntimeException("原密码错误");
+        }
+    }
+
 }

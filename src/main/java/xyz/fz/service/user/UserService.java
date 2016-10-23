@@ -27,4 +27,6 @@ public interface UserService {
     PagerData<Map> userRolePageList(Long userId, int curPage, int pageSize);
 
     void roleChange(Long roleId, Long userId);
+
+    void modifyPassWord(Long id, String oldPassWord, String newPassWord);
 }

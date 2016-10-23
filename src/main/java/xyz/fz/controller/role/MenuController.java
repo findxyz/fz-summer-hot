@@ -28,7 +28,7 @@ public class MenuController {
 
     @RequestMapping("/main")
     public String main() {
-        return "role/main_menu";
+        return "role/menuMain";
     }
 
     @RequestMapping("/menuPageList")

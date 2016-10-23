@@ -12,6 +12,7 @@ import xyz.fz.domain.user.TUser;
 import xyz.fz.service.user.UserService;
 import xyz.fz.utils.BaseUtil;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -157,6 +158,30 @@ public class UserController {
         Map<String, Object> result = new HashMap<>();
         try {
             userService.roleChange(roleId, userId);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping("/modifyMain")
+    public String modifyMain() {
+
+        return "user/modifyMain";
+    }
+
+    @RequestMapping("/modifyPassWord")
+    @ResponseBody
+    public Map<String, Object> modifyPassWord(@RequestParam("oldPassWord") String oldPassWord,
+                                              @RequestParam("newPassWord") String newPassWord,
+                                              HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            TUser user = (TUser) session.getAttribute("curUser");
+            userService.modifyPassWord(user.getId(), oldPassWord, newPassWord);
             result.put("success", true);
         } catch (Exception e) {
             e.printStackTrace();
