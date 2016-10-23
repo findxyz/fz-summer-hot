@@ -11,7 +11,8 @@ import java.util.Random;
 public class BaseUtil {
 
     public static String sha1Hex(String str) {
-        return DigestUtils.sha1Hex(str);
+        final String random = "70c1@Y_i$_@_$unnY_c1@Y";
+        return DigestUtils.sha1Hex(random + str);
     }
 
     public static Color getRandColor(int fc, int bc) {
@@ -26,5 +27,10 @@ public class BaseUtil {
         int g = fc + random.nextInt(bc - fc);
         int b = fc + random.nextInt(bc - fc);
         return new Color(r, g, b);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(sha1Hex("sadmin"));
+        System.out.println(DigestUtils.sha1Hex("sadmin"));
     }
 }
