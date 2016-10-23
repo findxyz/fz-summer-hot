@@ -2,25 +2,49 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>登陆</title>
-    <headerTemplate th:include="utils/common::headerTemplate"></headerTemplate>
+    <baseTemplate th:include="utils/common::baseTemplate"></baseTemplate>
+    <link th:href="@{/pubs/jqueryUI/jquery-ui.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/pubs/js/jquery-1.12.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/pubs/jqueryUI/jquery-ui.min.js}"></script>
+    <script th:src="@{/pubs/js/notify.min.js}"></script>
     <style type="text/css">
         body {
             background-image: url("/pubs/images/index-bg2.jpg");
         }
+
         .input {
             border-top: none;
             border-left: none;
             border-right: none;
             border-bottom: solid 1px gray;
         }
+
         .ui-dialog {
             font-size: 28px !important;
         }
+
+        .no-close .ui-dialog-titlebar-close {
+            display: none;
+        }
+
         .diaLabel {
             display: inline-block;
             width: 120px;
             margin-right: 10px;
             text-align: right;
+        }
+
+        .cleanMasking {
+            text-align: center;
+            padding-top: 200px;
+            display: none;
+            position: fixed;
+            z-index: 9000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(255, 255, 255, 0);
         }
     </style>
     <script th:inline="javascript" type="text/javascript">
@@ -65,6 +89,9 @@
         }
 
         $("#loginDialog").dialog({
+            dialogClass: "no-close",
+            closeOnEscape: false,
+            draggable: false,
             autoOpen: true,
             modal: true,
             width: 550,
@@ -75,7 +102,6 @@
             }]
         });
 
-        $(".ui-dialog-titlebar-close").hide();
         $("#userName").val("").focus();
         $("#passWord").val("");
         $("#valCode").val("").keypress(function (event) {
@@ -88,6 +114,20 @@
     function changeValCode() {
         $("#valCodeImg").attr("src", basePath + "index/valCode?" + Math.random());
     }
+
+    var cleanMask = {
+        open: function () {
+            $("#cleanMasking").show();
+        },
+        close: function () {
+            $("#cleanMasking").hide();
+        }
+    };
+
+    $.notify.defaults({
+        className: "info",
+        position: "top center"
+    });
     /*]]>*/
     </script>
 </head>

@@ -7,6 +7,9 @@
     /*<![CDATA[*/
     $(function () {
         $("#modifyDialog").dialog({
+            dialogClass: "no-close",
+            closeOnEscape: false,
+            draggable: false,
             autoOpen: true,
             modal: true,
             width: 350,
@@ -44,11 +47,11 @@
     <table width="300px;" style="border-collapse: separate; border-spacing: 5px;">
         <tr>
             <td style="text-align: right">原密码：</td>
-            <td><input title="原密码" id="oldPassWord" /></td>
+            <td><input title="原密码" type="password" id="oldPassWord" /></td>
         </tr>
         <tr>
             <td style="text-align: right">新密码：</td>
-            <td><input title="新密码" id="newPassWord" /></td>
+            <td><input title="新密码" type="password" id="newPassWord" /></td>
         </tr>
     </table>
 </div>
