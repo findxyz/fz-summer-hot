@@ -114,12 +114,13 @@
         <form>
             <p><input type="text" id="userName" value="" placeholder="用户名"/></p>
             <p><input type="password" id="passWord" value="" placeholder="密码"/></p>
-            <p style="margin-top: 15px;">
-                <input type="text" id="valCode" placeholder="验证码" style="width: 188px !important;"/>
-                <span style="text-align: center; margin: 0 auto;">
-                    <img src="" id="valCodeImg" alt="code" th:src="@{index/valCode}" onclick="changeValCode();" width="80" height="35" style="position: relative; top: 12px;"/>
+            <p style="margin-top: -15px;">
+                <input type="text" id="valCode" placeholder="验证码" style="width: 120px !important;"/>
+                <span>
+                    <img src="" id="valCodeImg" alt="code" th:src="@{index/valCode}" onclick="changeValCode();" width="150" height="60" style="position: relative; top: 24px;"/>
                 </span>
             </p>
+            <p></p>
             <p class="submit"><img src="" th:src="@{/favicon.ico}"/><input type="button" id="sub" value="登陆"/></p>
         </form>
     </div>
