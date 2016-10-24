@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * Created by Administrator on 2016/10/19 0019.
  */
 @Component
-public class MyCommandLineRunner implements CommandLineRunner{
+public class MyCommandLineRunner implements CommandLineRunner {
 
     /*
     @Autowired
@@ -16,6 +16,8 @@ public class MyCommandLineRunner implements CommandLineRunner{
 
     @Override
     public void run(String... strings) throws Exception {
+        // strings was the SpringApplication.run(Application.class, args);'s args
+
         // do what you want to do when spring context has already
 
         // if want awt or swing then replace
