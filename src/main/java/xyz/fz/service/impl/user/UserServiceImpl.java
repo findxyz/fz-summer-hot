@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
         bodySql += "LEFT JOIN t_role r ON u.role_id = r.id ";
         bodySql += "WHERE ";
         bodySql += "1 = 1 ";
+        bodySql += "AND u.role_id <> 0 ";
 
         Map<String, Object> params = new HashMap<>();
         if (!StringUtils.isEmpty(name)) {
