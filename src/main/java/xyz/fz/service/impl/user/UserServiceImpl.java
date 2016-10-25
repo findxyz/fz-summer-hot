@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PagerData<Map> userPageList(String name, int curPage, int pageSize) {
 
-        String countSql = "SELECT count(*) ";
+        String countSql = "SELECT COUNT(0) ";
 
         String dataSql = "";
         dataSql += "SELECT ";
@@ -73,9 +73,9 @@ public class UserServiceImpl implements UserService {
         }
 
         countSql += bodySql;
-        dataSql += bodySql + "order by u.create_time desc limit " + (curPage * pageSize) + ", " + pageSize;
+        dataSql += bodySql + "order by u.create_time desc";
 
-        return commonDao.queryPagerDataBySql(countSql, dataSql, params, Map.class);
+        return commonDao.queryPagerDataBySql(countSql, dataSql, params, curPage, pageSize, Map.class);
 
     }
 
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PagerData<Map> userRolePageList(Long userId, int curPage, int pageSize) {
-        String countSql = "SELECT count(*) ";
+        String countSql = "SELECT COUNT(0) ";
 
         String dataSql = "";
         dataSql += "SELECT ";
@@ -159,9 +159,9 @@ public class UserServiceImpl implements UserService {
         params.put("userId", userId);
 
         countSql += bodySql;
-        dataSql += bodySql + "order by r.id limit " + (curPage * pageSize) + ", " + pageSize;
+        dataSql += bodySql + "order by r.id ";
 
-        return commonDao.queryPagerDataBySql(countSql, dataSql, params, Map.class);
+        return commonDao.queryPagerDataBySql(countSql, dataSql, params, curPage, pageSize, Map.class);
     }
 
     @Override

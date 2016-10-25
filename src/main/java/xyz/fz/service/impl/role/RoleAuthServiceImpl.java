@@ -32,7 +32,7 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     @Cacheable
     public PagerData<Map> roleAuthMenuPageList(Long roleId, int curPage, int pageSize) {
 
-        String countSql = "select count(*) from t_role_auth ra inner join t_menu m on ra.menu_id = m.id where 1=1 ";
+        String countSql = "select count(0) from t_role_auth ra inner join t_menu m on ra.menu_id = m.id where 1=1 ";
         String sql = "select ra.id as id, m.id as menuId, m.menu_name as menuName, m.is_activity as isActivity from t_role_auth ra inner join t_menu m on ra.menu_id = m.id where 1=1 ";
         String conditionSql = "";
         Map<String, Object> params = new HashMap<>();
@@ -41,8 +41,8 @@ public class RoleAuthServiceImpl implements RoleAuthService {
         params.put("roleId", roleId);
         countSql += conditionSql;
         sql += conditionSql;
-        sql += "order by m.sort limit " + (curPage * pageSize) + ", " + pageSize;
-        return commonDao.queryPagerDataBySql(countSql, sql, params, Map.class);
+        sql += "order by m.sort ";
+        return commonDao.queryPagerDataBySql(countSql, sql, params, curPage, pageSize, Map.class);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     @Cacheable
     public PagerData<Map> roleMenuPageList(Long roleId, int curPage, int pageSize) {
 
-        String countSql = "SELECT count(*) ";
+        String countSql = "SELECT COUNT(0) ";
 
         String dataSql = "";
         dataSql += "SELECT ";
@@ -84,9 +84,9 @@ public class RoleAuthServiceImpl implements RoleAuthService {
         Map<String, Object> params = new HashMap<>();
         params.put("roleId", roleId);
         countSql += bodySql;
-        dataSql += bodySql + "order by m.sort limit " + (curPage * pageSize) + ", " + pageSize;
+        dataSql += bodySql + "order by m.sort ";
 
-        return commonDao.queryPagerDataBySql(countSql, dataSql, params, Map.class);
+        return commonDao.queryPagerDataBySql(countSql, dataSql, params, curPage, pageSize, Map.class);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     @Cacheable
     public PagerData<Map> roleAuthPageList(Long roleId, Long menuId, int curPage, int pageSize) {
 
-        String countSql = "SELECT count(*) ";
+        String countSql = "SELECT COUNT(0) ";
 
         String dataSql = "";
         dataSql += "SELECT ";
@@ -128,9 +128,9 @@ public class RoleAuthServiceImpl implements RoleAuthService {
         params.put("menuId", menuId);
 
         countSql += bodySql;
-        dataSql += bodySql + "order by a.sort limit " + (curPage * pageSize) + ", " + pageSize;
+        dataSql += bodySql + "order by a.sort ";
 
-        return commonDao.queryPagerDataBySql(countSql, dataSql, params, Map.class);
+        return commonDao.queryPagerDataBySql(countSql, dataSql, params, curPage, pageSize, Map.class);
     }
 
     @Override
