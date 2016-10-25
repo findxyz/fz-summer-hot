@@ -30,7 +30,7 @@ public class BaseUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(sha256Hex("sadmin"));
-        System.out.println(DigestUtils.sha256Hex("sadmin"));
+        System.out.println(sha256Hex("1"));
+        System.out.println(DigestUtils.sha256Hex("1"));
     }
 }
