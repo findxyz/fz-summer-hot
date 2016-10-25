@@ -16,8 +16,8 @@
         <!--</repository>-->
     <!--</repositories>-->
 
-    <groupId>xyz</groupId>
-    <artifactId>fz</artifactId>
+    <groupId>xyz.fz</groupId>
+    <artifactId>summerHot</artifactId>
     <version>1.0</version>
 
     <properties>
