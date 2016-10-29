@@ -3,7 +3,6 @@ package xyz.fz.controller;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,9 +24,7 @@ import java.util.Map;
  * Created by fz on 2016/9/15.
  */
 @Controller
-public class IndexController implements ErrorController {
-
-    private static final String ERROR_PATH = "/error";
+public class IndexController {
 
     @Autowired
     private UserService userService;
@@ -118,15 +115,4 @@ public class IndexController implements ErrorController {
         return result;
     }
 
-    @RequestMapping(value = ERROR_PATH)
-    public String error() {
-
-        return "error";
-    }
-
-    @Override
-    public String getErrorPath() {
-
-        return ERROR_PATH;
-    }
 }

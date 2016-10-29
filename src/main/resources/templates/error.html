@@ -5,6 +5,10 @@
     <meta charset="utf-8"/>
 </head>
 <body>
-Something was really wrong.
+<p th:text="${'Timestamp: ' + timestamp}"></p>
+<p th:text="${'Path: ' + path}"></p>
+<p th:text="${'Status: ' + status}"></p>
+<p th:text="${'Error: ' + error}"></p>
+<p th:text="${'Details: ' + message}"></p>
 </body>
 </html>
