@@ -139,17 +139,11 @@
         }
 
         function roleToggle(me, id, flag) {
-            var isActivity;
-            if (flag) {
-                isActivity = 1;
-            } else {
-                isActivity = 0;
-            }
             $(me).closest("tr").click();
             cleanMask.open();
             $.post(basePath + "role/toggle", {
                 id: id,
-                isActivity: isActivity
+                isActivity: flag ? 1 : 0
             }, function (json) {
                 cleanMask.close();
                 if (json.success) {
@@ -384,12 +378,12 @@
                     }
                 }
             }];
-            table3 = new XDataTables("roleMenuTab", basePath + "role/roleAuth/roleMenuPageList", paramsFun3, columns3, columnDefs3, true, {scrollY: 200, disAutoLoad: true});
+            table3 = new XDataTables("roleMenuTab", basePath + "role/roleAuth/roleMenuPageList", paramsFun3, columns3, columnDefs3, true, {scrollY: 300, disAutoLoad: true});
 
             $("#roleMenuDialog").dialog({
                 autoOpen: false,
                 modal: true,
-                width: 550,
+                width: 850,
                 height: 520,
                 buttons: [{
                     text: "关闭",
@@ -401,7 +395,7 @@
 
             $("#addBtn2").bind("click", function () {
                 if (getOneRoleId() < 0) {
-                    $.notify("请选择需要增加菜单的角色", {position: "top right"});
+                    $.notify("请选择需要增加菜单的角色");
                     return false;
                 }
                 cleanMask.open();
@@ -536,7 +530,7 @@
     </table>
 </div>
 <div id="roleMenuDialog" title="增加角色菜单" style="display: block;">
-    <div style="font-size: 14px; width: 500px;">
+    <div style="font-size: 14px; width: 800px;">
         <table id="roleMenuTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
             <thead>
             <tr>
