@@ -2,9 +2,6 @@ package xyz.fz.service.impl.user;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.fz.dao.CommonDao;
@@ -23,7 +20,6 @@ import java.util.Map;
  */
 @Service
 @Transactional
-@CacheConfig(cacheNames = "users", keyGenerator = "myCKG")
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -80,14 +76,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public TUser saveUser(TUser user) {
 
         return userDao.save(user);
     }
 
     @Override
-    @Cacheable
     public TUser findUser(String userName, String passWord) {
         List<TUser> userList = userDao.findUserList(userName, BaseUtil.sha256Hex(passWord));
         if (userList != null && userList.size() == 1) {
@@ -98,7 +92,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public void resetPassWord(Long id) {
         TUser user = userDao.findOne(id);
         String defaultPassWord = "88888888";
@@ -107,7 +100,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public void start(Long id) {
         TUser user = userDao.findOne(id);
         user.setIsActivity(1);
@@ -115,7 +107,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public void stop(Long id) {
         TUser user = userDao.findOne(id);
         user.setIsActivity(0);
@@ -123,7 +114,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public void del(Long id) {
         TUser user = userDao.findOne(id);
         userDao.delete(user);
@@ -165,7 +155,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public void roleChange(Long roleId, Long userId) {
         TUser user = userDao.findOne(userId);
         user.setRoleId(roleId);
@@ -173,7 +162,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
     public void modifyPassWord(Long id, String oldPassWord, String newPassWord) {
         TUser user = userDao.findOne(id);
         if (StringUtils.equals(BaseUtil.sha256Hex(oldPassWord), user.getPassWord())) {

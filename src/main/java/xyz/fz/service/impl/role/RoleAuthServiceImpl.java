@@ -1,7 +1,6 @@
 package xyz.fz.service.impl.role;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import java.util.*;
  */
 @Service
 @Transactional
-@CacheConfig(cacheNames = "roleMenuAuths", keyGenerator = "myCKG")
 public class RoleAuthServiceImpl implements RoleAuthService {
 
     @Autowired
@@ -29,7 +27,6 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     private CommonDao commonDao;
 
     @Override
-    @Cacheable
     public PagerData<Map> roleAuthMenuPageList(Long roleId, int curPage, int pageSize) {
 
         String countSql = "select count(0) from t_role_auth ra inner join t_menu m on ra.menu_id = m.id where 1=1 ";
@@ -46,14 +43,13 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public TRoleAuth saveRoleAuth(TRoleAuth roleAuth) {
 
         return roleAuthDao.save(roleAuth);
     }
 
     @Override
-    @Cacheable
     public PagerData<Map> roleMenuPageList(Long roleId, int curPage, int pageSize) {
 
         String countSql = "SELECT COUNT(0) ";
@@ -90,13 +86,12 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void delRoleMenu(Long roleId, Long menuId) {
         roleAuthDao.delRoleMenu(roleId, menuId);
     }
 
     @Override
-    @Cacheable
     public PagerData<Map> roleAuthPageList(Long roleId, Long menuId, int curPage, int pageSize) {
 
         String countSql = "SELECT COUNT(0) ";
@@ -134,31 +129,30 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void delRoleAuth(Long roleAuthId) {
         roleAuthDao.delete(roleAuthId);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void delRoleAuthByMenuId(Long menuId) {
         roleAuthDao.delRoleAuthByMenuId(menuId);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void delRoleAuthByAuthId(Long authId) {
         roleAuthDao.delRoleAuthByAuthId(authId);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void delRoleAuthByRoleId(Long roleId) {
         roleAuthDao.delRoleAuthByRoleId(roleId);
     }
 
     @Override
-    @Cacheable
     public List<Map> getRoleAuthData(Long roleId) {
         String sql = "";
         sql += "SELECT ";
@@ -205,7 +199,7 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     }
 
     @Override
-    @Cacheable
+    @Cacheable(value = "roleAuth", keyGenerator = "myRedisKeyGenerator")
     public Map<String, Object> getRoleAuthMap(Long roleId) {
 
         Map<String, Object> result = new HashMap<>();
@@ -226,8 +220,8 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     }
 
     @Override
-    @Cacheable
     @SuppressWarnings("unchecked")
+    @Cacheable(value = "treeData", keyGenerator = "myRedisKeyGenerator")
     public List<Map> getTreeData(Long roleId) {
 
         List<Map> list = getRoleAuthData(roleId);
@@ -264,8 +258,8 @@ public class RoleAuthServiceImpl implements RoleAuthService {
     }
 
     @Override
-    @Cacheable
     @SuppressWarnings("unchecked")
+    @Cacheable(value = "allTreeData", keyGenerator = "myRedisKeyGenerator")
     public List<Map> getAllTreeData() {
         String sql = "";
         sql += "SELECT ";

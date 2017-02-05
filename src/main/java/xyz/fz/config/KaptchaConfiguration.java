@@ -11,7 +11,7 @@ import java.util.Properties;
  * Created by Administrator on 2016/10/24 0024.
  */
 @Configuration
-public class CustomConfiguration {
+public class KaptchaConfiguration {
 
     @Bean("googleKaptcha")
     public DefaultKaptcha googleKaptcha() {

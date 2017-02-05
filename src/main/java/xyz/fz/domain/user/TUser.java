@@ -3,6 +3,7 @@ package xyz.fz.domain.user;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,9 @@ import java.util.Date;
  */
 @Entity()
 @Table(name = "t_user")
-public class TUser {
+public class TUser implements Serializable {
+
+    private static final long serialVersionUID = 310795750565551462L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

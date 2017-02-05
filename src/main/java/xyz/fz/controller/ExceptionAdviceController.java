@@ -24,6 +24,7 @@ public class ExceptionAdviceController {
         Map<String, Object> result = new HashMap<>();
         result.put("success", false);
         result.put("message", "error【" + e.getMessage() + "】");
+        e.printStackTrace();
         return result;
     }
 }

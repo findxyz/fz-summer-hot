@@ -2,9 +2,7 @@ package xyz.fz.service.impl.role;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,6 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
  */
 @Service
 @Transactional
-@CacheConfig(cacheNames = "roleMenuAuths", keyGenerator = "myCKG")
 public class MenuServiceImpl implements MenuService {
 
     @Autowired
@@ -34,7 +31,6 @@ public class MenuServiceImpl implements MenuService {
     private RoleAuthService roleAuthService;
 
     @Override
-    @Cacheable
     public Page<TMenu> menuPageList(String menuName, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.ASC, "sort");
@@ -50,13 +46,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public TMenu saveMenu(TMenu menu) {
         return menuDao.save(menu);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void toggle(Long id, int isActivity) {
         TMenu menu = menuDao.findOne(id);
         menu.setIsActivity(isActivity);
@@ -64,7 +60,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void del(Long id) {
         authService.deleteByMenuId(id);
         // done 删除角色权限中属于该菜单的权限

@@ -2,9 +2,7 @@ package xyz.fz.service.impl.role;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +18,6 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
  */
 @Service
 @Transactional
-@CacheConfig(cacheNames = "roleMenuAuths", keyGenerator = "myCKG")
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
@@ -30,7 +27,6 @@ public class RoleServiceImpl implements RoleService {
     private RoleAuthService roleAuthService;
 
     @Override
-    @Cacheable
     public Page<TRole> rolePageList(String roleName, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -46,13 +42,13 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public TRole saveRole(TRole role) {
         return roleDao.save(role);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void toggle(Long id, int isActivity) {
         TRole role = roleDao.findOne(id);
         role.setIsActivity(isActivity);
@@ -60,7 +56,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void del(Long id) {
         roleDao.delete(id);
         // done 删除该角色所有的角色权限

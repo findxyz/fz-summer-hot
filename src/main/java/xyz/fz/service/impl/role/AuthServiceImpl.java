@@ -1,9 +1,7 @@
 package xyz.fz.service.impl.role;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +18,6 @@ import xyz.fz.service.role.RoleAuthService;
  */
 @Service
 @Transactional
-@CacheConfig(cacheNames = "roleMenuAuths", keyGenerator = "myCKG")
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
@@ -30,7 +27,6 @@ public class AuthServiceImpl implements AuthService {
     private RoleAuthService roleAuthService;
 
     @Override
-    @Cacheable
     public Page<TAuth> authPageList(Long menuId, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.ASC, "sort");
@@ -39,19 +35,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public TAuth saveAuth(TAuth auth) {
         return authDao.save(auth);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void deleteByMenuId(Long menuId) {
         authDao.deleteByMenuId(menuId);
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void toggle(Long id, int isActivity) {
         TAuth auth = authDao.findOne(id);
         auth.setIsActivity(isActivity);
@@ -59,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void del(Long id) {
         authDao.delete(id);
         // done 删除角色权限中属于该权限的数据
