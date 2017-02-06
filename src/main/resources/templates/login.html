@@ -75,7 +75,7 @@
                 }, 'json');
             }
 
-            $("#sub").bind("click", function () {
+            $(".sub").bind("click", function () {
                 sub();
             });
 
@@ -123,7 +123,7 @@
                 </span>
             </p>
             <p></p>
-            <p class="submit"><img src="" th:src="@{/favicon.ico}"/><input type="button" id="sub" value="登陆"/></p>
+            <p class="submit"><img src="" class="sub" th:src="@{/favicon.ico}"/><input type="button" class="sub" id="sub" value="登陆"/></p>
         </form>
     </div>
 </section>
