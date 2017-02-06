@@ -19,10 +19,12 @@ public class KaptchaConfiguration {
         Properties properties = new Properties();
         properties.setProperty("kaptcha.image.width", "150");
         properties.setProperty("kaptcha.image.height", "60");
-        properties.setProperty("kaptcha.noise.color", "yellow");
+        properties.setProperty("kaptcha.noise.color", "blue");
         properties.setProperty("kaptcha.textproducer.char.string", "1234567890");
         properties.setProperty("kaptcha.textproducer.char.length", "4");
-        properties.setProperty("kaptcha.textproducer.font.color", "blue");
+        properties.setProperty("kaptcha.textproducer.font.color", "magenta");
+        properties.setProperty("kaptcha.textproducer.font.size", "48");
+        properties.setProperty("kaptcha.background.clear.from", "green");
         Config config = new Config(properties);
         DefaultKaptcha kaptcha = new DefaultKaptcha();
         kaptcha.setConfig(config);

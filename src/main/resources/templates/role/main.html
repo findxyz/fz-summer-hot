@@ -385,12 +385,16 @@
                 modal: true,
                 width: 850,
                 height: 520,
+                resizable: false,
                 buttons: [{
                     text: "关闭",
                     click: function () {
                         $(this).dialog("close");
                     }
-                }]
+                }],
+                open: function (event, ui) {
+                    $(window).resize();
+                }
             });
 
             $("#addBtn2").bind("click", function () {
@@ -529,7 +533,7 @@
         </tr>
     </table>
 </div>
-<div id="roleMenuDialog" title="增加角色菜单" style="display: block;">
+<div id="roleMenuDialog" title="增加角色菜单" style="display: none;">
     <div style="font-size: 14px; width: 800px;">
         <table id="roleMenuTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
             <thead>

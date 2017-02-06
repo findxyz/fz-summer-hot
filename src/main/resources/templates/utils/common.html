@@ -200,10 +200,8 @@
                 var scrollY = 400;
                 var autoLoad = true;
                 if (xExtends) {
-                    scrollY = xExtends.scrollY || scrollY;
-                    if (xExtends.disAutoLoad) {
-                        autoLoad = false;
-                    }
+                    scrollY = xExtends.scrollY;
+                    autoLoad = !xExtends.disAutoLoad;
                 }
                 // id容错处理
                 if (tabId.substr(0, 1) != "#") {
