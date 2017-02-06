@@ -32,7 +32,6 @@
         <version>1.4.1.RELEASE</version>
     </parent>
 
-    <!-- Add typical dependencies for a web application -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -70,18 +69,12 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <!-- third part -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -113,6 +106,12 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-devtools</artifactId>-->
+            <!--<optional>true</optional>-->
+        <!--</dependency>-->
     </dependencies>
 
     <!-- Package as an executable jar -->
