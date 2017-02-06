@@ -190,6 +190,8 @@
                 modal: true,
                 width: 360,
                 height: 250,
+                resizable: false,
+                draggable: false,
                 buttons: [{
                     text: "保存",
                     click: function () {
@@ -200,13 +202,13 @@
                             $.notify("请完善数据后保存");
                             return false;
                         }
-                        mask.open();
+                        cleanMask.open();
                         $.post(basePath + "role/menu/saveMenu", {
                             menuName: menuName,
                             menuPath: menuPath,
                             sort: sort
                         }, function (json) {
-                            mask.close();
+                            cleanMask.close();
                             if (json.success) {
                                 $.notify("保存成功", {className: "success"});
                                 search();
@@ -295,6 +297,8 @@
                 modal: true,
                 width: 360,
                 height: 250,
+                resizable: false,
+                draggable: false,
                 buttons: [{
                     text: "保存",
                     click: function () {
@@ -305,14 +309,14 @@
                             $.notify("请完善数据后保存");
                             return false;
                         }
-                        mask.open();
+                        cleanMask.open();
                         $.post(basePath + "role/auth/saveAuth", {
                             text: text,
                             url: url,
                             sort: sort2,
                             menuId: getOneMenuId()
                         }, function (json) {
-                            mask.close();
+                            cleanMask.close();
                             if (json.success) {
                                 $.notify("保存成功", {className: "success"});
                                 search2();

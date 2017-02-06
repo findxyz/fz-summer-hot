@@ -300,6 +300,8 @@
                 modal: true,
                 width: 340,
                 height: 180,
+                resizable: false,
+                draggable: false,
                 buttons: [{
                     text: "保存",
                     click: function () {
@@ -308,11 +310,11 @@
                             $.notify("请完善数据后保存");
                             return false;
                         }
-                        mask.open();
+                        cleanMask.open();
                         $.post(basePath + "role/saveRole", {
                             roleName: roleName
                         }, function (json) {
-                            mask.close();
+                            cleanMask.close();
                             if (json.success) {
                                 $.notify("保存成功", {className: "success"});
                                 search();
@@ -392,6 +394,7 @@
                 width: 850,
                 height: 520,
                 resizable: false,
+                draggable: false,
                 buttons: [{
                     text: "关闭",
                     click: function () {
