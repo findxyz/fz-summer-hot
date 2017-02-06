@@ -6,8 +6,8 @@
 
     <!--<repositories>-->
         <!--<repository>-->
-            <!--<id>central</id>-->
-            <!--<name>Central Repository</name>-->
+            <!--<id>aliMvnRepo</id>-->
+            <!--<name>ali Repository</name>-->
             <!--<url>http://maven.aliyun.com/nexus/content/groups/public</url>-->
             <!--<layout>default</layout>-->
             <!--<snapshots>-->
