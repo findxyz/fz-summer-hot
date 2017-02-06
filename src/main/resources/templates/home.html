@@ -47,7 +47,7 @@
         /*]]>*/
     </script>
     <script type="text/javascript" th:inline="javascript">
-    /*<![CDATA[*/
+        /*<![CDATA[*/
 
         var tab = null;
         var accordion = null;
@@ -142,9 +142,9 @@
                     var treeSearchStr = $("#treeSearch").val();
                     if (treeSearchStr) {
                         var treeSearchResult = {"text": "搜索结果", isexpand: true, children: []};
-                        for (var i=0; i<treeData.length; i++) {
+                        for (var i = 0; i < treeData.length; i++) {
                             var treeDataChildren = treeData[i].children;
-                            for (var j=0; j<treeDataChildren.length; j++) {
+                            for (var j = 0; j < treeDataChildren.length; j++) {
                                 var treeDataChild = treeDataChildren[j];
                                 if (treeDataChild.text.indexOf(treeSearchStr) > -1) {
                                     treeSearchResult.children.push(treeDataChild);
@@ -216,7 +216,7 @@
                 }
             }, 'json');
         }
-    /*]]>*/
+        /*]]>*/
     </script>
 </head>
 <body style="padding: 0; background: #EAEEF5;">
@@ -225,13 +225,16 @@
     <div style="float: right; margin-right: 0.4%; margin-top: 2px; height: 30px;">
         <button class="btn btn-success btn-sm" onclick="logout();">安全退出</button>
     </div>
-    <div style="float: right; margin-right: 0.4%; margin-top: 6px; height: 30px; font-size: 16px; color: #3b4cff; font-style: bold;" th:text="'Hello，' + ${curUser.realName} + '！'">欢迎someone</div>
+    <div style="float: right; margin-right: 0.4%; margin-top: 6px; height: 30px; font-size: 16px; color: #3b4cff; font-style: bold;"
+         th:text="'Hello，' + ${curUser.realName} + '！'">
+        欢迎someone
+    </div>
 </div>
 <div id="layout" style="width: 99.2%; margin: 4px auto 0;">
     <div id="accordion" position="left" title="主要菜单">
         <div title="功能列表" class="l-scroll">
             <div id="treeSearchDiv">
-                搜索：<input title="搜索" id="treeSearch" />
+                搜索：<input title="搜索" id="treeSearch"/>
             </div>
             <ul id="tree" style="margin-top: 3px;"></ul>
         </div>

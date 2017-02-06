@@ -27,84 +27,85 @@
         }
     </style>
     <script th:inline="javascript" type="text/javascript">
-    /*<![CDATA[*/
-    $(function () {
-        var successLock = false;
-        function sub() {
+        /*<![CDATA[*/
+        $(function () {
+            var successLock = false;
 
-            if (successLock) {
-                return false;
-            }
+            function sub() {
 
-            var $userName = $("#userName");
-            var userName = $userName.val();
-            var passWord = $("#passWord").val();
-            var $valCode = $("#valCode");
-            var valCode = $valCode.val();
-
-            if (valCode.length != 4) {
-                $valCode.val("");
-                return false;
-            }
-
-            if (!(userName && passWord && valCode)) {
-                $.notify("用户名和密码还有验证码都不能为空");
-                return false;
-            }
-            cleanMask.open();
-            $userName.focus();
-            $.post(basePath + "login", {
-                userName: userName,
-                passWord: passWord,
-                valCode: valCode
-            }, function (json) {
-                cleanMask.close();
-                if (json.success) {
-                    successLock = true;
-                    $.notify("登陆成功", {className: "success"});
-                    setTimeout(function () {
-                        window.location = basePath + "home";
-                    }, 1000);
-                } else {
-                    $valCode.val("");
-                    $valCode.focus();
-                    $.notify(json.message, {className: "error"});
-                    changeValCode();
+                if (successLock) {
+                    return false;
                 }
-            }, 'json');
-        }
 
-        $("#sub").bind("click", function () {
-            sub();
-        });
+                var $userName = $("#userName");
+                var userName = $userName.val();
+                var passWord = $("#passWord").val();
+                var $valCode = $("#valCode");
+                var valCode = $valCode.val();
 
-        $("#userName").val("").focus();
-        $("#passWord").val("");
-        $("#valCode").val("").keypress(function (event) {
-            if (event.keyCode == 13) {
-                sub();
+                if (valCode.length != 4) {
+                    $valCode.val("");
+                    return false;
+                }
+
+                if (!(userName && passWord && valCode)) {
+                    $.notify("用户名和密码还有验证码都不能为空");
+                    return false;
+                }
+                cleanMask.open();
+                $userName.focus();
+                $.post(basePath + "login", {
+                    userName: userName,
+                    passWord: passWord,
+                    valCode: valCode
+                }, function (json) {
+                    cleanMask.close();
+                    if (json.success) {
+                        successLock = true;
+                        $.notify("登陆成功", {className: "success"});
+                        setTimeout(function () {
+                            window.location = basePath + "home";
+                        }, 1000);
+                    } else {
+                        $valCode.val("");
+                        $valCode.focus();
+                        $.notify(json.message, {className: "error"});
+                        changeValCode();
+                    }
+                }, 'json');
             }
+
+            $("#sub").bind("click", function () {
+                sub();
+            });
+
+            $("#userName").val("").focus();
+            $("#passWord").val("");
+            $("#valCode").val("").keypress(function (event) {
+                if (event.keyCode == 13) {
+                    sub();
+                }
+            });
         });
-    });
 
-    function changeValCode() {
-        $("#valCodeImg").attr("src", basePath + "index/valCode?" + Math.random());
-    }
-
-    var cleanMask = {
-        open: function () {
-            $("#cleanMasking").show();
-        },
-        close: function () {
-            $("#cleanMasking").hide();
+        function changeValCode() {
+            $("#valCodeImg").attr("src", basePath + "index/valCode?" + Math.random());
         }
-    };
 
-    $.notify.defaults({
-        className: "info",
-        position: "top center"
-    });
-    /*]]>*/
+        var cleanMask = {
+            open: function () {
+                $("#cleanMasking").show();
+            },
+            close: function () {
+                $("#cleanMasking").hide();
+            }
+        };
+
+        $.notify.defaults({
+            className: "info",
+            position: "top center"
+        });
+        /*]]>*/
     </script>
 </head>
 <body>
@@ -117,7 +118,8 @@
             <p style="margin-top: -15px;">
                 <input type="text" id="valCode" placeholder="验证码" style="width: 120px !important;"/>
                 <span>
-                    <img src="" id="valCodeImg" alt="code" th:src="@{index/valCode}" onclick="changeValCode();" width="150" height="60" style="position: relative; top: 24px;"/>
+                    <img src="" id="valCodeImg" alt="code" th:src="@{index/valCode}" onclick="changeValCode();"
+                         width="150" height="60" style="position: relative; top: 24px;"/>
                 </span>
             </p>
             <p></p>

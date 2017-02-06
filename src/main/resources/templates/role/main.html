@@ -175,7 +175,7 @@
 
         $(function () {
             // 角色表格
-            var paramsFun = function(){
+            var paramsFun = function () {
                 var params = {};
                 params.name = $("#sName").val();
                 return params;
@@ -235,7 +235,7 @@
                 search();
             });
             // 菜单表格
-            var paramsFun2 = function(){
+            var paramsFun2 = function () {
                 var params = {};
                 // 角色Id
                 params.roleId = getOneRoleId();
@@ -282,7 +282,10 @@
                     }
                 }
             }];
-            table2 = new XDataTables("dtTab2", basePath + "role/roleAuth/roleAuthMenuPageList", paramsFun2, columns2, columnDefs2, true, {scrollY: 320, disAutoLoad: true});
+            table2 = new XDataTables("dtTab2", basePath + "role/roleAuth/roleAuthMenuPageList", paramsFun2, columns2, columnDefs2, true, {
+                scrollY: 320,
+                disAutoLoad: true
+            });
 
             var $dtTab2 = $("#dtTab2");
             $dtTab2.on("draw.dt", function () {
@@ -333,7 +336,7 @@
             });
 
             // 角色菜单表格
-            var paramsFun3 = function(){
+            var paramsFun3 = function () {
                 var params = {};
                 params.roleId = getOneRoleId();
                 return params;
@@ -378,7 +381,10 @@
                     }
                 }
             }];
-            table3 = new XDataTables("roleMenuTab", basePath + "role/roleAuth/roleMenuPageList", paramsFun3, columns3, columnDefs3, true, {scrollY: 300, disAutoLoad: true});
+            table3 = new XDataTables("roleMenuTab", basePath + "role/roleAuth/roleMenuPageList", paramsFun3, columns3, columnDefs3, true, {
+                scrollY: 300,
+                disAutoLoad: true
+            });
 
             $("#roleMenuDialog").dialog({
                 autoOpen: false,
@@ -410,7 +416,7 @@
             });
 
             // 角色权限表格
-            var paramsFun4 = function(){
+            var paramsFun4 = function () {
                 var params = {};
                 params.roleId = getOneRoleId();
                 params.menuId = getOneMenuId();
@@ -458,7 +464,10 @@
                     }
                 }
             }];
-            table4 = new XDataTables("roleAuthTab", basePath + "role/roleAuth/roleAuthPageList", paramsFun4, columns4, columnDefs4, true, {scrollY: 320, disAutoLoad: true});
+            table4 = new XDataTables("roleAuthTab", basePath + "role/roleAuth/roleAuthPageList", paramsFun4, columns4, columnDefs4, true, {
+                scrollY: 320,
+                disAutoLoad: true
+            });
 
         });
         /*]]>*/
@@ -469,11 +478,12 @@
     <div id="toolBar" style="margin-bottom: 5px;">
         <div><input id="addBtn" type="button" value="新增" class="btn btn-info btn-xs"/></div>
         <div>
-            <label for="sName">角色名称：</label><input id="sName" />
-            <input id="search" class="btn btn-success btn-xs" type="button" value="查询" />
+            <label for="sName">角色名称：</label><input id="sName"/>
+            <input id="search" class="btn btn-success btn-xs" type="button" value="查询"/>
         </div>
     </div>
-    <table id="dtTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+    <table id="dtTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0"
+           width="100%">
         <thead>
         <tr>
             <th>序号</th>
@@ -491,7 +501,8 @@
     <div id="toolBar2" style="margin-bottom: 5px;">
         <div><input id="addBtn2" type="button" value="菜单管理" class="btn btn-info btn-xs"/></div>
     </div>
-    <table id="dtTab2" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+    <table id="dtTab2" class="dataTable compact display cell-border hover order-column row-border stripe"
+           cellspacing="0" width="100%">
         <thead>
         <tr>
             <th>序号</th>
@@ -510,7 +521,8 @@
     <div id="toolBar3" style="margin-bottom: 5px;">
         <div><input type="button" value="权限管理" disabled="disabled" class="btn btn-info btn-xs"/></div>
     </div>
-    <table id="roleAuthTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+    <table id="roleAuthTab" class="dataTable compact display cell-border hover order-column row-border stripe"
+           cellspacing="0" width="100%">
         <thead>
         <tr>
             <th>序号</th>
@@ -529,13 +541,14 @@
     <table style="border-collapse: separate; border-spacing: 5px;">
         <tr>
             <td style="text-align: right">角色名称：</td>
-            <td><input title="角色名称" id="roleName" /></td>
+            <td><input title="角色名称" id="roleName"/></td>
         </tr>
     </table>
 </div>
 <div id="roleMenuDialog" title="增加角色菜单" style="display: none;">
     <div style="font-size: 14px; width: 800px;">
-        <table id="roleMenuTab" class="dataTable compact display cell-border hover order-column row-border stripe" cellspacing="0" width="100%">
+        <table id="roleMenuTab" class="dataTable compact display cell-border hover order-column row-border stripe"
+               cellspacing="0" width="100%">
             <thead>
             <tr>
                 <th>序号</th>
