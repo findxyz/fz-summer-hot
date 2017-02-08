@@ -15,8 +15,12 @@ public class MyRedisKeyGenerator implements KeyGenerator {
     public Object generate(Object target, Method method, Object... params) {
 
         StringBuilder key = new StringBuilder("");
-        for (Object param : params) {
-            key.append(param.toString()).append("_");
+        for (int i = 0; i < params.length; i++) {
+            Object param = params[i];
+            key.append(param.toString());
+            if (i != (params.length - 1)) {
+                key.append("_");
+            }
         }
         return key.toString();
     }
