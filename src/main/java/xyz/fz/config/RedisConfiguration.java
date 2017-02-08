@@ -13,12 +13,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * Created by Administrator on 2017/2/5.
  */
 @Configuration
-@PropertySource("application.properties")
+@PropertySource("application-redis.properties")
 @EnableRedisHttpSession
 public class RedisConfiguration {
 
@@ -34,9 +35,26 @@ public class RedisConfiguration {
     @Value("${spring.redis.password}")
     private String redisPassword;
 
+    @Value("${spring.redis.pool.max-active}")
+    private int maxActive;
+
+    @Value("${spring.redis.pool.max-idle}")
+    private int maxIdle;
+
+    @Value("${spring.redis.pool.max-wait}")
+    private long maxWait;
+
+    @Value("${spring.redis.pool.min-idle}")
+    private int minIdle;
+
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
-        JedisConnectionFactory factory = new JedisConnectionFactory();
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxTotal(maxActive);
+        poolConfig.setMaxIdle(maxIdle);
+        poolConfig.setMinIdle(minIdle);
+        poolConfig.setMaxWaitMillis(maxWait);
+        JedisConnectionFactory factory = new JedisConnectionFactory(poolConfig);
         factory.setHostName(redisHost);
         factory.setPort(redisPort);
         factory.setDatabase(redisDatabase);
