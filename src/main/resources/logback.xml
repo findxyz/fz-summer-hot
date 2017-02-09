@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
-    <property name="LOG_HOME" value="./log" />
+    <property name="LOG_HOME" value="./log"/>
     <!-- 把日志添加到控制台 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 日志输出编码 -->
@@ -81,12 +81,18 @@
             <MaxFileSize>20MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
+
+    <!-- 自定义logger并指定appender的时候，注意将追加属性additivity设置为false，避免重复造成浪费 -->
+    <!--<logger name="xyz.fz" level="DEBUG" additivity="false">-->
+    <!--<appender-ref ref="STDOUT"/>-->
+    <!--</logger>-->
+
     <!-- Application Loggers -->
-    <logger name="xyz.fz" level="DEBUG" />
+    <logger name="xyz.fz" level="DEBUG"/>
     <!-- Root Logger -->
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE-WARN" />
-        <appender-ref ref="FILE-ERROR" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE-WARN"/>
+        <appender-ref ref="FILE-ERROR"/>
     </root>
 </configuration>
