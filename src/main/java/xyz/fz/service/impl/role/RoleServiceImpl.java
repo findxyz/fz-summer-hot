@@ -17,7 +17,6 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
  * Created by fz on 2016/9/19.
  */
 @Service
-@Transactional
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
@@ -56,6 +55,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void del(Long id) {
         roleDao.delete(id);

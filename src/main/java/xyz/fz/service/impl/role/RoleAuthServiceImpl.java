@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import xyz.fz.dao.CommonDao;
 import xyz.fz.dao.PagerData;
 import xyz.fz.dao.role.RoleAuthDao;
@@ -17,7 +16,6 @@ import java.util.*;
  * Created by fz on 2016/9/19.
  */
 @Service
-@Transactional
 public class RoleAuthServiceImpl implements RoleAuthService {
 
     @Autowired
