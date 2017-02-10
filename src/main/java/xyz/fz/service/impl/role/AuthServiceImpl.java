@@ -19,11 +19,15 @@ import xyz.fz.service.role.RoleAuthService;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    private AuthDao authDao;
+    private final AuthDao authDao;
+
+    private final RoleAuthService roleAuthService;
 
     @Autowired
-    private RoleAuthService roleAuthService;
+    public AuthServiceImpl(AuthDao authDao, RoleAuthService roleAuthService) {
+        this.authDao = authDao;
+        this.roleAuthService = roleAuthService;
+    }
 
     @Override
     public Page<TAuth> authPageList(Long menuId, int curPage, int pageSize) {

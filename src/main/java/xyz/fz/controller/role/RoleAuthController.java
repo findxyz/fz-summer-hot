@@ -23,8 +23,12 @@ public class RoleAuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(RoleAuthController.class);
 
+    private final RoleAuthService roleAuthService;
+
     @Autowired
-    private RoleAuthService roleAuthService;
+    public RoleAuthController(RoleAuthService roleAuthService) {
+        this.roleAuthService = roleAuthService;
+    }
 
     @RequestMapping("/roleAuthMenuPageList")
     @ResponseBody

@@ -23,8 +23,12 @@ public class RoleController {
 
     private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
 
+    private final RoleService roleService;
+
     @Autowired
-    private RoleService roleService;
+    public RoleController(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
     @RequestMapping("/main")
     public String main() {

@@ -20,11 +20,15 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
+
+    private final CommonDao commonDao;
 
     @Autowired
-    private CommonDao commonDao;
+    public UserServiceImpl(UserDao userDao, CommonDao commonDao) {
+        this.userDao = userDao;
+        this.commonDao = commonDao;
+    }
 
     @Override
     public PagerData<Map> userPageList(String name, int curPage, int pageSize) {

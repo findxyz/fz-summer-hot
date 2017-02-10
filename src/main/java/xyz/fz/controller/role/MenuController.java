@@ -23,8 +23,12 @@ public class MenuController {
 
     private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
+    private final MenuService menuService;
+
     @Autowired
-    private MenuService menuService;
+    public MenuController(MenuService menuService) {
+        this.menuService = menuService;
+    }
 
     @RequestMapping("/main")
     public String main() {

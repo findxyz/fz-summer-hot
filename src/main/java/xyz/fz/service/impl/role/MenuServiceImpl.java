@@ -20,14 +20,18 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 @Service
 public class MenuServiceImpl implements MenuService {
 
-    @Autowired
-    private MenuDao menuDao;
+    private final MenuDao menuDao;
+
+    private final AuthService authService;
+
+    private final RoleAuthService roleAuthService;
 
     @Autowired
-    private AuthService authService;
-
-    @Autowired
-    private RoleAuthService roleAuthService;
+    public MenuServiceImpl(MenuDao menuDao, AuthService authService, RoleAuthService roleAuthService) {
+        this.menuDao = menuDao;
+        this.authService = authService;
+        this.roleAuthService = roleAuthService;
+    }
 
     @Override
     public Page<TMenu> menuPageList(String menuName, int curPage, int pageSize) {

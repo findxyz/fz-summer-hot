@@ -26,11 +26,15 @@ import java.util.Map;
 @Controller
 public class IndexController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    private final DefaultKaptcha googleKaptcha;
 
     @Autowired
-    private DefaultKaptcha googleKaptcha;
+    public IndexController(UserService userService, DefaultKaptcha googleKaptcha) {
+        this.userService = userService;
+        this.googleKaptcha = googleKaptcha;
+    }
 
     @RequestMapping("/")
     public String root() {

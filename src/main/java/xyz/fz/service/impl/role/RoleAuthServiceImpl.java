@@ -18,11 +18,15 @@ import java.util.*;
 @Service
 public class RoleAuthServiceImpl implements RoleAuthService {
 
-    @Autowired
-    private RoleAuthDao roleAuthDao;
+    private final RoleAuthDao roleAuthDao;
+
+    private final CommonDao commonDao;
 
     @Autowired
-    private CommonDao commonDao;
+    public RoleAuthServiceImpl(RoleAuthDao roleAuthDao, CommonDao commonDao) {
+        this.roleAuthDao = roleAuthDao;
+        this.commonDao = commonDao;
+    }
 
     @Override
     public PagerData<Map> roleAuthMenuPageList(Long roleId, int curPage, int pageSize) {

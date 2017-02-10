@@ -19,11 +19,15 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    private RoleDao roleDao;
+    private final RoleDao roleDao;
+
+    private final RoleAuthService roleAuthService;
 
     @Autowired
-    private RoleAuthService roleAuthService;
+    public RoleServiceImpl(RoleDao roleDao, RoleAuthService roleAuthService) {
+        this.roleDao = roleDao;
+        this.roleAuthService = roleAuthService;
+    }
 
     @Override
     public Page<TRole> rolePageList(String roleName, int curPage, int pageSize) {

@@ -16,8 +16,12 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/")
 public class HomeController {
 
+    private final RoleAuthService roleAuthService;
+
     @Autowired
-    private RoleAuthService roleAuthService;
+    public HomeController(RoleAuthService roleAuthService) {
+        this.roleAuthService = roleAuthService;
+    }
 
     @RequestMapping("/home")
     public String home(HttpSession session, Model model) {
