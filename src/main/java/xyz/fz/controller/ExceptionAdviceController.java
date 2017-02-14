@@ -19,7 +19,7 @@ public class ExceptionAdviceController {
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    public Map<String, Object> processException(Exception e) throws IOException {
+    public Map<String, Object> processException(Exception e) {
 
         Map<String, Object> result = new HashMap<>();
         result.put("success", false);
