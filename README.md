@@ -1,4 +1,4 @@
-# 系统预览
+# 预览
 
 ![Translation status](https://github.com/github20120522/summerHot/blob/master/src/main/resources/preview/1.png)
 ![Translation status](https://github.com/github20120522/summerHot/blob/master/src/main/resources/preview/2.png)
