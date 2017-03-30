@@ -13,7 +13,7 @@ import xyz.fz.service.role.RoleAuthService;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
-public class EveryTest {
+public class DaoTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
