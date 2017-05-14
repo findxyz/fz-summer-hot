@@ -31,7 +31,7 @@
         <!--<Encoding>UTF-8</Encoding>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 每天生成一个日志文件，每月生成一个文件夹 -->
-            <fileNamePattern>${LOG_HOME}/%d{yyyyMM}/%d{yyyyMMdd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/%d{yyyyMM, aux}/%d-warn.log</fileNamePattern>
             <!--
             By setting the maxHistory property of TimeBasedRollingPolicy or SizeAndTimeBasedFNATP,
             you can control the maximum number of archived files.
@@ -46,10 +46,6 @@
             <charset>UTF-8</charset>
             <pattern>%d [%thread] %-5level [%logger{36}] - %msg%n</pattern>
         </encoder>
-        <!--日志文件最大的大小 -->
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>20MB</MaxFileSize>
-        </triggeringPolicy>
     </appender>
     <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -61,7 +57,7 @@
         <!--<Encoding>UTF-8</Encoding>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 每天生成一个日志文件，每月生成一个文件夹 -->
-            <fileNamePattern>${LOG_HOME}/%d{yyyyMM}/%d{yyyyMMdd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/%d{yyyyMM, aux}/%d-error.log</fileNamePattern>
             <!--
             By setting the maxHistory property of TimeBasedRollingPolicy or SizeAndTimeBasedFNATP,
             you can control the maximum number of archived files.
@@ -76,10 +72,6 @@
             <charset>UTF-8</charset>
             <pattern>%d [%thread] %-5level [%logger{36}] - %msg%n</pattern>
         </encoder>
-        <!--日志文件最大的大小 -->
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>20MB</MaxFileSize>
-        </triggeringPolicy>
     </appender>
 
     <!-- 自定义logger并指定appender的时候，注意将追加属性additivity设置为false，避免重复造成浪费 -->
