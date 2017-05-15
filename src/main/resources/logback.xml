@@ -39,8 +39,7 @@
             simply set the maxHistory property to 12.
             Archived log files older than 12 months will be automatically removed.
             -->
-            <!-- 最大存储时间，12个月，超过12月的日志将被删除 -->
-            <maxHistory>12</maxHistory>
+            <maxHistory>180</maxHistory>
         </rollingPolicy>
         <encoder>
             <charset>UTF-8</charset>
@@ -65,8 +64,7 @@
             simply set the maxHistory property to 12.
             Archived log files older than 12 months will be automatically removed.
             -->
-            <!-- 最大存储时间，12个月，超过12月的日志将被删除 -->
-            <maxHistory>12</maxHistory>
+            <maxHistory>180</maxHistory>
         </rollingPolicy>
         <encoder>
             <charset>UTF-8</charset>
