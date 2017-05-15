@@ -8,7 +8,7 @@ import xyz.fz.dao.PagerData;
 import xyz.fz.dao.user.UserDao;
 import xyz.fz.domain.user.TUser;
 import xyz.fz.service.user.UserService;
-import xyz.fz.utils.BaseUtil;
+import xyz.fz.util.BaseUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TUser findUser(String userName, String passWord) {
-        List<TUser> userList = userDao.findUserList(userName, BaseUtil.sha256Hex(passWord));
+        List<TUser> userList = userDao.findList(userName, BaseUtil.sha256Hex(passWord));
         if (userList != null && userList.size() == 1) {
             return userList.get(0);
         } else {

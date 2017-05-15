@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -79,11 +80,21 @@ public class RedisConfiguration {
         return redisTemplate;
     }
 
-    @Bean
+    @Primary
+    @Bean("cacheManager")
     RedisCacheManager redisCacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate());
         redisCacheManager.setUsePrefix(true);
         redisCacheManager.setDefaultExpiration(7 * 24 * 60 * 60L);
         return redisCacheManager;
     }
+
+    @Bean("wxAccessTokenRedisCacheManager")
+    RedisCacheManager wxAccessTokenRedisCacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate());
+        redisCacheManager.setUsePrefix(true);
+        redisCacheManager.setDefaultExpiration(60 * 60L);
+        return redisCacheManager;
+    }
+
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (http://www.altova.com) by  () -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="xml">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="ToUserName" type="xs:string"/>
+				<xs:element name="FromUserName" type="xs:string"/>
+				<xs:element name="CreateTime" type="xs:string"/>
+				<xs:element name="MsgType" type="xs:string"/>
+				<xs:element name="Event" type="xs:string"/>
+				<xs:element name="EventKey" type="xs:string" minOccurs="0"/>
+				<xs:element name="Ticket" type="xs:string" minOccurs="0"/>
+				<xs:element name="Latitude" type="xs:string" minOccurs="0"/>
+				<xs:element name="Longitude" type="xs:string" minOccurs="0"/>
+				<xs:element name="Precision" type="xs:string" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

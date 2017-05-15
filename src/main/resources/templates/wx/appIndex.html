@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0"/>
+    <title>App首页</title>
+    <link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css"/>
+    <style type="text/css">
+        body {
+            background-color: #c3e6f8
+        }
+    </style>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".weui-form-preview__btn").bind("click", function () {
+                alert("被电击了");
+            });
+        });
+    </script>
+</head>
+<body>
+<img th:src="${headimgurl}" width="70px" height="70px"/>
+<span th:text="${nickname} + '的修车日记'"></span>
+
+<div class="weui-form-preview">
+    <div class="weui-form-preview__hd">
+        <label class="weui-form-preview__label">车牌号</label>
+        <span class="weui-badge" style="float: right">New</span>
+        <em class="weui-form-preview__value">豫A12345</em>
+    </div>
+    <div class="weui-form-preview__bd">
+        <p>
+            <label class="weui-form-preview__label">维修时间</label>
+            <span class="weui-form-preview__value">2017-01-01</span>
+        </p>
+        <p>
+            <label class="weui-form-preview__label">故障原因</label>
+            <span class="weui-form-preview__value">发动机故障</span>
+        </p>
+    </div>
+    <div class="weui-form-preview__ft">
+        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">查看进度</a>
+    </div>
+</div>
+<br/>
+<div class="weui-form-preview">
+    <div class="weui-form-preview__hd">
+        <label class="weui-form-preview__label">车牌号</label>
+        <em class="weui-form-preview__value">豫A12345</em>
+    </div>
+    <div class="weui-form-preview__bd">
+        <p>
+            <label class="weui-form-preview__label">维修时间</label>
+            <span class="weui-form-preview__value">2017-01-01</span>
+        </p>
+        <p>
+            <label class="weui-form-preview__label">故障原因</label>
+            <span class="weui-form-preview__value">发动机故障</span>
+        </p>
+    </div>
+    <div class="weui-form-preview__ft">
+        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">查看详情</a>
+    </div>
+</div>
+<br/>
+<div class="weui-form-preview">
+    <div class="weui-form-preview__hd">
+        <label class="weui-form-preview__label">车牌号</label>
+        <em class="weui-form-preview__value">豫A12345</em>
+    </div>
+    <div class="weui-form-preview__bd">
+        <p>
+            <label class="weui-form-preview__label">维修时间</label>
+            <span class="weui-form-preview__value">2017-01-01</span>
+        </p>
+        <p>
+            <label class="weui-form-preview__label">故障原因</label>
+            <span class="weui-form-preview__value">发动机故障</span>
+        </p>
+    </div>
+    <div class="weui-form-preview__ft">
+        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">查看详情</a>
+    </div>
+</div>
+<br/>
+</body>
+</html>

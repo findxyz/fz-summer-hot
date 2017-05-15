@@ -24,11 +24,11 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private RoleAuthService roleAuthService;
 
-    public AuthInterceptor() {}
-
-    public AuthInterceptor(RoleAuthService roleAuthService) {
+    public void setRoleAuthService(RoleAuthService roleAuthService) {
         this.roleAuthService = roleAuthService;
     }
+
+    public AuthInterceptor() {}
 
     @Override
     @SuppressWarnings("unchecked")

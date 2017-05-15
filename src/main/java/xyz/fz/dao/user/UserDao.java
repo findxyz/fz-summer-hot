@@ -15,5 +15,5 @@ import java.util.List;
 public interface UserDao extends JpaRepository<TUser, Long> {
 
     @Query("select u from TUser u where u.userName = :userName and u.passWord = :passWord and u.isActivity = 1 ")
-    List<TUser> findUserList(@Param("userName") String userName, @Param("passWord") String passWord);
+    List<TUser> findList(@Param("userName") String userName, @Param("passWord") String passWord);
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>微信管理</title>
+    <headerTemplate th:include="utils/common::headerTemplate"></headerTemplate>
+    <script th:inline="javascript" type="text/javascript">
+        /*<![CDATA[*/
+        function refreshAccessToken() {
+            $.post(basePath + "wxCtl/refreshAccessToken", {}, function (text) {
+                alert(text);
+            });
+        }
+        function delMenu() {
+            $.post(basePath + "wxCtl/delMenu", {}, function (text) {
+                alert(text);
+            });
+        }
+        function createMenu() {
+            var createMenuJson = $("#createMenuJson").val();
+            if (createMenuJson) {
+                $.post(basePath + "wxCtl/createMenu", {
+                    json: createMenuJson
+                }, function (text) {
+                    alert(text);
+                });
+            }
+        }
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div style="margin: 10px;">
+    <table cellspacing="0" width="800px;" style="border-collapse: collapse;">
+        <tr>
+            <td width="80px;">刷新token</td>
+            <td><input id="refreshMenuBtn" type="button" value="刷新accessToken" onclick="refreshAccessToken();"/></td>
+        </tr>
+        <tr>
+            <td>删除菜单</td>
+            <td><input id="delMenuBtn" type="button" value="删除菜单" onclick="delMenu();"/></td>
+        </tr>
+        <tr>
+            <td>创建菜单</td>
+            <td>
+                <textarea id="createMenuJson" style="width: 600px; height: 430px;" title="菜单json"></textarea>
+                <div>
+                    <input id="createMenuBtn" type="button" value="创建菜单" onclick="createMenu();"/>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

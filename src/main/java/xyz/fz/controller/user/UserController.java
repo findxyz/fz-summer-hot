@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import xyz.fz.dao.PagerData;
 import xyz.fz.domain.user.TUser;
 import xyz.fz.service.user.UserService;
-import xyz.fz.utils.BaseUtil;
+import xyz.fz.util.BaseUtil;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;

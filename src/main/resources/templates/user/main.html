@@ -157,7 +157,7 @@
                 "targets": -1,
                 render: function (data, type, row) {
                     var options = "";
-                    if (row.roleName != "超级管理员") {
+                    if (row.roleName !== "超级管理员") {
                         if (row.isActivity) {
                             options += "<button class='btn btn-default btn-xs' onclick='stop(this, " + row.id + ")'>禁用</button>";
                         } else {
@@ -183,7 +183,7 @@
             }];
             table = new XDataTables("userTab", basePath + "user/userPageList", paramsFun, columns, columnDefs);
             $("#sName").bind("keypress", function (event) {
-                if (event.keyCode == 13) {
+                if (event.keyCode === 13) {
                     search();
                 }
             });
@@ -301,7 +301,7 @@
                         $(this).dialog("close");
                     }
                 }],
-                open: function (event, ui) {
+                open: function () {
                     $(window).resize();
                 }
             });
