@@ -200,11 +200,15 @@
                 var scrollY = 400;
                 var autoLoad = true;
                 if (xExtends) {
-                    scrollY = xExtends.scrollY;
-                    autoLoad = !xExtends.disAutoLoad;
+                    if (xExtends.hasOwnProperty('scrollY')) {
+                        scrollY = xExtends.scrollY;
+                    }
+                    if (xExtends.hasOwnProperty('autoLoad')) {
+                        autoLoad = xExtends.autoLoad;
+                    }
                 }
                 // id容错处理
-                if (tabId.substr(0, 1) != "#") {
+                if (tabId.substr(0, 1) !== "#") {
                     tabId = "#" + tabId;
                 }
                 // 位置默认居中
@@ -292,7 +296,7 @@
             }
 
             function putDatasIntoTabBody(datas, datasDefs, tabBodyId) {
-                if (tabBodyId.substr(0, 1) != "#") {
+                if (tabBodyId.substr(0, 1) !== "#") {
                     tabBodyId = "#" + tabBodyId;
                 }
                 $(tabBodyId).html("");
@@ -302,7 +306,7 @@
                     for (var n = 0; n < datasDefs.length; n++) {
                         var dataDef = datasDefs[n];
                         if (dataDef.width) {
-                            if ((dataDef.width + "").indexOf("px") == -1) {
+                            if ((dataDef.width + "").indexOf("px") === -1) {
                                 dataDef.width = dataDef.width + "px";
                             }
                             tr += "<td width='" + dataDef.width + "'>" + data[dataDef.key] + "</td>";

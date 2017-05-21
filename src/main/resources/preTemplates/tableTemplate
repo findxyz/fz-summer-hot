@@ -1,0 +1,57 @@
+var table;
+
+function search() {
+    table.ajax.reload();
+}
+
+var paramsFun = function () {
+    var params = {};
+    params.name = $("#sName").val();
+    return params;
+};
+
+var columns = [{
+    data: "id"
+}, {
+    data: "name",
+    width: 80
+}, {
+    data: "isActivity",
+    width: 60
+}, {
+    data: null,
+    defaultContent: ''
+}];
+
+var columnDefs = [{
+    "visible": false,
+    "targets": [1]
+}, {
+    "targets": -1,
+    render: function (data, type, row) {
+        var options = "";
+        options += " <button class='btn btn-danger btn-xs' onclick='del(this, " + row.id + ")'>删除</button>";
+        return options;
+    }
+}, {
+    "targets": -2,
+    render: function (data, type, row) {
+        if (row.isActivity) {
+            return "<span style='color: green;'>有效</span>";
+        } else {
+            return "<span style='color: red;'>无效</span>";
+        }
+    }
+}];
+
+table = new XDataTables("dtTab", basePath + "foo/fooPageList", paramsFun, columns, columnDefs, true, {scrollY: 320});
+
+$("#sName").bind("keypress", function (event) {
+    if (event.keyCode === 13) {
+        search();
+    }
+});
+
+$("#search").bind("click", function () {
+    search();
+});

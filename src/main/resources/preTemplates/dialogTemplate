@@ -1,0 +1,30 @@
+$("#dialog").dialog({
+    dialogClass: "no-close",
+    closeOnEscape: false,
+    draggable: false,
+    autoOpen: false,
+    modal: true,
+    width: 350,
+    height: 255,
+    resizable: false,
+    buttons: [{
+        text: "关闭",
+        click: function () {
+            $(this).dialog("close");
+        }
+    }]
+});
+
+<div id="dialog" title="dialog" style="display: block;">
+    <table width="300px;" style="border-collapse: separate; border-spacing: 5px;">
+        <tr>
+            <td style="text-align: right">描述：</td>
+            <td><input title="描述" id="desc"/></td>
+        </tr>
+    </table>
+</div>
+
+$("#addBtn").bind("click", function () {
+    $("#name").val("");
+    $("#dialog").dialog("open");
+});
