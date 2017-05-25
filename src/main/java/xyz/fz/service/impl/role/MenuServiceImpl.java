@@ -38,12 +38,12 @@ public class MenuServiceImpl implements MenuService {
 
         Sort sort = new Sort(Sort.Direction.ASC, "sort");
         Pageable pageable = new PageRequest(curPage, pageSize, sort);
+        ExampleMatcher matcher = ExampleMatcher.matching();
         TMenu menu = new TMenu();
         if (!StringUtils.isEmpty(menuName)) {
             menu.setMenuName(menuName);
+            matcher = matcher.withMatcher("menuName", contains().startsWith());
         }
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("menuName", contains().ignoreCase());
         Example<TMenu> menuExample = Example.of(menu, matcher);
         return menuDao.findAll(menuExample, pageable);
     }

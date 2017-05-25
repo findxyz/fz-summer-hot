@@ -34,12 +34,12 @@ public class RoleServiceImpl implements RoleService {
 
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(curPage, pageSize, sort);
+        ExampleMatcher matcher = ExampleMatcher.matching();
         TRole role = new TRole();
         if (!StringUtils.isEmpty(roleName)) {
             role.setRoleName(roleName);
+            matcher = matcher.withMatcher("roleName", contains().startsWith());
         }
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("roleName", contains().ignoreCase());
         Example<TRole> roleExample = Example.of(role, matcher);
         return roleDao.findAll(roleExample, pageable);
     }
