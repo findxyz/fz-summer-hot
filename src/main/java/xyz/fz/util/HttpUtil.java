@@ -86,12 +86,21 @@ public class HttpUtil {
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
-                return responseBody.toString();
+                try {
+                    return responseBody.string();
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                    return "";
+                }
             } else {
                 return "";
             }
         } else {
             return "";
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        System.out.println(httpGet("https://www.baidu.com", null));
     }
 }
