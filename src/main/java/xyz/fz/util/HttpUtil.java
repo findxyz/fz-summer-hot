@@ -39,7 +39,7 @@ public class HttpUtil {
                 .build();
         logger.debug("Http PostJson Url: {}", request.url().toString());
         Response response = client.newCall(request).execute();
-        return response.body().string();
+        return result(response);
     }
 
     public static String httpPost(String url, Map formParams) throws IOException {
@@ -58,7 +58,7 @@ public class HttpUtil {
                 .build();
         logger.debug("Http Post Url: {}", request.url().toString());
         Response response = client.newCall(request).execute();
-        return response.body().string();
+        return result(response);
     }
 
     public static String httpGet(String url, LinkedHashMap queryParams) throws IOException {
@@ -79,6 +79,19 @@ public class HttpUtil {
                 .build();
         logger.debug("Http Get Url: {}", request.url().toString());
         Response response = client.newCall(request).execute();
-        return response.body().string();
+        return result(response);
+    }
+
+    private static String result(Response response) {
+        if (response.isSuccessful()) {
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                return responseBody.toString();
+            } else {
+                return "";
+            }
+        } else {
+            return "";
+        }
     }
 }
