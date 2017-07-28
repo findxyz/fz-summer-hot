@@ -3,6 +3,7 @@ package xyz.fz.service.impl.user;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.fz.dao.CommonDao;
 import xyz.fz.dao.PagerData;
 import xyz.fz.dao.user.UserDao;
@@ -18,6 +19,7 @@ import java.util.Map;
  * Created by fz on 2016/8/10.
  */
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;

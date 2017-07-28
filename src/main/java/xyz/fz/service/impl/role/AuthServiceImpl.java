@@ -17,6 +17,7 @@ import xyz.fz.service.role.RoleAuthService;
  * Created by fz on 2016/9/19.
  */
 @Service
+@Transactional
 public class AuthServiceImpl implements AuthService {
 
     private final AuthDao authDao;
@@ -58,7 +59,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
     @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void del(Long id) {
         authDao.delete(id);

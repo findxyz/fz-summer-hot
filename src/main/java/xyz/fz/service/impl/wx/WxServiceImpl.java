@@ -3,6 +3,7 @@ package xyz.fz.service.impl.wx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.fz.constant.WxConstant;
 import xyz.fz.dao.wx.WxUserDao;
 import xyz.fz.domain.wx.TWxUser;
@@ -20,6 +21,7 @@ import java.util.Map;
  * Created by Administrator on 2017/5/7.
  */
 @Service
+@Transactional
 public class WxServiceImpl implements WxService {
 
     public static final String WX_ACCESS_TOKEN = "WX_ACCESS_TOKEN";

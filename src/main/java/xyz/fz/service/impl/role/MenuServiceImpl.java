@@ -18,6 +18,7 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
  * Created by fz on 2016/9/19.
  */
 @Service
+@Transactional
 public class MenuServiceImpl implements MenuService {
 
     private final MenuDao menuDao;
@@ -63,7 +64,6 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    @Transactional
     @CacheEvict(value = {"roleAuth", "treeData", "allTreeData"}, allEntries = true)
     public void del(Long id) {
         authService.deleteByMenuId(id);
