@@ -119,8 +119,8 @@
             /*<![CDATA[*/
             var protoAlert = alert;
             alert = function (message) {
-                if (message.indexOf("datatables.net") > -1) {
-                    return false;
+                if ((message + "").indexOf("datatables.net") > -1) {
+                    console.log("alert datatables message: " + message);
                 } else {
                     protoAlert(message);
                 }
@@ -197,7 +197,7 @@
 
             function XDataTables(tabId, dataUrl, paramsFun, columns, columnDefs, singleSelected, xExtends) {
                 singleSelected = singleSelected || false;
-                var scrollY = 400;
+                var scrollY = $(window).height() - 160;
                 var autoLoad = true;
                 if (xExtends) {
                     if (xExtends.hasOwnProperty('scrollY')) {

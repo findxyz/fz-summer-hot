@@ -217,7 +217,7 @@
                     }
                 }
             }];
-            table = new XDataTables("dtTab", basePath + "role/rolePageList", paramsFun, columns, columnDefs, true, {scrollY: 320});
+            table = new XDataTables("dtTab", basePath + "role/rolePageList", paramsFun, columns, columnDefs, true);
 
             var $dtTab = $("#dtTab");
             $dtTab.on("draw.dt", function () {
@@ -283,7 +283,6 @@
                 }
             }];
             table2 = new XDataTables("dtTab2", basePath + "role/roleAuth/roleAuthMenuPageList", paramsFun2, columns2, columnDefs2, true, {
-                scrollY: 320,
                 autoLoad: false
             });
 
@@ -384,7 +383,6 @@
                 }
             }];
             table3 = new XDataTables("roleMenuTab", basePath + "role/roleAuth/roleMenuPageList", paramsFun3, columns3, columnDefs3, true, {
-                scrollY: 300,
                 autoLoad: false
             });
 
@@ -468,7 +466,6 @@
                 }
             }];
             table4 = new XDataTables("roleAuthTab", basePath + "role/roleAuth/roleAuthPageList", paramsFun4, columns4, columnDefs4, true, {
-                scrollY: 320,
                 autoLoad: false
             });
 

@@ -171,7 +171,7 @@
                     }
                 }
             }];
-            table = new XDataTables("dtTab", basePath + "role/menu/menuPageList", paramsFun, columns, columnDefs, true, {scrollY: 350});
+            table = new XDataTables("dtTab", basePath + "role/menu/menuPageList", paramsFun, columns, columnDefs, true);
             // 添加重绘事件
             var $dtTab = $("#dtTab");
             $dtTab.on("draw.dt", function () {
@@ -289,7 +289,6 @@
                 }
             }];
             table2 = new XDataTables("dtTab2", basePath + "role/auth/authPageList", paramsFun2, columns2, columnDefs2, true, {
-                scrollY: 350,
                 autoLoad: false
             });
             $("#authDialog").dialog({
