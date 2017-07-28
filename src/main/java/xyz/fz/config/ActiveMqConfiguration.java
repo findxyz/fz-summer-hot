@@ -3,6 +3,7 @@ package xyz.fz.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.jms.core.JmsTemplate;
 
@@ -11,6 +12,7 @@ import org.springframework.jms.core.JmsTemplate;
  * Created by Administrator on 2017/6/15.
  */
 @Configuration
+@EnableJms
 public class ActiveMqConfiguration {
 
     public static final String SAMPLE_QUEUE = "sample.queue";
