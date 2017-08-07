@@ -26,8 +26,12 @@ public class WxServiceImpl implements WxService {
 
     public static final String WX_ACCESS_TOKEN = "WX_ACCESS_TOKEN";
 
+    private final WxUserDao wxUserDao;
+
     @Autowired
-    private WxUserDao wxUserDao;
+    public WxServiceImpl(WxUserDao wxUserDao) {
+        this.wxUserDao = wxUserDao;
+    }
 
     @Override
     public String clickEvent(String publicName, String subscriberUserName, String eventKey) throws IOException, JAXBException {
