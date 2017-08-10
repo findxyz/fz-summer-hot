@@ -13,8 +13,9 @@ public class WxAccessTokenTask {
 
     private static final Logger logger = LoggerFactory.getLogger(WxAccessTokenTask.class);
 
-    @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
-    public void refresh() {
+    @Scheduled(fixedRate = 60 * 60 * 1000)
+    private void refresh() {
         // 使用缓存的自动过期来保证accessToken的刷新，定时任务方案暂时摒弃
+        System.out.println("abc");
     }
 }
