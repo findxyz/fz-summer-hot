@@ -189,39 +189,49 @@ public class RSAUtil {
         long begin = System.currentTimeMillis();
         // RetKeyPair keyPair = generateKeyPair();
         String priKey = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAKEFSIyJN1BofFcRz6yRtOR519UCxzsPRAN4bFJ6QhAN/YaW2O1ZFvoptPWLYEFO/Z22sq+Y5PIjbXR5Ut3ud/lwMp/DxTi6DTDNzJQbeGOugQqVQYxpX/ZQ9SsUITcXpsI3Z5NW1odpyEUuMuufM0VuKQlYibLUc6zGhlk67/yrAgMBAAECgYEAiZTXGWWBAs5UN507YgsZkgLdvN7j1n3DsmdpvstBuTALCL3JWnu920BZo1hUhVj18JUTdmBgdth4hIXJnWFN1lPb10JbKGWCnhbgRtoPI8QJpgyv+z6JRaWbF4nNjf+Z2pX17IWgVidWGmI8RSNaYm/zzlAQC5PuJtDyhDTV9QkCQQDOXdH4wTdBECxHGn55K0sF/pWu/4+4w6HSi10l2zIl9P4f4EGHttRojhyfmZkxisjNpmPB546j+IB+ZgcyupWnAkEAx795+smomvlfDocMSuLf0Vw0ff78JLu+6e0xk09899bjGjgO6fEg7EwAwSZFAMkytxfiIbYP0W/yM+d66Q1JXQJAE9gVvtPlmk4R0+yKSOCO4E6w2hkdGulFAFgCZweC9P9wCGSqKIC+QCeaPQaqIodz88KSSS0ZHE9jG8R34LrsdQJBAKOuvH5OEeQsxUBaWjBjiZU+QaWd9XEEiIWY4S8dzAIsDR3HIjGCbsAz58pfWdwzA2QWJjAJyRyO56Kw5X9ka+ECQQCRqn1t9ZoaXu/QciMnwzgqM1F74BiTybCnepIDCd2kzfy7ZMll1KoBIMtrq/dYFQFf7PaFnkIq3OAoHC4OAAM+";
-        System.out.println(Base64.decodeBase64(priKey).length);
         getPriCipher(priKey, ENCRYPT_MODE);
         getPriCipher(priKey, DECRYPT_MODE);
         String pubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChBUiMiTdQaHxXEc+skbTkedfVAsc7D0QDeGxSekIQDf2GltjtWRb6KbT1i2BBTv2dtrKvmOTyI210eVLd7nf5cDKfw8U4ug0wzcyUG3hjroEKlUGMaV/2UPUrFCE3F6bCN2eTVtaHachFLjLrnzNFbikJWImy1HOsxoZZOu/8qwIDAQAB";
         getPubCipher(pubKey, ENCRYPT_MODE);
         getPubCipher(pubKey, DECRYPT_MODE);
-        System.out.println(Base64.decodeBase64(pubKey).length);
         long end = System.currentTimeMillis();
-        System.out.println(end - begin);
+        System.out.println("公私钥初始化耗时：" + (end - begin));
 
-        System.out.println(priKey);
-        System.out.println(pubKey);
+        System.out.println("\n========================================\n");
+
+        System.out.println("私钥：" + priKey);
+        System.out.println("公钥：" + pubKey);
 
         String content = "xml";
+        System.out.println("原始内容：" + content);
+
+        System.out.println("\n========================================\n");
+
         long begin2 = System.currentTimeMillis();
         String encBase64Content = Base64.encodeBase64String(encryptByPrivateKey(content.getBytes("utf-8"), priKey));
+        System.out.println("私钥加密后的内容：" + encBase64Content);
         long end2 = System.currentTimeMillis();
-        System.out.println("私钥加密" + (end2 - begin2));
+        System.out.println("私钥加密用时：" + (end2 - begin2));
 
         long begin3 = System.currentTimeMillis();
-        System.out.println(new String(decryptByPublicKey(Base64.decodeBase64(encBase64Content), pubKey), "utf-8"));
+        String decBase64Content = new String(decryptByPublicKey(Base64.decodeBase64(encBase64Content), pubKey), "utf-8");
+        System.out.println("公钥解密后的内容：" + decBase64Content);
         long end3 = System.currentTimeMillis();
-        System.out.println("公钥解密" + (end3 - begin3));
+        System.out.println("公钥解密用时：" + (end3 - begin3));
+
+        System.out.println("\n========================================\n");
 
         long begin4 = System.currentTimeMillis();
         String encBase64Content2 = Base64.encodeBase64String(encryptByPublicKey(content.getBytes("utf-8"), pubKey));
+        System.out.println("公钥加密后的内容：" + encBase64Content2);
         long end4 = System.currentTimeMillis();
-        System.out.println("公钥加密" + (end4 - begin4));
+        System.out.println("公钥加密用时：" + (end4 - begin4));
 
         long begin5 = System.currentTimeMillis();
-        System.out.println(new String(decryptByPrivateKey(Base64.decodeBase64(encBase64Content2), priKey), "utf-8"));
+        String decBase64Content2 = new String(decryptByPrivateKey(Base64.decodeBase64(encBase64Content2), priKey), "utf-8");
+        System.out.println("私钥解密后的内容：" + decBase64Content2);
         long end5 = System.currentTimeMillis();
-        System.out.println("私钥解密" + (end5 - begin5));
+        System.out.println("私钥解密用时：" + (end5 - begin5));
     }
 
 }
