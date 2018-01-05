@@ -12,15 +12,17 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * Created by fz on 2016/7/4.
  */
 public class RSAUtil {
 
+    private static final String KEY_PAIR = "RSA";
+
     private static final String KEY_ALGORITHM = "RSA";
+
+    private static final String CIPHER_ALGORITHM = "RSA/ECB/PKCS1Padding";
 
     private static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 
@@ -33,8 +35,6 @@ public class RSAUtil {
     private static final int ENCRYPT_MODE = Cipher.ENCRYPT_MODE;
 
     private static final int DECRYPT_MODE = Cipher.DECRYPT_MODE;
-
-    private static final Map<String, Cipher> cipherCache = new Hashtable<>();
 
     public static class RetKeyPair {
 
@@ -59,7 +59,7 @@ public class RSAUtil {
     // 生成公私匙
     public static RetKeyPair generateKeyPair() throws Exception {
 
-        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
+        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_PAIR);
         keyPairGen.initialize(KEY_SIZE);
         KeyPair keyPair = keyPairGen.generateKeyPair();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
@@ -96,35 +96,25 @@ public class RSAUtil {
     // 获取公匙加解密法
     private static Cipher getPubCipher(String publicKey, int mode) throws Exception {
 
-        if (cipherCache.containsKey(publicKey + "_" + mode)) {
-            return cipherCache.get(publicKey + "_" + mode);
-        } else {
-            byte[] keyBytes = Base64.decodeBase64(publicKey);
-            X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
-            Key publicK = keyFactory.generatePublic(x509KeySpec);
-            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
-            cipher.init(mode, publicK);
-            cipherCache.put(publicKey + "_" + mode, cipher);
-            return cipher;
-        }
+        byte[] keyBytes = Base64.decodeBase64(publicKey);
+        X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+        Key publicK = keyFactory.generatePublic(x509KeySpec);
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+        cipher.init(mode, publicK);
+        return cipher;
     }
 
     // 获取私匙加解密法
     private static Cipher getPriCipher(String privateKey, int mode) throws Exception {
 
-        if (cipherCache.containsKey(privateKey + "_" + mode)) {
-            return cipherCache.get(privateKey + "_" + mode);
-        } else {
-            byte[] keyBytes = Base64.decodeBase64(privateKey);
-            PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(keyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
-            Key privateK = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
-            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
-            cipher.init(mode, privateK);
-            cipherCache.put(privateKey + "_" + mode, cipher);
-            return cipher;
-        }
+        byte[] keyBytes = Base64.decodeBase64(privateKey);
+        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+        Key privateK = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+        cipher.init(mode, privateK);
+        return cipher;
     }
 
     private static byte[] encryptData(byte[] originData, Cipher cipher) throws Exception {
@@ -186,16 +176,9 @@ public class RSAUtil {
 
     public static void main(String[] args) throws Exception {
 
-        long begin = System.currentTimeMillis();
         // RetKeyPair keyPair = generateKeyPair();
-        String priKey = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAKEFSIyJN1BofFcRz6yRtOR519UCxzsPRAN4bFJ6QhAN/YaW2O1ZFvoptPWLYEFO/Z22sq+Y5PIjbXR5Ut3ud/lwMp/DxTi6DTDNzJQbeGOugQqVQYxpX/ZQ9SsUITcXpsI3Z5NW1odpyEUuMuufM0VuKQlYibLUc6zGhlk67/yrAgMBAAECgYEAiZTXGWWBAs5UN507YgsZkgLdvN7j1n3DsmdpvstBuTALCL3JWnu920BZo1hUhVj18JUTdmBgdth4hIXJnWFN1lPb10JbKGWCnhbgRtoPI8QJpgyv+z6JRaWbF4nNjf+Z2pX17IWgVidWGmI8RSNaYm/zzlAQC5PuJtDyhDTV9QkCQQDOXdH4wTdBECxHGn55K0sF/pWu/4+4w6HSi10l2zIl9P4f4EGHttRojhyfmZkxisjNpmPB546j+IB+ZgcyupWnAkEAx795+smomvlfDocMSuLf0Vw0ff78JLu+6e0xk09899bjGjgO6fEg7EwAwSZFAMkytxfiIbYP0W/yM+d66Q1JXQJAE9gVvtPlmk4R0+yKSOCO4E6w2hkdGulFAFgCZweC9P9wCGSqKIC+QCeaPQaqIodz88KSSS0ZHE9jG8R34LrsdQJBAKOuvH5OEeQsxUBaWjBjiZU+QaWd9XEEiIWY4S8dzAIsDR3HIjGCbsAz58pfWdwzA2QWJjAJyRyO56Kw5X9ka+ECQQCRqn1t9ZoaXu/QciMnwzgqM1F74BiTybCnepIDCd2kzfy7ZMll1KoBIMtrq/dYFQFf7PaFnkIq3OAoHC4OAAM+";
-        getPriCipher(priKey, ENCRYPT_MODE);
-        getPriCipher(priKey, DECRYPT_MODE);
-        String pubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChBUiMiTdQaHxXEc+skbTkedfVAsc7D0QDeGxSekIQDf2GltjtWRb6KbT1i2BBTv2dtrKvmOTyI210eVLd7nf5cDKfw8U4ug0wzcyUG3hjroEKlUGMaV/2UPUrFCE3F6bCN2eTVtaHachFLjLrnzNFbikJWImy1HOsxoZZOu/8qwIDAQAB";
-        getPubCipher(pubKey, ENCRYPT_MODE);
-        getPubCipher(pubKey, DECRYPT_MODE);
-        long end = System.currentTimeMillis();
-        System.out.println("公私钥初始化耗时：" + (end - begin));
+        String priKey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAJG5vzs1cndiJQnAXh8kZAQ2/24dIrHX1/QS5+PqS+76Z+zVHtasMT/uZO2iU9Jr7boaP6lVfoSO1IKQn18XDOx85lpVlFgWT4JPYHlwXXGJPUi+sPp9SRr2ZKX809BIUdgKF3JjQ0M/tn1rUA/JvDSnOm/jZ8yDdm7fs1vdNNa/AgMBAAECgYAmtuVCEqH1a4KRg6S9u0pDAGV92Im2G7TIqBkpKL7Bn47qkXge6iIvbOMtarnAJmJC1eRh1U/GYbe9dDSS66nH44qVBIfA+u7kHE6j1geUzLQc9XsIcs5Erwjy9MTcp421xJcxrRSHtsiyteF1StNmWSrgO4osZgvzPLRAGLU8SQJBAP8c7g9MHkJ9SAf1ZjWju9DwiL3MZ08I6cpsoSeFG7kDDMFMRgPEW+cKL9S6BHBpVKsJix26DytAmDaXy8p0pQsCQQCSO3Qyr5j9+kOkYGI4fACdVcwrTCV3dn/Bto9Iuz08a251Kz24DQtDFR2w34s4QqtWux0rCZ8riVHovJFACD2dAkEAlc8SSO9lEZxqMSo9NCCLST4GvpYK0JGmYJV76S40Qmf1FInKz6l+YmVMAzqdIrnn22yGQhWhlL+g4uYu6RuoUwJAJDPl65p/lPk9f9eA2Z0RheI03s9GQ1IqBOpOhOIeIfQy730aFZPdIul6ZUyiqfYPdzRx3zLNnjir96Ofjiu8HQJBAPA9TIRvdJKB5IHFG7Sm6Do3zGu5fMhvwI6t6U7DPa4bX5RHCikEWNd5xd39r5HLAP/eIl/rFJAF3EHdpqA3ZOI=";
+        String pubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRub87NXJ3YiUJwF4fJGQENv9uHSKx19f0Eufj6kvu+mfs1R7WrDE/7mTtolPSa+26Gj+pVX6EjtSCkJ9fFwzsfOZaVZRYFk+CT2B5cF1xiT1IvrD6fUka9mSl/NPQSFHYChdyY0NDP7Z9a1APybw0pzpv42fMg3Zu37Nb3TTWvwIDAQAB";
 
         System.out.println("\n========================================\n");
 
