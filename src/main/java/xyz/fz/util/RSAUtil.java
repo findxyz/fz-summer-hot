@@ -18,7 +18,7 @@ import java.security.spec.X509EncodedKeySpec;
  */
 public class RSAUtil {
 
-    private static final String KEY_PAIR = "RSA";
+    private static final String KEY_PAIR_ALGORITHM = "RSA";
 
     private static final String KEY_ALGORITHM = "RSA";
 
@@ -26,11 +26,16 @@ public class RSAUtil {
 
     private static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 
-    private static final int KEY_SIZE = 1024;
+    private static final int KEY_BITS_1024 = 1024;
 
-    private static final int MAX_ENCRYPT_BLOCK = 117;
+    private static final int KEY_BITS_2048 = 2048;
 
-    private static final int MAX_DECRYPT_BLOCK = 128;
+    // 密钥位数1024或2048
+    private static final int KEY_SIZE = KEY_BITS_1024;
+
+    private static final int MAX_DECRYPT_BLOCK = KEY_SIZE / 8;
+
+    private static final int MAX_ENCRYPT_BLOCK = MAX_DECRYPT_BLOCK - 11;
 
     private static final int ENCRYPT_MODE = Cipher.ENCRYPT_MODE;
 
@@ -59,7 +64,7 @@ public class RSAUtil {
     // 生成公私匙
     public static RetKeyPair generateKeyPair() throws Exception {
 
-        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_PAIR);
+        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_PAIR_ALGORITHM);
         keyPairGen.initialize(KEY_SIZE);
         KeyPair keyPair = keyPairGen.generateKeyPair();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();

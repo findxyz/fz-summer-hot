@@ -15,49 +15,59 @@ import java.security.spec.AlgorithmParameterSpec;
 /**
  * Created by Administrator on 2017/3/30.
  */
-public class AES256CBCUtil {
+public class AES_CBC_Util {
 
-    private static String DEFAULT_TEST_256KEY = "xxooxxooooxxooxxxxooxxooooxxooxx";
+    // 128位密钥长度需要16个字符
+    // 256位密钥长度需要32个字符，注：256位密钥需要自行安装加密许可 http://blog.csdn.net/wangjunjun2008/article/details/50847426
+    private static final String DEFAULT_TEST_KEY = "0000111122223333";
 
-    private static String AES256CBC_ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final String DEFAULT_ENCODING = "UTF-8";
 
-    private static byte[] ivBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    private static final String KEY_ALGORITHM = "AES";
+
+    private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
+
+    private static final String SIGNATURE_ALGORITHM = "HmacSHA512";
+
+    // 最好的使用方式是每次随机然后将iv向量也随请求传递
+    private static final byte[] DEFAULT_IV_BYTES = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     public static String encrypt(String content, String key) throws UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-        byte[] contentBytes = content.getBytes("UTF-8");
-        AlgorithmParameterSpec ivSpec = new IvParameterSpec(ivBytes);
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-        Cipher cipher = Cipher.getInstance(AES256CBC_ALGORITHM);
+        byte[] contentBytes = content.getBytes(DEFAULT_ENCODING);
+        AlgorithmParameterSpec ivSpec = new IvParameterSpec(DEFAULT_IV_BYTES);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(DEFAULT_ENCODING), KEY_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivSpec);
         return Base64.encodeBase64String(cipher.doFinal(contentBytes));
     }
 
     public static String decrypt(String content, String key) throws UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
         byte[] contentBytes = Base64.decodeBase64(content);
-        AlgorithmParameterSpec ivSpec = new IvParameterSpec(ivBytes);
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-        Cipher cipher = Cipher.getInstance(AES256CBC_ALGORITHM);
+        AlgorithmParameterSpec ivSpec = new IvParameterSpec(DEFAULT_IV_BYTES);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(DEFAULT_ENCODING), KEY_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivSpec);
-        return new String(cipher.doFinal(contentBytes), "UTF-8");
+        return new String(cipher.doFinal(contentBytes), DEFAULT_ENCODING);
     }
 
+    /* 用于对数据签名，密钥可随意指定 */
     public static String hmacSHA512(String data, String key) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         byte[] bytesKey = key.getBytes();
-        final SecretKeySpec secretKey = new SecretKeySpec(bytesKey, "HmacSHA512");
-        Mac mac = Mac.getInstance("HmacSHA512");
+        final SecretKeySpec secretKey = new SecretKeySpec(bytesKey, SIGNATURE_ALGORITHM);
+        Mac mac = Mac.getInstance(SIGNATURE_ALGORITHM);
         mac.init(secretKey);
         final byte[] macData = mac.doFinal(data.getBytes());
         byte[] hex = new Hex().encode(macData);
-        return new String(hex, "UTF-8");
+        return new String(hex, DEFAULT_ENCODING);
     }
 
     public static void main(String[] args) throws NoSuchPaddingException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
-        String key = "SvEpI11JO2QpqEPTCxA7JTspRa56OBDq";
         String content = "<?xml version=\"1.0\" encoding=\"utf-8\"?><orderRequest><orderId>1234567890</orderId></orderRequest>";
-        String encryptContent = AES256CBCUtil.encrypt(content, key);
+        System.out.println(DEFAULT_TEST_KEY.getBytes(DEFAULT_ENCODING).length);
+        String encryptContent = AES_CBC_Util.encrypt(content, DEFAULT_TEST_KEY);
         System.out.println(encryptContent);
-        System.out.println(AES256CBCUtil.decrypt(encryptContent, key));
-        String hmacKey = "VJ4fpM0q30/LwkbykbYa7HnBYTv9qB+t";
-        System.out.println(AES256CBCUtil.hmacSHA512(encryptContent, hmacKey));
+        System.out.println(AES_CBC_Util.decrypt(encryptContent, DEFAULT_TEST_KEY));
+        String hmacKey = "任意字符串";
+        System.out.println(AES_CBC_Util.hmacSHA512(encryptContent, hmacKey));
     }
 }

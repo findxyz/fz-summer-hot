@@ -6,20 +6,21 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 /**
  * Created by fz on 2015/11/18.
  */
-public class AES128Util {
+public class AES_ECB_Util {
 
     private static final String DEFAULT_CHARSET = "utf-8";
 
-    private static final String ALGORITHM = "AES";
+    private static final String KEY_ALGORITHM = "AES";
 
-    private static final String TRANSFORMATION = "AES";
+    private static final String CIPHER_ALGORITHM = "AES";
+
+    private static final String SEC_RANDOM_ALGORITHM = "SHA1PRNG";
 
     private static final int BITS = 128;
 
@@ -27,7 +28,7 @@ public class AES128Util {
         try {
             SecretKeySpec key = getAESSecretKey(base64KeyWord);
             byte[] byteContent = content.getBytes(DEFAULT_CHARSET);
-            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] result = cipher.doFinal(byteContent);
             byte[] encode = Base64.encodeBase64(result);
@@ -40,7 +41,7 @@ public class AES128Util {
     public static String decrypt(String base64KeyWord, String content) {
         try {
             SecretKeySpec key = getAESSecretKey(base64KeyWord);
-            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, key);
             byte[] result = cipher.doFinal(Base64.decodeBase64(content));
             return new String(result, DEFAULT_CHARSET);
@@ -50,17 +51,17 @@ public class AES128Util {
     }
 
     private static SecretKeySpec getAESSecretKey(String base64KeyWord) throws NoSuchAlgorithmException {
-        KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
+        KeyGenerator keyGen = KeyGenerator.getInstance(KEY_ALGORITHM);
         // 防止linux下随机生成key
-        SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+        SecureRandom secureRandom = SecureRandom.getInstance(SEC_RANDOM_ALGORITHM);
         secureRandom.setSeed(Base64.decodeBase64(base64KeyWord));
         // 根据密钥初始化密钥生成器
         keyGen.init(BITS, secureRandom);
         SecretKey secretKey = keyGen.generateKey();
-        return new SecretKeySpec(secretKey.getEncoded(), ALGORITHM);
+        return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public static void main(String[] args) {
 
         String keyWord = "today_is_a_sunny_day";
         String base64KeyWord = Base64.encodeBase64String(keyWord.getBytes());
