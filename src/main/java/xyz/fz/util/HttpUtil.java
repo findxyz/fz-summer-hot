@@ -25,7 +25,19 @@ public class HttpUtil {
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    public static final MediaType XML = MediaType.parse("application/xml; charset=utf-8");
+    private static final MediaType XML = MediaType.parse("application/xml; charset=utf-8");
+
+    private static final MediaType JPEG = MediaType.parse("image/jpeg");
+
+    private static final MediaType GIF = MediaType.parse("image/gif");
+
+    private static final MediaType PNG = MediaType.parse("image/png");
+
+    private static final MediaType XLS = MediaType.parse("application/vnd.ms-excel");
+
+    private static final MediaType TXT = MediaType.parse("text/plain");
+
+    private static final MediaType BIN = MediaType.parse("application/octet-stream");
 
     private static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[]{
             new X509TrustManager() {
@@ -145,12 +157,43 @@ public class HttpUtil {
             Object value = entry.getValue();
             if (value instanceof File) {
                 File file = (File) value;
-                multipartBodyBuilder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse("image/jpg"), file));
+                addFile(multipartBodyBuilder, key, file.getName(), file);
             } else {
                 multipartBodyBuilder.addFormDataPart(key, value.toString());
             }
         }
         return multipartBodyBuilder.build();
+    }
+
+    private static void addFile(MultipartBody.Builder multipartBodyBuilder, String key, String fileName, File file) {
+        try {
+            String suffix = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+            switch (suffix) {
+                case "jpeg":
+                    multipartBodyBuilder.addFormDataPart(key, fileName, RequestBody.create(JPEG, file));
+                    break;
+                case "jpg":
+                    multipartBodyBuilder.addFormDataPart(key, fileName, RequestBody.create(JPEG, file));
+                    break;
+                case "gif":
+                    multipartBodyBuilder.addFormDataPart(key, fileName, RequestBody.create(GIF, file));
+                    break;
+                case "png":
+                    multipartBodyBuilder.addFormDataPart(key, fileName, RequestBody.create(PNG, file));
+                    break;
+                case "xls":
+                    multipartBodyBuilder.addFormDataPart(key, fileName, RequestBody.create(XLS, file));
+                    break;
+                case "txt":
+                    multipartBodyBuilder.addFormDataPart(key, fileName, RequestBody.create(TXT, file));
+                    break;
+                default:
+                    multipartBodyBuilder.addFormDataPart(key, fileName, RequestBody.create(BIN, file));
+                    break;
+            }
+        } catch (Exception e) {
+            multipartBodyBuilder.addFormDataPart(key, fileName, RequestBody.create(BIN, file));
+        }
     }
 
     private static Request requestBuild(String url) {
@@ -192,7 +235,10 @@ public class HttpUtil {
         return "";
     }
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
-        System.out.println(httpGet("http://www.baidu.com", null));
+        LinkedHashMap params = new LinkedHashMap();
+        params.put("wd", "baidu");
+        System.out.println(httpGet("http://www.baidu.com/s", params));
     }
 }
