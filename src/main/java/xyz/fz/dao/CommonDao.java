@@ -1,5 +1,6 @@
 package xyz.fz.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ public interface CommonDao {
     /* 非查询dao方法 */
 
     void save(Object entity);
+
+    void batchSave(Collection entities);
 
     void update(Object entity);
 

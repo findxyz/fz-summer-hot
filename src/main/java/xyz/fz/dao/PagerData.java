@@ -2,14 +2,15 @@ package xyz.fz.dao;
 
 import java.util.List;
 
-/**
- * Created by fz on 2015/11/7.
- */
 public class PagerData<T> {
+
+    private static final String LOAD_STATUS_Y = "y";
+
+    private static final String LOAD_STATUS_N = "n";
 
     private List<T> data;
 
-    private long totalCount;
+    private Long totalCount;
 
     public List<T> getData() {
         return data;
@@ -19,12 +20,20 @@ public class PagerData<T> {
         this.data = data;
     }
 
-    public long getTotalCount() {
+    public Long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(long totalCount) {
+    public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
+    }
+
+    /**
+     * @param page 页码从1开始
+     * @return y: 可以继续加载，n: 加载完毕
+     */
+    public String getLoadStatus(PagerData<T> pagerData, int page, int pageSize) {
+        return pagerData.getTotalCount() > page * pageSize ? LOAD_STATUS_Y : LOAD_STATUS_N;
     }
 }
 
