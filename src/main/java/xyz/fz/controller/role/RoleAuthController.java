@@ -36,7 +36,7 @@ public class RoleAuthController {
                                                     @RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                                     @RequestParam(value = "length", required = false, defaultValue = "20") int length,
                                                     @RequestParam(value = "roleId", required = false, defaultValue = "0") Long roleId) {
-        int curPage = (start / length);
+        int curPage = (start / length) + 1;
         Map<String, Object> result = new HashMap<>();
         PagerData<Map> page = roleAuthService.roleAuthMenuPageList(roleId, curPage, length);
         result.put("draw", draw);
@@ -52,7 +52,7 @@ public class RoleAuthController {
                                                 @RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                                 @RequestParam(value = "length", required = false, defaultValue = "20") int length,
                                                 @RequestParam(value = "roleId", required = false, defaultValue = "0") Long roleId) {
-        int curPage = (start / length);
+        int curPage = (start / length) + 1;
         Map<String, Object> result = new HashMap<>();
         PagerData<Map> page = roleAuthService.roleMenuPageList(roleId, curPage, length);
         result.put("draw", draw);
@@ -101,7 +101,7 @@ public class RoleAuthController {
                                                 @RequestParam(value = "length", required = false, defaultValue = "20") int length,
                                                 @RequestParam(value = "roleId", required = false, defaultValue = "0") Long roleId,
                                                 @RequestParam(value = "menuId", required = false, defaultValue = "0") Long menuId) {
-        int curPage = (start / length);
+        int curPage = (start / length) + 1;
         Map<String, Object> result = new HashMap<>();
         PagerData<Map> page = roleAuthService.roleAuthPageList(roleId, menuId, curPage, length);
         result.put("draw", draw);

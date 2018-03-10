@@ -285,7 +285,8 @@
                 }
             }];
             table2 = new XDataTables("roleTab", basePath + "user/userRolePageList", paramsFun2, columns2, columnDefs2, true, {
-                autoLoad: false
+                autoLoad: false,
+                scrollY: 300
             });
             $("#roleDialog").dialog({
                 autoOpen: false,

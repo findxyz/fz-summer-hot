@@ -23,8 +23,12 @@ public class WxCtlController {
 
     private static final Logger logger = LoggerFactory.getLogger(WxCtlController.class);
 
+    private final WxService wxService;
+
     @Autowired
-    private WxService wxService;
+    public WxCtlController(WxService wxService) {
+        this.wxService = wxService;
+    }
 
     @RequestMapping("/main")
     public String main() {

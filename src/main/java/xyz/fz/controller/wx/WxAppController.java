@@ -27,8 +27,12 @@ public class WxAppController {
 
     private static final Logger logger = LoggerFactory.getLogger(WxAppController.class);
 
+    private final WxService wxService;
+
     @Autowired
-    private WxService wxService;
+    public WxAppController(WxService wxService) {
+        this.wxService = wxService;
+    }
 
     @RequestMapping("/index")
     public String appIndex(@RequestParam(value = "code", required = false) String code,
@@ -37,27 +41,22 @@ public class WxAppController {
                            Model model) throws UnsupportedEncodingException {
 
         // 0.如果用户已登陆则直接返回
-        if (session.getAttribute("openid") != null) {
-            model.addAttribute("openid", session.getAttribute("openid"));
-            model.addAttribute("nickname", session.getAttribute("nickname"));
-            model.addAttribute("headimgurl", session.getAttribute("headimgurl"));
+        if (isAlreadyLogin(session, model)) {
             return "wx/appIndex";
         }
         // 1.没有任何参数的进入，说明需要进行权限验证，跳转到微信用户信息授权页
-        if (StringUtils.isEmpty(state) && StringUtils.isEmpty(code)) {
-            String encodeAppIndexUrl = URLEncoder.encode(WxConstant.getAppIndexUrl(), "utf-8");
-            String authUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WxConstant.getAppID();
-            authUrl += "&redirect_uri=" + encodeAppIndexUrl;
-            authUrl += "&response_type=code";
-            authUrl += "&scope=snsapi_userinfo";
-            authUrl += "&state=STATE#wechat_redirect";
-            return "redirect:" + authUrl;
-        }
-        // 2.用户取消，没有code只有state，跳转到sorry页面
-        if (!StringUtils.isEmpty(state) && StringUtils.isEmpty(code)) {
-            return "wx/appSorry";
+        String authUrl = neededWxAuth(code, state);
+        if (authUrl != null) {
+            return authUrl;
         }
         // 3.有code也有state，说明授权完毕，可以通过code换取用于拉取用户个人信息的access_token
+        if (doWxAuth(code, state, session, model)) {
+            return "wx/appIndex";
+        }
+        return "wx/appSorry";
+    }
+
+    private boolean doWxAuth(String code, String state, HttpSession session, Model model) {
         if (!StringUtils.isEmpty(state) && !StringUtils.isEmpty(code)) {
             // 3.1code获取access_token失败，说明code错误，不排除恶意行为，直接跳转sorry页
             // 3.2code获取access_token成功，使用access_token拉取用户个人信息，并存入数据库
@@ -70,11 +69,34 @@ public class WxAppController {
                 model.addAttribute("openid", userInfoMap.get("openid"));
                 model.addAttribute("nickname", userInfoMap.get("nickname"));
                 model.addAttribute("headimgurl", userInfoMap.get("headimgurl"));
-                return "wx/appIndex";
+                return true;
             } catch (Exception e) {
                 logger.error(BaseUtil.getExceptionStackTrace(e));
             }
         }
-        return "wx/appSorry";
+        return false;
+    }
+
+    private String neededWxAuth(String code, String state) throws UnsupportedEncodingException {
+        if (StringUtils.isEmpty(state) && StringUtils.isEmpty(code)) {
+            String encodeAppIndexUrl = URLEncoder.encode(WxConstant.getAppIndexUrl(), "utf-8");
+            String authUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WxConstant.getAppID();
+            authUrl += "&redirect_uri=" + encodeAppIndexUrl;
+            authUrl += "&response_type=code";
+            authUrl += "&scope=snsapi_userinfo";
+            authUrl += "&state=STATE#wechat_redirect";
+            return "redirect:" + authUrl;
+        }
+        return null;
+    }
+
+    private boolean isAlreadyLogin(HttpSession session, Model model) {
+        if (session.getAttribute("openid") != null) {
+            model.addAttribute("openid", session.getAttribute("openid"));
+            model.addAttribute("nickname", session.getAttribute("nickname"));
+            model.addAttribute("headimgurl", session.getAttribute("headimgurl"));
+            return true;
+        }
+        return false;
     }
 }

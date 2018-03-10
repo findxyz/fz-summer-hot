@@ -24,12 +24,16 @@ public class WxController {
 
     private static final Logger logger = LoggerFactory.getLogger(WxController.class);
 
+    private final WxService wxService;
+
     @Autowired
-    private WxService wxService;
+    public WxController(WxService wxService) {
+        this.wxService = wxService;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
-    public String WxServerCheck(@RequestParam(value = "signature", required = false) String signature,
+    public String wxServerCheck(@RequestParam(value = "signature", required = false) String signature,
                                 @RequestParam(value = "timestamp", required = false) String timestamp,
                                 @RequestParam(value = "nonce", required = false) String nonce,
                                 @RequestParam(value = "echostr", required = false) String echostr) {
@@ -45,7 +49,7 @@ public class WxController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public String WxMessage(@RequestBody String xml) throws JAXBException, IOException {
+    public String wxMessage(@RequestBody String xml) throws JAXBException, IOException {
 
         xyz.fz.model.wxMessage.Xml xmlObj = BaseUtil.JAXBUnMarshal(xml, xyz.fz.model.wxMessage.Xml.class);
         String toUserName = xmlObj.getToUserName();
