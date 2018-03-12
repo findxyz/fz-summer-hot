@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     public Page<TAuth> authPageList(Long menuId, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.ASC, "sort");
-        Pageable pageable = new PageRequest(curPage, pageSize, sort);
+        Pageable pageable = new PageRequest(curPage - 1, pageSize, sort);
         return authDao.findByMenuId(menuId, pageable);
     }
 

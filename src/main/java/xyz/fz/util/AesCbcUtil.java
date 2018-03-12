@@ -15,7 +15,7 @@ import java.security.spec.AlgorithmParameterSpec;
 /**
  * Created by Administrator on 2017/3/30.
  */
-public class AES_CBC_Util {
+public class AesCbcUtil {
 
     // 128位密钥长度需要16个字符
     // 256位密钥长度需要32个字符，注：256位密钥需要自行安装加密许可 http://blog.csdn.net/wangjunjun2008/article/details/50847426
@@ -64,10 +64,10 @@ public class AES_CBC_Util {
     public static void main(String[] args) throws NoSuchPaddingException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         String content = "<?xml version=\"1.0\" encoding=\"utf-8\"?><orderRequest><orderId>1234567890</orderId></orderRequest>";
         System.out.println(DEFAULT_TEST_KEY.getBytes(DEFAULT_ENCODING).length);
-        String encryptContent = AES_CBC_Util.encrypt(content, DEFAULT_TEST_KEY);
+        String encryptContent = AesCbcUtil.encrypt(content, DEFAULT_TEST_KEY);
         System.out.println(encryptContent);
-        System.out.println(AES_CBC_Util.decrypt(encryptContent, DEFAULT_TEST_KEY));
+        System.out.println(AesCbcUtil.decrypt(encryptContent, DEFAULT_TEST_KEY));
         String hmacKey = "任意字符串";
-        System.out.println(AES_CBC_Util.hmacSHA512(encryptContent, hmacKey));
+        System.out.println(AesCbcUtil.hmacSHA512(encryptContent, hmacKey));
     }
 }

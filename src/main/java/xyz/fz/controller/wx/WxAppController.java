@@ -61,7 +61,7 @@ public class WxAppController {
             // 3.1code获取access_token失败，说明code错误，不排除恶意行为，直接跳转sorry页
             // 3.2code获取access_token成功，使用access_token拉取用户个人信息，并存入数据库
             try {
-                Map userInfoMap = wxService.fetchUserInfo(WxConstant.getAppID(), WxConstant.getAppsecret(), code);
+                Map userInfoMap = wxService.fetchUserInfo(WxConstant.getAppId(), WxConstant.getAppSecret(), code);
                 logger.debug("拉取到的用户信息：{}", userInfoMap.toString());
                 session.setAttribute("openid", userInfoMap.get("openid"));
                 session.setAttribute("nickname", userInfoMap.get("nickname"));
@@ -80,7 +80,7 @@ public class WxAppController {
     private String neededWxAuth(String code, String state) throws UnsupportedEncodingException {
         if (StringUtils.isEmpty(state) && StringUtils.isEmpty(code)) {
             String encodeAppIndexUrl = URLEncoder.encode(WxConstant.getAppIndexUrl(), "utf-8");
-            String authUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WxConstant.getAppID();
+            String authUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WxConstant.getAppId();
             authUrl += "&redirect_uri=" + encodeAppIndexUrl;
             authUrl += "&response_type=code";
             authUrl += "&scope=snsapi_userinfo";

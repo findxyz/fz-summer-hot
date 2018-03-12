@@ -36,7 +36,7 @@ public class AuthController {
                                             @RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                             @RequestParam(value = "length", required = false, defaultValue = "20") int length,
                                             @RequestParam("menuId") Long menuId) {
-        int curPage = (start / length);
+        int curPage = (start / length) + 1;
         Map<String, Object> result = new HashMap<>();
         Page<TAuth> page = authService.authPageList(menuId, curPage, length);
         result.put("draw", draw);

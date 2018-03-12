@@ -100,8 +100,8 @@ public class WxServiceImpl implements WxService {
         String url = "https://api.weixin.qq.com/cgi-bin/token";
         LinkedHashMap linkedHashMap = new LinkedHashMap();
         linkedHashMap.put("grant_type", "client_credential");
-        linkedHashMap.put("appid", WxConstant.getAppID());
-        linkedHashMap.put("secret", WxConstant.getAppsecret());
+        linkedHashMap.put("appid", WxConstant.getAppId());
+        linkedHashMap.put("secret", WxConstant.getAppSecret());
         String json = HttpUtil.httpGet(url, linkedHashMap);
         Map data = BaseUtil.parseJson(json, Map.class);
         return data.get("access_token").toString();

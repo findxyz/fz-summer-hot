@@ -9,50 +9,50 @@ import org.springframework.stereotype.Component;
 @Component
 public class WxConstant {
 
-    private static String appID;
+    private static String appId;
 
-    private static String appsecret;
+    private static String appSecret;
 
-    private static String URL;
+    private static String url;
 
-    private static String Token;
+    private static String token;
 
     private static String appIndexUrl;
 
-    public static String getAppID() {
-        return appID;
+    public static String getAppId() {
+        return appId;
     }
 
     @Value("${wx.appID}")
-    public void setAppID(String appID) {
-        WxConstant.appID = appID;
+    public void setAppId(String appId) {
+        WxConstant.appId = appId;
     }
 
-    public static String getAppsecret() {
-        return appsecret;
+    public static String getAppSecret() {
+        return appSecret;
     }
 
     @Value("${wx.appsecret}")
-    public void setAppsecret(String appsecret) {
-        WxConstant.appsecret = appsecret;
+    public void setAppSecret(String appSecret) {
+        WxConstant.appSecret = appSecret;
     }
 
-    public static String getURL() {
-        return URL;
+    public static String getUrl() {
+        return url;
     }
 
     @Value("${wx.URL}")
-    public void setURL(String URL) {
-        WxConstant.URL = URL;
+    public void setUrl(String url) {
+        WxConstant.url = url;
     }
 
     public static String getToken() {
-        return Token;
+        return token;
     }
 
     @Value("${wx.Token}")
     public void setToken(String token) {
-        Token = token;
+        WxConstant.token = token;
     }
 
     public static String getAppIndexUrl() {

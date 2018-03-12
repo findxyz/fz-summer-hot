@@ -41,7 +41,7 @@ public class RoleController {
                                             @RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                             @RequestParam(value = "length", required = false, defaultValue = "20") int length,
                                             @RequestParam("name") String name) {
-        int curPage = (start / length);
+        int curPage = (start / length) + 1;
         Map<String, Object> result = new HashMap<>();
         Page<TRole> page = roleService.rolePageList(name, curPage, length);
         result.put("draw", draw);

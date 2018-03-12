@@ -38,7 +38,7 @@ public class MenuServiceImpl implements MenuService {
     public Page<TMenu> menuPageList(String menuName, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.ASC, "sort");
-        Pageable pageable = new PageRequest(curPage, pageSize, sort);
+        Pageable pageable = new PageRequest(curPage - 1, pageSize, sort);
         ExampleMatcher matcher = ExampleMatcher.matching();
         TMenu menu = new TMenu();
         if (!StringUtils.isEmpty(menuName)) {

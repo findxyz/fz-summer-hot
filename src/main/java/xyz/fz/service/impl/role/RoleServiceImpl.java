@@ -34,7 +34,7 @@ public class RoleServiceImpl implements RoleService {
     public Page<TRole> rolePageList(String roleName, int curPage, int pageSize) {
 
         Sort sort = new Sort(Sort.Direction.DESC, "id");
-        Pageable pageable = new PageRequest(curPage, pageSize, sort);
+        Pageable pageable = new PageRequest(curPage - 1, pageSize, sort);
         ExampleMatcher matcher = ExampleMatcher.matching();
         TRole role = new TRole();
         if (!StringUtils.isEmpty(roleName)) {

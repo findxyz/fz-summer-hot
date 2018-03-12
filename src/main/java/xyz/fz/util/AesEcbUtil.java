@@ -12,7 +12,7 @@ import java.security.SecureRandom;
 /**
  * Created by fz on 2015/11/18.
  */
-public class AES_ECB_Util {
+public class AesEcbUtil {
 
     private static final String DEFAULT_CHARSET = "utf-8";
 
