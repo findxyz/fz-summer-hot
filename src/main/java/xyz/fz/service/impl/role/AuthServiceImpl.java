@@ -17,7 +17,7 @@ import xyz.fz.service.role.RoleAuthService;
  * Created by fz on 2016/9/19.
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class AuthServiceImpl implements AuthService {
 
     private final AuthDao authDao;

@@ -17,7 +17,7 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
  * Created by fz on 2016/9/19.
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class RoleServiceImpl implements RoleService {
 
     private final RoleDao roleDao;

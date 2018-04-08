@@ -51,7 +51,7 @@ public class WxController {
     @ResponseBody
     public String wxMessage(@RequestBody String xml) throws JAXBException, IOException {
 
-        xyz.fz.model.wxMessage.Xml xmlObj = BaseUtil.JAXBUnMarshal(xml, xyz.fz.model.wxMessage.Xml.class);
+        xyz.fz.model.wxMessage.Xml xmlObj = BaseUtil.jaxbUnmarshal(xml, xyz.fz.model.wxMessage.Xml.class);
         String toUserName = xmlObj.getToUserName();
         String fromUserName = xmlObj.getFromUserName();
         String msgType = xmlObj.getMsgType();

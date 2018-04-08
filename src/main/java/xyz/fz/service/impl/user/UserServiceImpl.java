@@ -19,7 +19,7 @@ import java.util.Map;
  * Created by fz on 2016/8/10.
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;

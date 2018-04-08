@@ -17,7 +17,7 @@ import java.util.*;
  * Created by fz on 2016/9/19.
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class RoleAuthServiceImpl implements RoleAuthService {
 
     private final RoleAuthDao roleAuthDao;

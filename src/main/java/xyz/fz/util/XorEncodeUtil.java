@@ -6,15 +6,15 @@ import java.io.UnsupportedEncodingException;
 
 public class XorEncodeUtil {
 
-    private static final String key = "abc";
+    private static final String KEY = "abc";
 
     private static final String CHARSET_ENCODE = "utf-8";
 
     private static byte[] xorEncode(byte[] data) {
         // 将任意长的key转变成长度为256的新key
         byte[] keyBytes = new byte[256];
-        for (int i = 0; i < key.getBytes().length; i++) {
-            keyBytes[i] = key.getBytes()[i % key.getBytes().length];
+        for (int i = 0; i < KEY.getBytes().length; i++) {
+            keyBytes[i] = KEY.getBytes()[i % KEY.getBytes().length];
         }
 
         // 该byte[]为输出密文

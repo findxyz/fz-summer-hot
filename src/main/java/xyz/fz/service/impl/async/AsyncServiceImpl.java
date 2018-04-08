@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
  * Created by Administrator on 2017/3/30.
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class AsyncServiceImpl implements AsyncService {
 
     private static Logger logger = LoggerFactory.getLogger(AsyncServiceImpl.class);

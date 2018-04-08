@@ -21,7 +21,7 @@ import java.util.Map;
  * Created by Administrator on 2017/5/7.
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class WxServiceImpl implements WxService {
 
     public static final String WX_ACCESS_TOKEN = "WX_ACCESS_TOKEN";
@@ -39,10 +39,10 @@ public class WxServiceImpl implements WxService {
         xyz.fz.model.wxResponse.Xml xml = objectFactory.createXml();
         xml.setToUserName(subscriberUserName);
         xml.setFromUserName(publicName);
-        xml.setCreateTime((new Date().getTime() / 1000) + "");
+        xml.setCreateTime((System.currentTimeMillis() / 1000) + "");
         xml.setMsgType("text");
         xml.setContent("Hello Developer! The key is: " + eventKey);
-        return BaseUtil.JAXBMarshal(xml);
+        return BaseUtil.jaxbMarshal(xml);
     }
 
     @Override
@@ -51,10 +51,10 @@ public class WxServiceImpl implements WxService {
         xyz.fz.model.wxResponse.Xml xml = objectFactory.createXml();
         xml.setToUserName(subscriberUserName);
         xml.setFromUserName(publicName);
-        xml.setCreateTime((new Date().getTime() / 1000) + "");
+        xml.setCreateTime((System.currentTimeMillis() / 1000) + "");
         xml.setMsgType("text");
         xml.setContent("Scan Result: " + scanResult);
-        return BaseUtil.JAXBMarshal(xml);
+        return BaseUtil.jaxbMarshal(xml);
     }
 
     @Override
