@@ -28,12 +28,8 @@ public class PagerData<T> {
         this.totalCount = totalCount;
     }
 
-    /**
-     * @param page 页码从1开始
-     * @return y: 可以继续加载，n: 加载完毕
-     */
-    public String getLoadStatus(PagerData<T> pagerData, int page, int pageSize) {
-        return pagerData.getTotalCount() > page * pageSize ? LOAD_STATUS_Y : LOAD_STATUS_N;
+    public String getLoadStatus(int page, int pageSize) {
+        return this.getTotalCount() > page * pageSize ? LOAD_STATUS_Y : LOAD_STATUS_N;
     }
 }
 
