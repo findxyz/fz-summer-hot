@@ -35,6 +35,7 @@ public class CommonDaoImpl implements CommonDao {
         add("java.lang.Long");
         add("java.lang.Integer");
         add("java.math.BigInteger");
+        add("java.lang.Number");
     }};
 
     private static final String DTO = "DTO";
