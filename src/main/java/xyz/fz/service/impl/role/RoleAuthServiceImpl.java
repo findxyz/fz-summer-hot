@@ -232,33 +232,33 @@ public class RoleAuthServiceImpl implements RoleAuthService {
         List<Map> treeList = new ArrayList<>();
         Map menuMap = null;
         List<Map> children = null;
-        for (Map m : list) {
-            if (menuMap == null || !menuMap.get("menuPath").equals(m.get("menuPath").toString())) {
-                if (m.get("mIsActivity").toString().equals("1")) {
+        for (Map roleAuth : list) {
+            if (menuMap == null || !menuMap.get("menuPath").equals(roleAuth.get("menuPath").toString())) {
+                if (roleAuth.get("mIsActivity").toString().equals("1")) {
                     menuMap = new HashMap();
                     children = new ArrayList<>();
                     menuMap.put("children", children);
-                    menuMap.put("menuPath", m.get("menuPath").toString());
-                    menuMap.put("text", m.get("menuName").toString());
+                    menuMap.put("menuPath", roleAuth.get("menuPath").toString());
+                    menuMap.put("text", roleAuth.get("menuName").toString());
                     menuMap.put("isexpand", true);
-                    if (m.get("aIsActivity").toString().equals("1")) {
-                        Map child = new HashMap();
-                        child.put("text", m.get("text").toString());
-                        child.put("url", m.get("url").toString());
-                        children.add(child);
-                    }
+                    addChild(children, roleAuth);
                     treeList.add(menuMap);
                 }
             } else {
-                if (m.get("aIsActivity").toString().equals("1")) {
-                    Map child = new HashMap();
-                    child.put("text", m.get("text").toString());
-                    child.put("url", m.get("url").toString());
-                    children.add(child);
-                }
+                addChild(children, roleAuth);
             }
         }
         return treeList;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addChild(List<Map> children, Map roleAuth) {
+        if (roleAuth.get("aIsActivity").toString().equals("1")) {
+            Map child = new HashMap();
+            child.put("text", roleAuth.get("text").toString());
+            child.put("url", roleAuth.get("url").toString());
+            children.add(child);
+        }
     }
 
     @Override
@@ -284,23 +284,23 @@ public class RoleAuthServiceImpl implements RoleAuthService {
         List<Map> treeList = new ArrayList<>();
         Map menuMap = null;
         List<Map> children = null;
-        for (Map m : list) {
-            if (menuMap == null || !menuMap.get("menuPath").equals(m.get("menuPath").toString())) {
+        for (Map menu : list) {
+            if (menuMap == null || !menuMap.get("menuPath").equals(menu.get("menuPath").toString())) {
                 menuMap = new HashMap();
                 children = new ArrayList<>();
                 menuMap.put("children", children);
-                menuMap.put("menuPath", m.get("menuPath").toString());
-                menuMap.put("text", m.get("menuName").toString());
+                menuMap.put("menuPath", menu.get("menuPath").toString());
+                menuMap.put("text", menu.get("menuName").toString());
                 menuMap.put("isexpand", true);
                 Map child = new HashMap();
-                child.put("text", m.get("text").toString());
-                child.put("url", m.get("url").toString());
+                child.put("text", menu.get("text").toString());
+                child.put("url", menu.get("url").toString());
                 children.add(child);
                 treeList.add(menuMap);
             } else {
                 Map child = new HashMap();
-                child.put("text", m.get("text").toString());
-                child.put("url", m.get("url").toString());
+                child.put("text", menu.get("text").toString());
+                child.put("url", menu.get("url").toString());
                 children.add(child);
             }
         }
