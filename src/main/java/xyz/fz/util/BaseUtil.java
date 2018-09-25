@@ -5,15 +5,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -63,6 +71,45 @@ public class BaseUtil {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             return (T) unmarshaller.unmarshal(sr);
         }
+    }
+
+    public static String mapToXml(Map<String, String> data) {
+        String output = "";
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            documentBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            documentBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            documentBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            documentBuilderFactory.setXIncludeAware(false);
+            documentBuilderFactory.setExpandEntityReferences(false);
+            org.w3c.dom.Document document = documentBuilderFactory.newDocumentBuilder().newDocument();
+            org.w3c.dom.Element root = document.createElement("xml");
+            document.appendChild(root);
+            for (String key : data.keySet()) {
+                String value = data.get(key);
+                if (value == null) {
+                    value = "";
+                }
+                value = value.trim();
+                org.w3c.dom.Element filed = document.createElement(key);
+                filed.appendChild(document.createTextNode(value));
+                root.appendChild(filed);
+            }
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            DOMSource source = new DOMSource(document);
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            transformer.transform(source, result);
+            output = writer.getBuffer().toString();
+            writer.close();
+        } catch (Exception ignored) {
+        }
+        return output;
     }
 
     public static Color getRandColor(int fc, int bc) {
