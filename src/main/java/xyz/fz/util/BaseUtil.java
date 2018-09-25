@@ -4,12 +4,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -21,6 +27,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -28,6 +35,8 @@ import java.util.Random;
  * Created by fz on 2016/9/7.
  */
 public class BaseUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(BaseUtil.class);
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -73,8 +82,7 @@ public class BaseUtil {
         }
     }
 
-    public static String mapToXml(Map<String, String> data) {
-        String output = "";
+    private static DocumentBuilder newDocumentBuilder() {
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -84,7 +92,46 @@ public class BaseUtil {
             documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             documentBuilderFactory.setXIncludeAware(false);
             documentBuilderFactory.setExpandEntityReferences(false);
-            org.w3c.dom.Document document = documentBuilderFactory.newDocumentBuilder().newDocument();
+            return documentBuilderFactory.newDocumentBuilder();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Document newDocument() {
+        return newDocumentBuilder().newDocument();
+    }
+
+    public static Map<String, String> xmlToMap(String strXML) {
+        try {
+            Map<String, String> data = new HashMap<>();
+            InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
+            org.w3c.dom.Document doc = newDocumentBuilder().parse(stream);
+            doc.getDocumentElement().normalize();
+            NodeList nodeList = doc.getDocumentElement().getChildNodes();
+            for (int idx = 0; idx < nodeList.getLength(); ++idx) {
+                Node node = nodeList.item(idx);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    org.w3c.dom.Element element = (org.w3c.dom.Element) node;
+                    data.put(element.getNodeName(), element.getTextContent());
+                }
+            }
+            try {
+                stream.close();
+            } catch (Exception ex) {
+                // do nothing
+            }
+            return data;
+        } catch (Exception ex) {
+            logger.error("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXML);
+            return null;
+        }
+    }
+
+    public static String mapToXml(Map<String, String> data) {
+        String output = "";
+        try {
+            org.w3c.dom.Document document = newDocument();
             org.w3c.dom.Element root = document.createElement("xml");
             document.appendChild(root);
             for (String key : data.keySet()) {
@@ -175,5 +222,14 @@ public class BaseUtil {
     public static void main(String[] args) {
         System.out.println(sha256Hex("1"));
         System.out.println(DigestUtils.sha256Hex("1"));
+
+        Map<String, String> data = new HashMap<>();
+        data.put("aa", "bb");
+        data.put("cc", "dd");
+        data.put("ee", "ff");
+        String xml = mapToXml(data);
+        Map map = xmlToMap(xml);
+        System.out.println(xml);
+        System.out.println(map);
     }
 }
