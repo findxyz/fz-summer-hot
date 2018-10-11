@@ -24,6 +24,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -105,7 +106,7 @@ public class BaseUtil {
     public static Map<String, String> xmlToMap(String strXML) {
         try {
             Map<String, String> data = new HashMap<>();
-            InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
+            InputStream stream = new ByteArrayInputStream(strXML.getBytes(StandardCharsets.UTF_8));
             org.w3c.dom.Document doc = newDocumentBuilder().parse(stream);
             doc.getDocumentElement().normalize();
             NodeList nodeList = doc.getDocumentElement().getChildNodes();
@@ -128,11 +129,11 @@ public class BaseUtil {
         }
     }
 
-    public static String mapToXml(Map<String, String> data) {
+    public static String mapToXml(String rootTagName, Map<String, String> data) {
         String output = "";
         try {
             org.w3c.dom.Document document = newDocument();
-            org.w3c.dom.Element root = document.createElement("xml");
+            org.w3c.dom.Element root = document.createElement(rootTagName);
             document.appendChild(root);
             for (String key : data.keySet()) {
                 String value = data.get(key);
@@ -227,7 +228,7 @@ public class BaseUtil {
         data.put("aa", "bb");
         data.put("cc", "dd");
         data.put("ee", "ff");
-        String xml = mapToXml(data);
+        String xml = mapToXml("xml", data);
         Map map = xmlToMap(xml);
         System.out.println(xml);
         System.out.println(map);
