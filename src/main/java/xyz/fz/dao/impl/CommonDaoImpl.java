@@ -9,12 +9,12 @@ import xyz.fz.dao.CommonDao;
 import xyz.fz.dao.PagerData;
 import xyz.fz.util.BaseUtil;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.*;
-
 
 /**
  * Created by fz on 2015/11/7.
@@ -31,14 +31,14 @@ public class CommonDaoImpl implements CommonDao {
         add("java.util.HashMap");
     }};
 
-    private static final Set<String> COUNT_CLAZZ = new HashSet<String>() {{
-        add("java.lang.Long");
-        add("java.lang.Integer");
-        add("java.math.BigInteger");
+    private static final Set<String> PRIMITIVE_CLAZZ = new HashSet<String>() {{
+        add("java.lang.String");
         add("java.lang.Number");
+        add("java.lang.Integer");
+        add("java.lang.Long");
+        add("java.math.BigInteger");
+        add("java.math.BigDecimal");
     }};
-
-    private static final String DTO = "DTO";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -90,8 +90,7 @@ public class CommonDaoImpl implements CommonDao {
     @Override
     public <T> T findById(Class<T> clazz, Object id) {
         try {
-            Object object = entityManager.find(clazz, id);
-            return (T) object;
+            return entityManager.find(clazz, id);
         } catch (Exception e) {
             logger.error(BaseUtil.getExceptionStackTrace(e));
             throw new RuntimeException(e);
@@ -141,15 +140,22 @@ public class CommonDaoImpl implements CommonDao {
 
     private Query getSqlQuery(String sql, Map<String, Object> params, Class clazz) {
         Query query;
-        if (MAP_CLAZZ.contains(clazz.getName())) {
-            query = mapQuery(sql, params);
-        } else if (COUNT_CLAZZ.contains(clazz.getName()) || String.class.getName().contains(clazz.getName())) {
-            query = countStringQuery(sql, params);
-        } else if (clazz.getName().contains(DTO)) {
-            query = beanQuery(sql, params, clazz);
-        } else {
+        boolean isEntity = clazz.isAnnotationPresent(Entity.class);
+        if (isEntity) {
             query = clazzQuery(sql, params, clazz);
+        } else if (MAP_CLAZZ.contains(clazz.getName())) {
+            query = mapQuery(sql, params);
+        } else if (PRIMITIVE_CLAZZ.contains(clazz.getName())) {
+            query = primitiveQuery(sql, params);
+        } else {
+            query = beanQuery(sql, params, clazz);
         }
+        return query;
+    }
+
+    private Query clazzQuery(String sql, Map<String, Object> params, Class clazz) {
+        Query query = entityManager.createNativeQuery(sql, clazz);
+        queryParamsSet(query, params);
         return query;
     }
 
@@ -160,7 +166,7 @@ public class CommonDaoImpl implements CommonDao {
         return query;
     }
 
-    private Query countStringQuery(String sql, Map<String, Object> params) {
+    private Query primitiveQuery(String sql, Map<String, Object> params) {
         Query query = entityManager.createNativeQuery(sql);
         queryParamsSet(query, params);
         return query;
@@ -170,12 +176,6 @@ public class CommonDaoImpl implements CommonDao {
         Query query = entityManager.createNativeQuery(sql);
         queryParamsSet(query, params);
         query.unwrap(SQLQuery.class).setResultTransformer(Transformers.aliasToBean(clazz));
-        return query;
-    }
-
-    private Query clazzQuery(String sql, Map<String, Object> params, Class clazz) {
-        Query query = entityManager.createNativeQuery(sql, clazz);
-        queryParamsSet(query, params);
         return query;
     }
 
