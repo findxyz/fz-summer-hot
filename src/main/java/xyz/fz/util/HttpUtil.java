@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
@@ -239,9 +241,11 @@ public class HttpUtil {
     }
 
     public static OkHttpClient twoWaySslClient(String caPath, String password) {
+        InputStream inputStream = null;
         try {
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            keyStore.load(new FileInputStream(caPath), password.toCharArray());
+            inputStream = new FileInputStream(caPath);
+            keyStore.load(inputStream, password.toCharArray());
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(keyStore, password.toCharArray());
             KeyManager[] kms = kmf.getKeyManagers();
@@ -261,6 +265,14 @@ public class HttpUtil {
                     .build();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
